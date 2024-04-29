@@ -28,6 +28,11 @@
   color: #61dafb;
 }
 
+.material-icons {
+  font-family: "Material Icons" !important;
+  /* Other styles */
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -35,4 +40,37 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+/* App.css */
+
+/* Ensure the root HTML element and body fill the viewport */
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Style the overall layout to use flexbox */
+/*  */
+/*  */
+/* Main content area */
+.main-content {
+  margin-left: 250px; /* Adjust margin to account for sidebar width */
+  padding: 20px; /* Add padding for better spacing */
+}
+
+/* Footer styling */
+.footer {
+  height: 40px; /* Fixed height for the footer */
+  background-color: #555; /* Example background color */
+}
+
+/* Styles for content container */
+.content-container {
+  flex: 1; /* Expand to fill remaining space */
+  padding: 20px; /* Add padding */
 }
