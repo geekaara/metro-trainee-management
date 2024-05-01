@@ -6,6 +6,8 @@ import AddInstructor from "./pages/AddInstructor";
 import ViewInstructor from "./pages/ViewInstructor";
 import ManageLeaves from "./pages/ManageLeaves";
 import ViewSchedules from "./pages/ViewSchedules";
+import AddCourse from "./pages/AddCourse";
+import ScheduleCourse from "./pages/ScheduleCourse"
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
         <Route exact path="/view-instructors" element={<ViewInstructor />} />
         <Route exact path="/manage-leaves" element={<ManageLeaves />} />
         <Route exact path="/view-schedules" element={<ViewSchedules />} />
+        <Route exact path="/add-courses" element={<AddCourse />} />
+        <Route exact path="/schedule-courses" element={<ScheduleCourse />} />
       </Routes>
       </div>
       </div>

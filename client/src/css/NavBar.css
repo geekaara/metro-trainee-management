@@ -5,7 +5,7 @@
   font-family: "Roboto", sans-serif; /* Use Roboto font */
   font-weight: bold;
   /* Set navbar height to occupy full viewport height */
-  height: 100vh; /* Set navbar height to occupy full viewport height */
+  height: auto; /* Set navbar height to occupy full viewport height */
   width: 250px; /* Set navbar width */
   position: fixed; /* Keep navbar fixed */
   left: 0; /* Position navbar on the left side */
@@ -13,6 +13,9 @@
   z-index: 1000; /* Ensure navbar is above other content */
   display: flex; /* Use flexbox */
   flex-direction: column; 
+  overflow-y: auto;
+  min-height: 100vh;
+  padding-bottom: 20px;
 }
 
 .container {

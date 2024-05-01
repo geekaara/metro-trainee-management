@@ -8,6 +8,7 @@ import { FaChevronUp, FaChevronDown } from "react-icons/fa";
 
 function Navbar(props) {
   const [showInstructorDropdown, setShowInstructorDropdown] = useState(false);
+  const [showModuleDropdown, setShowModuleDropdown] = useState(false);
   const [showCourseDropdown, setShowCourseDropdown] = useState(false);
 
   const toggleInstructorDropdown = () => {
@@ -15,13 +16,20 @@ function Navbar(props) {
     setShowCourseDropdown(false); // Close the course dropdown when opening instructor dropdown
   };
 
-  const toggleCourseDropdown = () => {
-    setShowCourseDropdown(!showCourseDropdown);
-    setShowInstructorDropdown(false); // Close the instructor dropdown when opening course dropdown
+  const toggleModuleDropdown = () => {
+    setShowModuleDropdown(!showModuleDropdown);
+    setShowCourseDropdown(false); // Close the course dropdown when opening module dropdown
   };
 
+  const toggleCourseDropdown = () => {
+    setShowCourseDropdown(!showCourseDropdown);
+    setShowModuleDropdown(false); // Close the module dropdown when opening course dropdown
+  };
+
+
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-green">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-green" >
       <ul className="navbar-nav flex-column">
         <li className="nav-item">
           <Link className="navbar-brand" to="/">
@@ -73,12 +81,35 @@ function Navbar(props) {
         </li>
 
         <li className="nav-item">
+          <span className="nav-link" onClick={toggleModuleDropdown}>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              Modules
+              <Icon
+                as={showModuleDropdown ? FaChevronUp : FaChevronDown}
+                style={{ marginLeft: "90px" }}
+              />
+            </div>
+          </span>
+
+          {showModuleDropdown && (
+            <ul className="navbar-nav flex-column">
+              <li className="nav-item">
+                <Link className="nav-link" to="/add-modules">
+                  <span style={{ marginRight: "15px" }}>Add New Module</span>
+                </Link>
+              </li>
+              {/* Add more module-related actions as needed */}
+            </ul>
+          )}
+        </li>
+
+        <li className="nav-item">
           <span className="nav-link" onClick={toggleCourseDropdown}>
             <div style={{ display: "flex", alignItems: "center" }}>
-              Course
+              Courses
               <Icon
                 as={showCourseDropdown ? FaChevronUp : FaChevronDown}
-                style={{ marginLeft: "100px" }}
+                style={{ marginLeft: "90px" }}
               />
             </div>
           </span>
@@ -91,8 +122,8 @@ function Navbar(props) {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/view-courses">
-                  <span style={{ marginRight: "35px" }}>View Courses</span>
+                <Link className="nav-link" to="/schedule-courses">
+                  <span style={{ marginRight: "15px" }}>Schedule Course</span>
                 </Link>
               </li>
             </ul>
