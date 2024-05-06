@@ -1,0 +1,40 @@
+/* LoginPage.css */
+
+.main-grid {
+    height: 100vh;
+}
+
+.image-grid {
+    /* Position relative allows the pseudo-element to be positioned absolutely within this container */
+    position: relative;
+    background-image: url('../images/Banner.png'); /* Adjust path as necessary */
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    background-color: rgba(11, 92, 195, 0.95);
+}
+
+.paper-grid {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 64px 32px;
+}
+
+
+.avatar {
+    margin: 8px;
+    background-color: #f50057; /* Secondary color */
+}
+
+.form {
+    margin-top: 8px;
+}
+
+.submit-button {
+    margin-top: 24px;
+    margin-bottom: 16px;
+    padding: 10px 20px; /* Makes button thicker and reduces length */
+    width: auto; /* Adjust the width as necessary, or use a specific value */
+    border-radius: 50px; /* Keeps corners rounded */
+}
