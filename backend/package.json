@@ -1,0 +1,26 @@
+{
+  "name": "metro-trainee-management",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/geekaara/metro-trainee-management.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/geekaara/metro-trainee-management/issues"
+  },
+  "homepage": "https://github.com/geekaara/metro-trainee-management#readme",
+  "dependencies": {
+    "@mui/material": "^5.15.15",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mysql2": "^3.9.7"
+  }
+}
