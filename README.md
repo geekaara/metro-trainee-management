@@ -2,9 +2,10 @@
 
 ### Run Server
 
-- node server.js
+- cd backend
+- npm start
 
-### Run Server
+### Run Client
 
 - cd client
 - npm start
