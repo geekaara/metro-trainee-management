@@ -31,12 +31,13 @@ export default function LoginPage() {
             <Grid item xs={false} sm={4} md={7} className="image-grid" />
             <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
                 <Box className="paper-grid">
+                <div className="symbol-background"></div> {/* Background for symbol.png */}
                     {/* Avatar and TrainIcon component are commented out
                     <Avatar className="avatar">
                         <TrainIcon />
                     </Avatar>
                     */}
-                    <Typography component="h1" variant="h5">
+                    <Typography component="h1" variant="h5" style={{ fontWeight: 'bold' }}>
                         Sign in
                     </Typography>
                     <form noValidate onSubmit={handleSubmit} className="form">

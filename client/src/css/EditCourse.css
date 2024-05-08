@@ -1,0 +1,48 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px; /* Add padding for better spacing */
+    margin-left:  auto;
+    margin-right: 1000px; 
+    bottom: 5%; /* Adjust margin to accommodate the navbar width */
+    width: calc(10% - 250px); /* Adjust width to accommodate the navbar */
+    z-index: 1; /* Ensure content is below navbar */
+  }
+  
+  .course-details {
+    margin-top: 20px; /* Add margin to separate course details */
+  }
+  
+  .schedule-details {
+    margin-top: 20px; /* Add margin to separate schedule details */
+  }
+  
+  .schedule-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; /* Add margin between schedule items */
+  }
+  
+  .schedule-item-label {
+    margin-right: 10px; /* Add margin between label and value */
+    font-weight: bold; /* Make label text bold */
+  }
+  
+  .schedule-item-value {
+    flex-grow: 1; /* Allow value to take up remaining space */
+  }
+  
+  .button-container {
+    margin-top: 20px; /* Add margin above button */
+  }
+  
+  .edit-h1 {
+    margin-bottom: 20px;
+    font-size: 18px; /* Increase font size */
+    color: #333; /* Change text color to a dark shade */
+    text-transform: uppercase; /* Convert text to uppercase */
+    font-weight: bold; /* Make the text bold */
+    letter-spacing: 1px; /* Add letter spacing */
+  }
+  

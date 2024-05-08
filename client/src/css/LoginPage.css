@@ -9,9 +9,11 @@
     position: relative;
     background-image: url('../images/Banner.png'); /* Adjust path as necessary */
     background-repeat: no-repeat;
-    background-size: contain;
+    background-size: small;
     background-position: center;
-    background-color: rgba(11, 92, 195, 0.95);
+    background-color: #0073CF ;
+    filter: blur(0px);
+    
 }
 
 .paper-grid {
@@ -36,5 +38,27 @@
     margin-bottom: 16px;
     padding: 10px 20px; /* Makes button thicker and reduces length */
     width: auto; /* Adjust the width as necessary, or use a specific value */
-    border-radius: 50px; /* Keeps corners rounded */
+    border-radius: 25px; /* Half of the height to create curved ends */
+    background-color: #0073CF !important; /* Example background color */
+    color: #fff; /* Example text color */
+    border: none; /* Remove border */
+    outline: none; /* Remove outline */
+    cursor: pointer; /* Add cursor on hover */
+    transition: background-color 0.3s, color 0.3s; /* Add transition effect */
+}
+
+.submit-button:hover {
+    background-color: #066baf; /* Example background color on hover */
+}
+
+.symbol-background {
+    position: fixed;
+    top: 0;
+    left: 735px;
+    width: 50%;
+    height: 100%;
+    background-image: url('../images/Symbol.png'); /* Symbol background image */
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 0.1; /* Adjust opacity as needed */
 }

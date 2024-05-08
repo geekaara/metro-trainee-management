@@ -7,13 +7,14 @@ import {
   Grid,
   Typography,
   Divider,
+  Paper,
 } from "@material-ui/core";
 
 function AddCourse() {
   const [courseName, setCourseName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-  const [numberOfStudents, setNumberOfStudents] = useState(0);
+  const [numberOfStudents, setNumberOfStudents] = useState("");
   const [generatedSchedule, setGeneratedSchedule] = useState([]);
   const [publicHolidays, setPublicHolidays] = useState([]);
 
@@ -75,6 +76,9 @@ function AddCourse() {
           schedule.push({
             day: dayCount,
             date: dateString,
+            weekday: new Date(currentDate).toLocaleDateString("en-US", {
+              weekday: "long",
+            }),
             description: "",
             isHoliday: false,
           });
@@ -82,6 +86,9 @@ function AddCourse() {
           schedule.push({
             day: "",
             date: new Date(currentDate).toLocaleDateString("en-US"),
+            weekday: new Date(currentDate).toLocaleDateString("en-US", {
+              weekday: "long",
+            }),
             description: isHoliday,
             isHoliday: true,
           });
@@ -181,64 +188,53 @@ function AddCourse() {
             Generate Schedule
           </Button>
         </Grid>
-        {generatedSchedule.length > 0 && (
-          <>
-            <Grid item xs={12}>
-              <Divider />
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h6">Generated Schedule</Typography>
-            </Grid>
-            {generatedSchedule.map((item, index) => (
-              <Grid container item xs={12} key={index}>
-                <Grid item xs={3}>
-                  <Typography>
-                    {item.day ? `Day ${item.day}` : ""}
-                
-                  </Typography>
-                  </Grid>
-                  <Grid item xs={3}>
-                  <Typography>
-                    {item.date ? item.date : ""}
-                    
-                  </Typography>
-                  <Typography>
-                    {item.date &&
-                      new Date(item.date).toLocaleDateString("en-US", {
-                        weekday: "long",
-                      })}
-                  </Typography>
-                </Grid>
-                <Grid item xs={3}>
-                  <Typography>{item.description}</Typography>
-                </Grid>
-                <Grid item xs={3}>
-                  <TextField
-                    label="Description"
-                    fullWidth
-                    value={item.description}
-                    onChange={(e) => {
-                      const updatedSchedule = [...generatedSchedule];
-                      updatedSchedule[index].description = e.target.value;
-                      setGeneratedSchedule(updatedSchedule);
-                    }}
-                    disabled={item.isHoliday}
-                  />
-                </Grid>
-              </Grid>
-            ))}
-            <Grid item xs={12}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleSave}
-              >
-                Save
-              </Button>
-            </Grid>
-          </>
-        )}
       </Grid>
+
+      {generatedSchedule.length > 0 && (
+        <>
+          <Divider />
+          <Typography variant="h6" style={{ margin: "20px 0" }}>
+            <h1>Generated Schedule</h1>
+          </Typography>
+          {generatedSchedule.map((item, index) => (
+  <Paper key={index} elevation={3} style={{ padding: "20px", marginBottom: "20px", height: "150px", display: "flex", flexDirection: "row", justifyContent: "space-around" , width:"950px",}}>
+    <Typography variant="h6" gutterBottom>
+      <span>Day {item.day}</span> 
+      </Typography>
+      <Typography variant="h6"gutterBottom>
+      <span>Date: {item.date}</span> 
+      </Typography>
+      <Typography variant="h6" gutterBottom>
+       <span>Weekday: {item.weekday}</span>
+    </Typography>
+    <Typography variant="h6" gutterBottom>
+    <TextField
+      label="Description"
+      
+      multiline
+      
+      value={item.description}
+      onChange={(e) => {
+        const updatedSchedule = [...generatedSchedule];
+        updatedSchedule[index].description = e.target.value;
+        setGeneratedSchedule(updatedSchedule);
+      }}
+      // disabled={item.isHoliday}
+    />
+    </Typography>
+  </Paper>
+))}
+
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSave}
+            style={{ marginTop: "20px" }}
+          >
+            Save
+          </Button>
+        </>
+      )}
     </div>
   );
 }

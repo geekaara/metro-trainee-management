@@ -2,10 +2,10 @@ import "../css/NavBar.css";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import metroImage from "../images/Banner.png";
-import { Icon } from "@chakra-ui/react";
+import { Icon, Box} from "@chakra-ui/react";
 import { AiOutlineHome } from "react-icons/ai";
 import { FaChevronUp, FaChevronDown } from "react-icons/fa";
-
+import { CgProfile } from "react-icons/cg";
 function Navbar(props) {
   const [showInstructorDropdown, setShowInstructorDropdown] = useState(false);
   const [showModuleDropdown, setShowModuleDropdown] = useState(false);
@@ -33,11 +33,36 @@ function Navbar(props) {
       <ul className="navbar-nav flex-column">
         <li className="nav-item">
           <Link className="navbar-brand" to="/">
-            <img
-              src={metroImage}
-              style={{ width: "200px", height: "auto" }}
+          <img
+                src={metroImage} // Image source
+                style={{ 
+                    width: "250px", // Set width to 200px
+                    height: "auto", // Auto adjust height to maintain aspect ratio
+                    borderRadius: "5%", // Circular shape
+                    
+                }}
             />
-          </Link>
+
+           
+           <Box
+            bg="#0073CF" // Background color
+            borderRadius="40%" // Rounded border
+            p={4} // Padding
+            mr={4} // Margin right
+            color="white" // Text color
+            display="flex" // Flex display for alignment
+            alignItems="center" // Center align vertically
+            justifyContent="center" // Center align horizontally
+            width={40} // Width of the box
+            height={100} // Height of the box
+            marginLeft={50}
+        >
+            <CgProfile size={60} /> {/* Profile icon */}
+        </Box>
+        <h1 className="Profile-heading" style={{ color: "white", fontSize:"20px", marginLeft: "100px"}}>
+            Admin
+            </h1>
+       </Link>
         </li>
 
         <li className="nav-item">
@@ -79,7 +104,7 @@ function Navbar(props) {
             </ul>
           )}
         </li>
-
+{/* 
         <li className="nav-item">
           <span className="nav-link" onClick={toggleModuleDropdown}>
             <div style={{ display: "flex", alignItems: "center" }}>
@@ -98,10 +123,10 @@ function Navbar(props) {
                   <span style={{ marginRight: "15px" }}>Add New Module</span>
                 </Link>
               </li>
-              {/* Add more module-related actions as needed */}
+    
             </ul>
           )}
-        </li>
+        </li> */}
 
         <li className="nav-item">
           <span className="nav-link" onClick={toggleCourseDropdown}>
@@ -122,8 +147,8 @@ function Navbar(props) {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" to="/schedule-courses">
-                  <span style={{ marginRight: "15px" }}>Schedule Course</span>
+                <Link className="nav-link" to="/edit-courses">
+                  <span style={{ marginRight: "50px" }}>Edit Course</span>
                 </Link>
               </li>
             </ul>

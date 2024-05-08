@@ -7,7 +7,7 @@ import ViewInstructor from "./pages/ViewInstructor";
 import ManageLeaves from "./pages/ManageLeaves";
 import ViewSchedules from "./pages/ViewSchedules";
 import AddCourse from "./pages/AddCourse";
-import ScheduleCourse from "./pages/ScheduleCourse";
+import EditCourse from "./pages/EditCourse";
 import LoginPage from "./pages/LoginPage"; // Ensure this import points to the actual file location
 
 function App() {
@@ -21,7 +21,7 @@ function App() {
                 <Route path="/manage-leaves" element={<WithNavbar><ManageLeaves /></WithNavbar>} />
                 <Route path="/view-schedules" element={<WithNavbar><ViewSchedules /></WithNavbar>} />
                 <Route path="/add-courses" element={<WithNavbar><AddCourse /></WithNavbar>} />
-                <Route path="/schedule-courses" element={<WithNavbar><ScheduleCourse /></WithNavbar>} />
+                <Route path="/edit-courses" element={<WithNavbar><EditCourse /></WithNavbar>} />
             </Routes>
         </Router>
     );
