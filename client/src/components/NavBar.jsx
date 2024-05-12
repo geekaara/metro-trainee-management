@@ -30,9 +30,9 @@ function Navbar(props) {
     <nav className="navbar navbar-expand-lg navbar-dark bg-green">
       <ul className="navbar-nav flex-column">
         <li className="nav-item">
-          <Link className="navbar-brand" to="/">
             <img
               src={metroImage} // Image source
+              alt="Metro Image"
               style={{
                 width: "250px", // Set width to 200px
                 height: "auto", // Auto adjust height to maintain aspect ratio
@@ -41,18 +41,18 @@ function Navbar(props) {
             />
 
             <Box
-              bgcolor="white" // Background color
+              
               borderRadius="40%" // Rounded border
-              p={4} // Padding
-              mr={7} // Margin right
-              color="white" // Text color
-              display="flex" // Flex display for alignment
-              alignItems="center" // Center align vertically
-              justifyContent="center" // Center align horizontally
-              width={100} // Width of the box
-              height={100} // Height of the box
-               marginLeft={90}
-              marginRight={100}
+              // p={4} // Padding
+              // mr={7} // Margin right
+              // color="white" // Text color
+              // display="flex" // Flex display for alignment
+              // alignItems="center" // Center align vertically
+              // justifyContent="center" // Center align horizontally
+              // width={100} // Width of the box
+              // height={100} // Height of the box
+              //  marginLeft={90}
+              // marginRight={100}
              
             >
               <CgProfile style={{
@@ -60,13 +60,14 @@ function Navbar(props) {
                 height: "auto", // Auto adjust height to maintain aspect ratio
                 borderRadius: "5%", // Circular shape
                 marginLeft: "90px",
+                color:"white"
               }}/>
                {/* Profile icon */}
             </Box>
             <h1 className="Profile-heading" style={{ color: "white", fontSize: "20px", marginLeft: "95px" }}>
               Admin
             </h1>
-          </Link>
+     
         </li>
 
         <li className="nav-item">
