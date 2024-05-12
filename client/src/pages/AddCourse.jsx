@@ -8,7 +8,7 @@ import {
   Typography,
   Divider,
   Paper,
-} from "@material-ui/core";
+} from "@mui/material";
 
 function AddCourse() {
   const [courseName, setCourseName] = useState("");

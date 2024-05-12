@@ -10,6 +10,8 @@ import AddCourse from "./pages/AddCourse";
 import EditCourse from "./pages/EditCourse";
 import LoginPage from "./pages/LoginPage"; // Ensure this import points to the actual file location
 
+import './css/style.css';
+
 function App() {
     return (
         <Router>

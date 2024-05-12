@@ -1,15 +1,21 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';  // Import useNavigate
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+
+import {
+
+    Grid,
+    CssBaseline,
+    Box,
+    Paper,
+    Typography,
+    Button,
+    Link,
+    TextField,
+    FormControlLabel,
+    Checkbox
+
+ } from '@mui/material';
+
 import "../css/LoginPage.css";
 
 export default function LoginPage() {
@@ -95,17 +101,17 @@ export default function LoginPage() {
 
 
 // import React from 'react';
-// // import Avatar from '@material-ui/core/Avatar';
-// import Button from '@material-ui/core/Button';
-// import CssBaseline from '@material-ui/core/CssBaseline';
-// import TextField from '@material-ui/core/TextField';
-// import FormControlLabel from '@material-ui/core/FormControlLabel';
-// import Checkbox from '@material-ui/core/Checkbox';
-// import Link from '@material-ui/core/Link';
-// import Paper from '@material-ui/core/Paper';
-// import Box from '@material-ui/core/Box';
-// import Grid from '@material-ui/core/Grid';
-// import Typography from '@material-ui/core/Typography';
+// // import Avatar from '@mui/material/Avatar';
+// import Button from '@mui/material/Button';
+// import CssBaseline from '@mui/material/CssBaseline';
+// import TextField from '@mui/material/TextField';
+// import FormControlLabel from '@mui/material/FormControlLabel';
+// import Checkbox from '@mui/material/Checkbox';
+// import Link from '@mui/material/Link';
+// import Paper from '@mui/material/Paper';
+// import Box from '@mui/material/Box';
+// import Grid from '@mui/material/Grid';
+// import Typography from '@mui/material/Typography';
 // import "../css/LoginPage.css";
 // // import TrainIcon from '@material-ui/icons/TrainOutlined';  // Assuming TrainIcon is correctly installed
 //

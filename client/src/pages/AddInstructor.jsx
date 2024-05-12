@@ -10,7 +10,7 @@ import {
     Select,
     MenuItem,
     Grid
-} from '@material-ui/core';
+} from '@mui/material';
 import "../css/AddInstructor.css";
 
 function AddInstructor() {

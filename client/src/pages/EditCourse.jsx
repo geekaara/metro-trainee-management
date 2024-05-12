@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { TextField, Button, Grid, Typography, Divider } from "@material-ui/core";
+import { TextField, Button, Grid, Typography, Divider } from "@mui/material";
 import "../css/EditCourse.css";
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import SearchIcon from '@material-ui/icons/Search';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import SearchIcon from '@mui/icons-material/Search';
 
 function EditCourse() {
   // State variable to store course details

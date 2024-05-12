@@ -1,0 +1,18 @@
+.manageLeaves{
+    width:700px
+}
+
+.currentLeaves{
+    margin-top: 30px;
+}
+
+.currentLeavesList{
+    background-color: lightgray;
+    padding: 20px;
+    height: 300px;
+    overflow-y: scroll;
+}
+
+.addNewLeave{
+    margin-top: 30px;
+}

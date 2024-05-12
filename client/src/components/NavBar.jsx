@@ -2,7 +2,7 @@ import "../css/NavBar.css";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import metroImage from "../images/Banner.png";
-import { Box, Icon } from "@material-ui/core";
+import { Box, Icon } from "@mui/material";
 import { FaChevronUp, FaChevronDown } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 
