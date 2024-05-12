@@ -1,9 +1,15 @@
 import React, { useState } from "react";
-import { TextField, Button, Grid, Typography, Divider } from "@material-ui/core";
+import {
+  TextField,
+  Button,
+  Grid,
+  Typography,
+  Divider,
+} from "@material-ui/core";
 import "../css/EditCourse.css";
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import SearchIcon from '@material-ui/icons/Search';
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import SearchIcon from "@material-ui/icons/Search";
 
 function EditCourse() {
   // State variable to store course details
@@ -14,6 +20,8 @@ function EditCourse() {
       startDate: "2024-01-16",
       endDate: "2024-02-02",
       numberOfStudents: 20,
+      className: "Class 200",
+      groupName: "North",
       schedule: [
         { day: 1, date: "2024-01-15", weekday: "Monday", description: "" },
         { day: 2, date: "2024-01-15", weekday: "Tuesday", description: "" },
@@ -56,14 +64,17 @@ function EditCourse() {
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              {courses.map((course) => (  // Move IconButton inside map function
-                <IconButton key={course.id} onClick={() => handleCourseSelect(course)}>
+              {courses.map((course) => (
+                <IconButton
+                  key={course.id}
+                  onClick={() => handleCourseSelect(course)}
+                >
                   <SearchIcon />
                 </IconButton>
               ))}
             </InputAdornment>
           ),
-          style: { paddingRight: "30px" } // Adjust the padding to fit the search icon properly
+          style: { paddingRight: "30px" }, // Adjust the padding to fit the search icon properly
         }}
         style={{ marginBottom: "20px" }}
       />
@@ -72,13 +83,11 @@ function EditCourse() {
       {courses.map((course) => (
         <div key={course.id}>
           <Button
-            
             onClick={() => handleCourseSelect(course)}
             style={{ marginBottom: "10px" }}
             variant="contained"
             color="primary"
           >
-            {/* {course.courseName} - {course.startDate} to {course.endDate} */}
             Search
           </Button>
         </div>
@@ -88,7 +97,9 @@ function EditCourse() {
       {selectedCourse && (
         <div>
           <Divider style={{ margin: "20px 0" }} />
-          <Typography variant="h5">Editing Course: {selectedCourse.courseName}</Typography>
+          <Typography variant="h5">
+            Editing Course: {selectedCourse.courseName}
+          </Typography>
           <Grid container spacing={2} style={{ marginTop: "20px" }}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -97,7 +108,38 @@ function EditCourse() {
                 fullWidth
                 value={selectedCourse.courseName}
                 onChange={(e) =>
-                  setSelectedCourse({ ...selectedCourse, courseName: e.target.value })
+                  setSelectedCourse({
+                    ...selectedCourse,
+                    courseName: e.target.value,
+                  })
+                }
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Class Name"
+                variant="outlined"
+                fullWidth
+                value={selectedCourse.className}
+                onChange={(e) =>
+                  setSelectedCourse({
+                    ...selectedCourse,
+                    className: e.target.value,
+                  })
+                }
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="Group Name"
+                variant="outlined"
+                fullWidth
+                value={selectedCourse.groupName}
+                onChange={(e) =>
+                  setSelectedCourse({
+                    ...selectedCourse,
+                    groupName: e.target.value,
+                  })
                 }
               />
             </Grid>
@@ -109,7 +151,10 @@ function EditCourse() {
                 fullWidth
                 value={selectedCourse.startDate}
                 onChange={(e) =>
-                  setSelectedCourse({ ...selectedCourse, startDate: e.target.value })
+                  setSelectedCourse({
+                    ...selectedCourse,
+                    startDate: e.target.value,
+                  })
                 }
                 InputLabelProps={{
                   shrink: true,
@@ -124,7 +169,10 @@ function EditCourse() {
                 fullWidth
                 value={selectedCourse.endDate}
                 onChange={(e) =>
-                  setSelectedCourse({ ...selectedCourse, endDate: e.target.value })
+                  setSelectedCourse({
+                    ...selectedCourse,
+                    endDate: e.target.value,
+                  })
                 }
                 InputLabelProps={{
                   shrink: true,
@@ -157,7 +205,6 @@ function EditCourse() {
                     label="Day Number"
                     variant="outlined"
                     value={item.day}
-                    
                   />
                 </Grid>
                 <Grid item xs={2}>
@@ -165,7 +212,6 @@ function EditCourse() {
                     label="Date"
                     variant="outlined"
                     value={item.date}
-                    
                   />
                 </Grid>
                 <Grid item xs={3}>
@@ -173,7 +219,6 @@ function EditCourse() {
                     label="Weekday"
                     variant="outlined"
                     value={item.weekday}
-                    
                   />
                 </Grid>
                 <Grid item xs={5}>
@@ -211,3 +256,4 @@ function EditCourse() {
 }
 
 export default EditCourse;
+

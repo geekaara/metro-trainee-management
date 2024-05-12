@@ -87,8 +87,8 @@ function AddInstructor() {
                         </Grid>
                         <Grid item xs={12} className="grid-item">
                             <TextField
-                                name="otherName"
-                                label="Other Name"
+                                name="formalName"
+                                label="Formal Name"
                                 value={instructorDetails.otherName}
                                 onChange={handleInputChange}
                                 fullWidth
@@ -119,6 +119,30 @@ function AddInstructor() {
                                 required
                                 name="contactNo"
                                 label="Primary Contact No"
+                                value={instructorDetails.contactNo}
+                                onChange={handleInputChange}
+                                fullWidth
+                                variant="outlined"
+                                className="input-field"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6} className="grid-item">
+                            <TextField
+                                required
+                                name="preferredName"
+                                label="Preferred Name"
+                                value={instructorDetails.contactNo}
+                                onChange={handleInputChange}
+                                fullWidth
+                                variant="outlined"
+                                className="input-field"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6} className="grid-item">
+                            <TextField
+                                required
+                                name="employeeID"
+                                label="Employee ID"
                                 value={instructorDetails.contactNo}
                                 onChange={handleInputChange}
                                 fullWidth
