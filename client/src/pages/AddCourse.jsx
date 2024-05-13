@@ -8,17 +8,13 @@ import {
   Typography,
   Divider,
   Paper,
-  Select,
-  InputLabel,
-  MenuItem,
-} from "@material-ui/core";
+} from "@mui/material";
 
 function AddCourse() {
   const [courseName, setCourseName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [numberOfStudents, setNumberOfStudents] = useState("");
-  const [fieldGroupName, setFieldGroupName] = useState("");
   const [generatedSchedule, setGeneratedSchedule] = useState([]);
   const [publicHolidays, setPublicHolidays] = useState([]);
 
@@ -151,25 +147,6 @@ function AddCourse() {
           />
         </Grid>
         <Grid item xs={6}>
-        <TextField
-            label="Class Name"
-            fullWidth
-            value={courseName}
-            onChange={(e) => setCourseName(e.target.value)}
-          />
-        </Grid>
-        <Grid item xs={6}>
-        <InputLabel id="gender-label">Group Name</InputLabel>
-          <Select
-            fullWidth
-            value={fieldGroupName}
-            onChange={(e) => setFieldGroupName(e.target.value)}
-          >
-            <MenuItem value="North">North</MenuItem>
-            <MenuItem value="South">South</MenuItem>
-          </Select>
-        </Grid>
-        <Grid item xs={6}>
           <TextField
             label="Start Date"
             type="date"
@@ -193,7 +170,7 @@ function AddCourse() {
             }}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <TextField
             label="Number of Students"
             type="number"
@@ -220,42 +197,34 @@ function AddCourse() {
             <h1>Generated Schedule</h1>
           </Typography>
           {generatedSchedule.map((item, index) => (
-            <Paper
-              key={index}
-              elevation={3}
-              style={{
-                padding: "20px",
-                marginBottom: "20px",
-                height: "150px",
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-around",
-                width: "950px",
-              }}
-            >
-              <Typography variant="h6" gutterBottom>
-                <span>Day {item.day}</span>
-              </Typography>
-              <Typography variant="h6" gutterBottom>
-                <span>Date: {item.date}</span>
-              </Typography>
-              <Typography variant="h6" gutterBottom>
-                <span>Weekday: {item.weekday}</span>
-              </Typography>
-              <Typography variant="h6" gutterBottom>
-                <TextField
-                  label="Description"
-                  multiline
-                  value={item.description}
-                  onChange={(e) => {
-                    const updatedSchedule = [...generatedSchedule];
-                    updatedSchedule[index].description = e.target.value;
-                    setGeneratedSchedule(updatedSchedule);
-                  }}
-                />
-              </Typography>
-            </Paper>
-          ))}
+  <Paper key={index} elevation={3} style={{ padding: "20px", marginBottom: "20px", height: "150px", display: "flex", flexDirection: "row", justifyContent: "space-around" , width:"950px",}}>
+    <Typography variant="h6" gutterBottom>
+      <span>Day {item.day}</span> 
+      </Typography>
+      <Typography variant="h6"gutterBottom>
+      <span>Date: {item.date}</span> 
+      </Typography>
+      <Typography variant="h6" gutterBottom>
+       <span>Weekday: {item.weekday}</span>
+    </Typography>
+    <Typography variant="h6" gutterBottom>
+    <TextField
+      label="Description"
+      
+      multiline
+      
+      value={item.description}
+      onChange={(e) => {
+        const updatedSchedule = [...generatedSchedule];
+        updatedSchedule[index].description = e.target.value;
+        setGeneratedSchedule(updatedSchedule);
+      }}
+      // disabled={item.isHoliday}
+    />
+    </Typography>
+  </Paper>
+))}
+
           <Button
             variant="contained"
             color="primary"
