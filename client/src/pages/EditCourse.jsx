@@ -1,9 +1,16 @@
 import React, { useState } from "react";
-import { TextField, Button, Grid, Typography, Divider } from "@material-ui/core";
+import {
+  TextField,
+  Button,
+  Grid,
+  Typography,
+  Divider,
+} from "@material-ui/core";
+import axios from "axios";
 import "../css/EditCourse.css";
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import SearchIcon from '@material-ui/icons/Search';
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import SearchIcon from "@material-ui/icons/Search";
 
 function EditCourse() {
   // State variable to store course details
@@ -38,9 +45,16 @@ function EditCourse() {
   };
 
   // Function to handle saving changes
-  const handleSaveChanges = () => {
-    // Logic to save changes to the selected course
-    console.log("Changes saved:", selectedCourse);
+  const handleSaveChanges = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:3001/courses/edit/${selectedCourse.id}`,
+        selectedCourse
+      );
+      console.log("Changes saved:", response.data);
+    } catch (error) {
+      console.error("Failed to save changes:", error);
+    }
   };
 
   return (
@@ -56,39 +70,50 @@ function EditCourse() {
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              {courses.map((course) => (  // Move IconButton inside map function
-                <IconButton key={course.id} onClick={() => handleCourseSelect(course)}>
-                  <SearchIcon />
-                </IconButton>
-              ))}
+              <IconButton
+                onClick={() => {
+                  const course = courses.find((course) =>
+                    course.courseName
+                      .toLowerCase()
+                      .includes(searchQuery.toLowerCase())
+                  );
+                  if (course) handleCourseSelect(course);
+                }}
+              >
+                <SearchIcon />
+              </IconButton>
             </InputAdornment>
           ),
-          style: { paddingRight: "30px" } // Adjust the padding to fit the search icon properly
+          style: { paddingRight: "30px" }, // Adjust the padding to fit the search icon properly
         }}
         style={{ marginBottom: "20px" }}
       />
 
       {/* Display filtered courses */}
-      {courses.map((course) => (
-        <div key={course.id}>
-          <Button
-            
-            onClick={() => handleCourseSelect(course)}
-            style={{ marginBottom: "10px" }}
-            variant="contained"
-            color="primary"
-          >
-            {/* {course.courseName} - {course.startDate} to {course.endDate} */}
-            Search
-          </Button>
-        </div>
-      ))}
+      {courses
+        .filter((course) =>
+          course.courseName.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+        .map((course) => (
+          <div key={course.id}>
+            <Button
+              onClick={() => handleCourseSelect(course)}
+              style={{ marginBottom: "10px" }}
+              variant="contained"
+              color="primary"
+            >
+              {course.courseName} - {course.startDate} to {course.endDate}
+            </Button>
+          </div>
+        ))}
 
       {/* Display selected course details for editing */}
       {selectedCourse && (
         <div>
           <Divider style={{ margin: "20px 0" }} />
-          <Typography variant="h5">Editing Course: {selectedCourse.courseName}</Typography>
+          <Typography variant="h5">
+            Editing Course: {selectedCourse.courseName}
+          </Typography>
           <Grid container spacing={2} style={{ marginTop: "20px" }}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -97,7 +122,10 @@ function EditCourse() {
                 fullWidth
                 value={selectedCourse.courseName}
                 onChange={(e) =>
-                  setSelectedCourse({ ...selectedCourse, courseName: e.target.value })
+                  setSelectedCourse({
+                    ...selectedCourse,
+                    courseName: e.target.value,
+                  })
                 }
               />
             </Grid>
@@ -109,7 +137,10 @@ function EditCourse() {
                 fullWidth
                 value={selectedCourse.startDate}
                 onChange={(e) =>
-                  setSelectedCourse({ ...selectedCourse, startDate: e.target.value })
+                  setSelectedCourse({
+                    ...selectedCourse,
+                    startDate: e.target.value,
+                  })
                 }
                 InputLabelProps={{
                   shrink: true,
@@ -124,7 +155,10 @@ function EditCourse() {
                 fullWidth
                 value={selectedCourse.endDate}
                 onChange={(e) =>
-                  setSelectedCourse({ ...selectedCourse, endDate: e.target.value })
+                  setSelectedCourse({
+                    ...selectedCourse,
+                    endDate: e.target.value,
+                  })
                 }
                 InputLabelProps={{
                   shrink: true,
@@ -151,13 +185,20 @@ function EditCourse() {
               <Typography variant="h6">Schedule Details</Typography>
             </Grid>
             {selectedCourse.schedule.map((item, index) => (
-              <Grid container item xs={12} key={index}>
+              <Grid container item xs={12} key={index} spacing={2}>
                 <Grid item xs={2}>
                   <TextField
                     label="Day Number"
                     variant="outlined"
                     value={item.day}
-                    
+                    onChange={(e) => {
+                      const updatedSchedule = [...selectedCourse.schedule];
+                      updatedSchedule[index].day = e.target.value;
+                      setSelectedCourse({
+                        ...selectedCourse,
+                        schedule: updatedSchedule,
+                      });
+                    }}
                   />
                 </Grid>
                 <Grid item xs={2}>
@@ -165,7 +206,14 @@ function EditCourse() {
                     label="Date"
                     variant="outlined"
                     value={item.date}
-                    
+                    onChange={(e) => {
+                      const updatedSchedule = [...selectedCourse.schedule];
+                      updatedSchedule[index].date = e.target.value;
+                      setSelectedCourse({
+                        ...selectedCourse,
+                        schedule: updatedSchedule,
+                      });
+                    }}
                   />
                 </Grid>
                 <Grid item xs={3}>
@@ -173,7 +221,14 @@ function EditCourse() {
                     label="Weekday"
                     variant="outlined"
                     value={item.weekday}
-                    
+                    onChange={(e) => {
+                      const updatedSchedule = [...selectedCourse.schedule];
+                      updatedSchedule[index].weekday = e.target.value;
+                      setSelectedCourse({
+                        ...selectedCourse,
+                        schedule: updatedSchedule,
+                      });
+                    }}
                   />
                 </Grid>
                 <Grid item xs={5}>

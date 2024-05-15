@@ -1,4 +1,3 @@
-import "../css/AddCourse.css";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
@@ -9,6 +8,7 @@ import {
   Divider,
   Paper,
 } from "@material-ui/core";
+import "../css/AddCourse.css";
 
 function AddCourse() {
   const [courseName, setCourseName] = useState("");
@@ -19,11 +19,9 @@ function AddCourse() {
   const [publicHolidays, setPublicHolidays] = useState([]);
 
   useEffect(() => {
-    // Fetch public holidays for Victoria when the component mounts
     fetchPublicHolidays();
   }, []);
 
-  // Function to fetch public holidays
   const fetchPublicHolidays = async (fromDate, toDate) => {
     try {
       const response = await axios.get(
@@ -37,7 +35,6 @@ function AddCourse() {
       );
       const holidays = response.data.dates;
       setPublicHolidays(holidays);
-      console.log(holidays);
       return holidays;
     } catch (error) {
       console.error("Error fetching public holidays:", error);
@@ -46,33 +43,25 @@ function AddCourse() {
   };
 
   const handleGenerateSchedule = async () => {
-    // Resetting the generated schedule before regenerating
     setGeneratedSchedule([]);
-
-    // Parse start and end dates into Date objects
     const startDateObj = new Date(startDate);
     const endDateObj = new Date(endDate);
 
     try {
-      // Fetch public holidays for the specified year
       const holidays = await fetchPublicHolidays(
         startDateObj.getFullYear() + "-01-01",
         endDateObj.getFullYear() + "-12-31"
       );
-      console.log(holidays);
-      // Logic to generate schedule based on start and end dates
       const schedule = [];
       let currentDate = new Date(startDateObj);
       let endDateFormatted = new Date(endDateObj);
-      let dayCount = 0; // Initialize day count
+      let dayCount = 0;
 
-      // Loop through each day between start and end dates
       while (currentDate <= endDateFormatted) {
-        const isHoliday = isPublicHoliday(currentDate, publicHolidays);
-        // Check if the current day is not Saturday, Sunday, or a public holiday
+        const isHoliday = isPublicHoliday(currentDate, holidays);
         if (!isHoliday) {
           dayCount++;
-          const dateString = currentDate.toLocaleDateString("en-US"); // Format date consistently
+          const dateString = currentDate.toLocaleDateString("en-US");
           schedule.push({
             day: dayCount,
             date: dateString,
@@ -93,7 +82,6 @@ function AddCourse() {
             isHoliday: true,
           });
         }
-        // Move to the next day
         currentDate.setDate(currentDate.getDate() + 1);
       }
 
@@ -103,35 +91,35 @@ function AddCourse() {
     }
   };
 
-  // Function to check if a given date is a public holiday
   const isPublicHoliday = (date, publicHolidays) => {
-    if (date.getDay() === 0) {
-      return "Day off";
-    } else if (date.getDay() === 6) {
+    if (date.getDay() === 0 || date.getDay() === 6) {
       return "Day off";
     }
-
-    // Format the date as 'yyyy-MM-dd' to match the holiday date format
     const formattedDate = date.toISOString().slice(0, 10);
 
-    // Check if publicHolidays is defined and not empty
     if (publicHolidays && publicHolidays.length > 0) {
-      // Loop through each holiday
       for (const holiday of publicHolidays) {
-        // Compare the holiday date with the formatted date
         if (holiday.date === formattedDate) {
-          console.log(" Public holiday", date);
-          return "Public holiday"; // The given date is a public holiday
+          return "Public holiday";
         }
       }
     }
-    console.log("Not Public holiday", date);
-    return false; // The given date is not a public holiday
+    return false;
   };
 
-  const handleSave = () => {
-    // Logic to save the generated schedule
-    console.log("Saved schedule:", generatedSchedule);
+  const handleSave = async () => {
+    try {
+      const response = await axios.post("http://localhost:3001/courses/add", {
+        courseName,
+        startDate,
+        endDate,
+        numberOfStudents,
+      });
+      alert("Course saved successfully!");
+    } catch (error) {
+      console.error("Error saving the course:", error);
+      alert("Failed to save the course.");
+    }
   };
 
   return (
@@ -194,37 +182,41 @@ function AddCourse() {
         <>
           <Divider />
           <Typography variant="h6" style={{ margin: "20px 0" }}>
-            <h1>Generated Schedule</h1>
+            Generated Schedule
           </Typography>
           {generatedSchedule.map((item, index) => (
-  <Paper key={index} elevation={3} style={{ padding: "20px", marginBottom: "20px", height: "150px", display: "flex", flexDirection: "row", justifyContent: "space-around" , width:"950px",}}>
-    <Typography variant="h6" gutterBottom>
-      <span>Day {item.day}</span> 
-      </Typography>
-      <Typography variant="h6"gutterBottom>
-      <span>Date: {item.date}</span> 
-      </Typography>
-      <Typography variant="h6" gutterBottom>
-       <span>Weekday: {item.weekday}</span>
-    </Typography>
-    <Typography variant="h6" gutterBottom>
-    <TextField
-      label="Description"
-      
-      multiline
-      
-      value={item.description}
-      onChange={(e) => {
-        const updatedSchedule = [...generatedSchedule];
-        updatedSchedule[index].description = e.target.value;
-        setGeneratedSchedule(updatedSchedule);
-      }}
-      // disabled={item.isHoliday}
-    />
-    </Typography>
-  </Paper>
-))}
-
+            <Paper
+              key={index}
+              elevation={3}
+              style={{
+                padding: "20px",
+                marginBottom: "20px",
+                display: "flex",
+                justifyContent: "space-around",
+                width: "100%",
+              }}
+            >
+              <Typography variant="h6" gutterBottom>
+                Day {item.day}
+              </Typography>
+              <Typography variant="h6" gutterBottom>
+                Date: {item.date}
+              </Typography>
+              <Typography variant="h6" gutterBottom>
+                Weekday: {item.weekday}
+              </Typography>
+              <TextField
+                label="Description"
+                multiline
+                value={item.description}
+                onChange={(e) => {
+                  const updatedSchedule = [...generatedSchedule];
+                  updatedSchedule[index].description = e.target.value;
+                  setGeneratedSchedule(updatedSchedule);
+                }}
+              />
+            </Paper>
+          ))}
           <Button
             variant="contained"
             color="primary"
