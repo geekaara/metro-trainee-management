@@ -8,7 +8,12 @@ import {
   Grid,
   Card,
   CardContent,
-  Button
+  CardActions,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem
 } from '@mui/material';
 
 // const useStyles = makeStyles((theme) => ({
@@ -75,7 +80,7 @@ function ManageLeaves() {
         <Card>
           <CardContent>
             <Grid container spacing={2}>
-            <Grid item xs={6}>
+            <Grid item xs={4}>
           <TextField
             id="outlined-basic" 
             variant="outlined"
@@ -85,7 +90,7 @@ function ManageLeaves() {
             disabled
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={4}>
         <TextField
             id="outlined-basic" 
             variant="outlined"
@@ -95,8 +100,23 @@ function ManageLeaves() {
             disabled
             />
         </Grid>
+        <Grid item xs={4}>
+        <TextField
+            id="outlined-basic" 
+            variant="outlined"
+            label="Type"
+            size="small"
+            fullWidth
+            disabled
+            />
+        </Grid>
+  
             </Grid>
+            
           </CardContent>
+          <CardActions>
+            <Button style={{marginLeft:'auto'}} variant="contained" size="small">Edit</Button>
+      </CardActions>
         </Card>
 
   
@@ -134,7 +154,24 @@ function ManageLeaves() {
             
             />
         </Grid>
-
+        <Grid item xs={6}>
+        <FormControl fullWidth>
+          <InputLabel 
+            id="type-select-label"
+             size="small" >Leave Type</InputLabel>
+          <Select
+            labelId="type-select-label"
+            id="type-select"
+            label="Leave Type"
+            size="small"
+          >
+            <MenuItem value="Casual">Casual</MenuItem>
+            <MenuItem value="Annual">Annual</MenuItem>
+            <MenuItem value="Sick">Sick</MenuItem>
+          </Select>
+        </FormControl>
+        </Grid>
+        <Grid item xs={6}></Grid>
         <Grid item xs={12}>
         <TextField
             id="outlined-basic" 
