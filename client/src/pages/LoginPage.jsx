@@ -1,8 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';  // Import useNavigate
-
 import {
-
     Grid,
     CssBaseline,
     Box,
@@ -13,9 +11,7 @@ import {
     TextField,
     FormControlLabel,
     Checkbox
-
- } from '@mui/material';
-
+} from '@mui/material';
 import "../css/LoginPage.css";
 
 export default function LoginPage() {
@@ -36,8 +32,15 @@ export default function LoginPage() {
             <CssBaseline />
             <Grid item xs={false} sm={4} md={7} className="image-grid" />
             <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-                <Box className="paper-grid">
-                <div className="symbol-background"></div> {/* Background for symbol.png */}
+                <Box className="paper-grid" sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    minHeight: '100vh',
+                    padding: 4
+                }}>
+                    <div className="symbol-background"></div> {/* Background for symbol.png */}
                     {/* Avatar and TrainIcon component are commented out
                     <Avatar className="avatar">
                         <TrainIcon />
@@ -46,7 +49,7 @@ export default function LoginPage() {
                     <Typography component="h1" variant="h5" style={{ fontWeight: 'bold' }}>
                         Sign in
                     </Typography>
-                    <form noValidate onSubmit={handleSubmit} className="form">
+                    <Box component="form" noValidate onSubmit={handleSubmit} className="form" sx={{ mt: 1 }}>
                         <TextField
                             margin="normal"
                             required
@@ -77,6 +80,7 @@ export default function LoginPage() {
                             variant="contained"
                             color="primary"
                             className="submit-button"
+                            sx={{ mt: 3, mb: 2 }}
                         >
                             Sign In
                         </Button>
@@ -88,11 +92,11 @@ export default function LoginPage() {
                             </Grid>
                             <Grid item>
                                 <Link href="#" variant="body2">
-                                    Don't have an account? Sign Up
+                                    {"Don't have an account? Sign Up"}
                                 </Link>
                             </Grid>
                         </Grid>
-                    </form>
+                    </Box>
                 </Box>
             </Grid>
         </Grid>
@@ -100,22 +104,30 @@ export default function LoginPage() {
 }
 
 
+
 // import React from 'react';
-// // import Avatar from '@mui/material/Avatar';
-// import Button from '@mui/material/Button';
-// import CssBaseline from '@mui/material/CssBaseline';
-// import TextField from '@mui/material/TextField';
-// import FormControlLabel from '@mui/material/FormControlLabel';
-// import Checkbox from '@mui/material/Checkbox';
-// import Link from '@mui/material/Link';
-// import Paper from '@mui/material/Paper';
-// import Box from '@mui/material/Box';
-// import Grid from '@mui/material/Grid';
-// import Typography from '@mui/material/Typography';
+// import { useNavigate } from 'react-router-dom';  // Import useNavigate
+//
+// import {
+//
+//     Grid,
+//     CssBaseline,
+//     Box,
+//     Paper,
+//     Typography,
+//     Button,
+//     Link,
+//     TextField,
+//     FormControlLabel,
+//     Checkbox
+//
+//  } from '@mui/material';
+//
 // import "../css/LoginPage.css";
-// // import TrainIcon from '@material-ui/icons/TrainOutlined';  // Assuming TrainIcon is correctly installed
 //
 // export default function LoginPage() {
+//     const navigate = useNavigate();  // Create a navigate function
+//
 //     const handleSubmit = (event) => {
 //         event.preventDefault();
 //         const data = new FormData(event.currentTarget);
@@ -123,33 +135,25 @@ export default function LoginPage() {
 //             email: data.get('email'),
 //             password: data.get('password'),
 //         });
+//         navigate('/dashboard');
 //     };
 //
 //     return (
-//         <Grid container component="main">
+//         <Grid container component="main" className="main-grid">
 //             <CssBaseline />
-//             <Grid item xs={false} sm={4} md={7} style={{ background: 'url(path_to_your_image.jpg)', backgroundSize: 'cover' }} />
+//             <Grid item xs={false} sm={4} md={7} className="image-grid" />
 //             <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-//                 <Box style={{
-//                     display: 'flex',
-//                     flexDirection: 'column',
-//                     alignItems: 'center',
-//                     margin: '64px 32px',
-//                     width: 'auto',
-//                 }}>
-//                     {/*<Avatar style={{*/}
-//                     {/*    margin: '8px',*/}
-//                     {/*    backgroundColor: 'secondary.main',*/}
-//                     {/*}}>*/}
-//                     {/*    <TrainIcon />*/}
-//                     {/*</Avatar>*/}
-//                     <Typography component="h1" variant="h5">
+//                 <Box className="paper-grid">
+//                 <div className="symbol-background"></div> {/* Background for symbol.png */}
+//                     {/* Avatar and TrainIcon component are commented out
+//                     <Avatar className="avatar">
+//                         <TrainIcon />
+//                     </Avatar>
+//                     */}
+//                     <Typography component="h1" variant="h5" style={{ fontWeight: 'bold' }}>
 //                         Sign in
 //                     </Typography>
-//                     <form noValidate onSubmit={handleSubmit} style={{
-//                         width: '100%',
-//                         marginTop: '8px',
-//                     }}>
+//                     <form noValidate onSubmit={handleSubmit} className="form">
 //                         <TextField
 //                             margin="normal"
 //                             required
@@ -179,12 +183,7 @@ export default function LoginPage() {
 //                             fullWidth
 //                             variant="contained"
 //                             color="primary"
-//                             style={{
-//                                 marginTop: '24px',
-//                                 marginBottom: '16px',
-//                                 padding: '15px 200px',
-//                                 borderRadius: '80px',
-//                             }}
+//                             className="submit-button"
 //                         >
 //                             Sign In
 //                         </Button>

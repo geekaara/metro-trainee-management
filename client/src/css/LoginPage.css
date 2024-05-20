@@ -9,11 +9,11 @@
     position: relative;
     background-image: url('../images/Banner.png'); /* Adjust path as necessary */
     background-repeat: no-repeat;
-    background-size: small;
+    /*background-size: small;*/
     background-position: center;
     background-color: #0073CF ;
     filter: blur(0px);
-    
+
 }
 
 .paper-grid {
@@ -57,7 +57,7 @@
     left: 735px;
     width: 50%;
     height: 100%;
-    background-image: url('../images/Symbol.png'); /* Symbol background image */
+    /*background-image: url('../images/Symbol.png'); !* Symbol background image *!*/
     background-repeat: no-repeat;
     background-size: cover;
     opacity: 0.1; /* Adjust opacity as needed */

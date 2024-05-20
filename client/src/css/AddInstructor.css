@@ -1,38 +1,60 @@
-/* AddInstructor.css */
 .container {
-    margin: 20px;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    overflow-y: auto;
-}
-
-.container h1 {
-    margin-bottom: 20px;
-    font-size: 18px; /* Increase font size */
-    color: #333; /* Change text color to a dark shade */
-    text-transform: uppercase; /* Convert text to uppercase */
-    font-weight: bold; /* Make the text bold */
-    letter-spacing: 1px; /* Add letter spacing */
-}
-
-.button-primary {
-    margin-top: 20px;
-    background-color: #0073CF; /* Change button color to blue */
-    color: white; /* Change text color to white */
-}
-
-.button-primary:hover {
-    background-color: #066baf; /* Darker blue color on hover */
+    margin-top: 2rem;
 }
 
 .typography-h6 {
-    margin-top: 20px;
+    margin-bottom: 1rem;
 }
 
 .grid-item {
-    margin-bottom: 20px;
+    padding: 0.5rem;
 }
+
+.input-field {
+    margin-top: 0.5rem;
+}
+
+.button-primary {
+    margin-top: 1rem;
+}
+
+
+
+/*!* AddInstructor.css *!*/
+/*.container {*/
+/*    margin: 20px;*/
+/*    padding: 20px;*/
+/*    border: 1px solid #ccc;*/
+/*    border-radius: 5px;*/
+/*    overflow-y: auto;*/
+/*}*/
+
+/*.container h1 {*/
+/*    margin-bottom: 20px;*/
+/*    font-size: 18px; !* Increase font size *!*/
+/*    color: #333; !* Change text color to a dark shade *!*/
+/*    text-transform: uppercase; !* Convert text to uppercase *!*/
+/*    font-weight: bold; !* Make the text bold *!*/
+/*    letter-spacing: 1px; !* Add letter spacing *!*/
+/*}*/
+
+/*.button-primary {*/
+/*    margin-top: 20px;*/
+/*    background-color: #0073CF; !* Change button color to blue *!*/
+/*    color: white; !* Change text color to white *!*/
+/*}*/
+
+/*.button-primary:hover {*/
+/*    background-color: #066baf; !* Darker blue color on hover *!*/
+/*}*/
+
+/*.typography-h6 {*/
+/*    margin-top: 20px;*/
+/*}*/
+
+/*.grid-item {*/
+/*    margin-bottom: 20px;*/
+/*}*/
 
 /*.container-main {*/
 /*    padding: 20px;*/

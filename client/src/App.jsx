@@ -8,7 +8,8 @@ import ManageLeaves from "./pages/ManageLeaves";
 import ViewSchedules from "./pages/ViewSchedules";
 import AddCourse from "./pages/AddCourse";
 import EditCourse from "./pages/EditCourse";
-import LoginPage from "./pages/LoginPage"; // Ensure this import points to the actual file location
+import LoginPage from "./pages/LoginPage";
+import AddQualifications from "./pages/AddQualification"
 
 import './css/style.css';
 
@@ -19,6 +20,7 @@ function App() {
                 <Route path="/" element={<LoginPage />} />
                 <Route path="/dashboard" element={<WithNavbar><Dashboard /></WithNavbar>} />
                 <Route path="/add-instructors" element={<WithNavbar><AddInstructor /></WithNavbar>} />
+                <Route path="/qualifications" element={<WithNavbar><AddQualifications /></WithNavbar>} />
                 <Route path="/view-instructors" element={<WithNavbar><ViewInstructor /></WithNavbar>} />
                 <Route path="/manage-leaves" element={<WithNavbar><ManageLeaves /></WithNavbar>} />
                 <Route path="/view-schedules" element={<WithNavbar><ViewSchedules /></WithNavbar>} />
