@@ -3,9 +3,9 @@
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    overflow-y: auto; 
+    overflow-y: auto;
   }
-  
+
   .container h1 {
     margin-bottom: 20px;
   font-size: 18px; /* Increase font size */
@@ -15,7 +15,7 @@
   letter-spacing: 1px; /* Add letter spacing */
 
   }
-  
+
   .container .MuiButton-containedPrimary {
     margin-top: 20px;
     background-color: #0073CF; /* Change button color to blue */
@@ -25,13 +25,12 @@
   .container .MuiButton-containedPrimary:hover {
     background-color: #066baf; /* Darker blue color on hover */
   }
-  
+
   .container .MuiTypography-h6 {
     margin-top: 20px;
   }
-  
+
   .container .MuiGrid-item {
     margin-bottom: 20px;
   }
 
-  

@@ -118,7 +118,7 @@ const ViewSchedules = () => {
         </div>
         
       
-      <TableContainer style={{minHeight:'400px',backgroundColor:'lightgray'}} component={Paper}>
+      <TableContainer style={{minHeight:'400px',backgroundColor:'lightgray', minWidth:'auto'}} component={Paper}>
         <Table style={{backgroundColor:'#FFF'}} >
           <TableHead>
             <TableRow>
