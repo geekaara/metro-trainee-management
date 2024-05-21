@@ -1,694 +1,287 @@
 import React, { useState } from "react";
 import {
-    TextField,
-    Button,
-    Grid,
-    Typography,
-    Divider,
-    Paper,
-    Container,
-    Box,
-    InputAdornment,
-    IconButton,
+  TextField,
+  Button,
+  Grid,
+  Typography,
+  Divider,
+  Paper,
+  Container,
+  Box,
+  InputAdornment,
+  IconButton,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import "../css/EditCourse.css";
 
 function EditCourse() {
-    // State variable to store course details
-    const [courses, setCourses] = useState([
-        {
-            id: 1,
-            courseName: "Induction",
-            startDate: "2024-01-16",
-            endDate: "2024-02-02",
-            numberOfStudents: 20,
-            schedule: [
-                { day: 1, date: "2024-01-15", weekday: "Monday", description: "" },
-                { day: 2, date: "2024-01-16", weekday: "Tuesday", description: "" },
-                // Add more schedule items as needed
-            ],
-        },
-        // Add more courses as needed
-    ]);
+  // State variable to store course details
+  const [courses, setCourses] = useState([
+    {
+      id: 1,
+      courseName: "Induction",
+      startDate: "2024-01-15",
+      endDate: "2024-01-19",
+      numberOfStudents: 20,
+      classId: "Class 200",
+      group: "North",
+      schedule: [
+        { day: 1, date: "15-01-2024", weekday: "Monday", description: "" },
+        { day: 2, date: "16-01-2024", weekday: "Tuesday", description: "" },
+        { day: 2, date: "17-01-2024", weekday: "Wednesday", description: "" },
+        { day: 2, date: "18-01-2024", weekday: "Thursday", description: "" },
+        { day: 2, date: "19-01-2024", weekday: "Friday", description: "" },
+        // Add more schedule items as needed
+      ],
+    },
+    // Add more courses as needed
+  ]);
 
-    // State variables for search and selected course
-    const [searchQuery, setSearchQuery] = useState("");
-    const [selectedCourse, setSelectedCourse] = useState(null);
+  // State variables for search and selected course
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCourse, setSelectedCourse] = useState(null);
 
-    // Function to handle search input change
-    const handleSearchChange = (event) => {
-        setSearchQuery(event.target.value);
-    };
+  // Function to handle search input change
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
 
-    // Function to handle course selection
-    const handleCourseSelect = (course) => {
-        setSelectedCourse(course);
-    };
+  // Function to handle course selection
+  const handleCourseSelect = (course) => {
+    setSelectedCourse(course);
+  };
 
-    // Function to handle saving changes
-    const handleSaveChanges = () => {
-        // Logic to save changes to the selected course
-        console.log("Changes saved:", selectedCourse);
-    };
+  // Function to handle saving changes
+  const handleSaveChanges = () => {
+    // Logic to save changes to the selected course
+    console.log("Changes saved:", selectedCourse);
+  };
 
-    return (
-        <Container maxWidth="md">
-            <Paper elevation={3} sx={{ padding: 3, marginTop: 3 }}>
-                <Typography variant="h4" gutterBottom>
-                    Edit Course
-                </Typography>
-                {/* Search input for filtering courses */}
+  return (
+    <Container maxWidth="md">
+      <Paper elevation={3} sx={{ padding: 3, marginTop: 3 }}>
+        <Typography variant="h4" gutterBottom>
+          Edit Course
+        </Typography>
+        {/* Search input for filtering courses */}
+        <TextField
+          label="Search Courses"
+          variant="outlined"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          fullWidth
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton>
+                  <SearchIcon />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+          sx={{ marginBottom: 2 }}
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            const foundCourse = courses.find(
+              (course) =>
+                course.courseName.toLowerCase() === searchQuery.toLowerCase()
+            );
+            handleCourseSelect(foundCourse);
+          }}
+          fullWidth
+          sx={{ marginBottom: 2 }}
+        >
+          Search
+        </Button>
+
+        {/* Display selected course details for editing */}
+        {selectedCourse && (
+          <Box sx={{ padding: 2 }}>
+            <Divider sx={{ margin: "20px 0" }} />
+            <Typography variant="h5" gutterBottom>
+              Editing Course: {selectedCourse.courseName}
+            </Typography>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
                 <TextField
-                    label="Search Courses"
-                    variant="outlined"
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    fullWidth
-                    InputProps={{
-                        endAdornment: (
-                            <InputAdornment position="end">
-                                <IconButton>
-                                    <SearchIcon />
-                                </IconButton>
-                            </InputAdornment>
-                        ),
-                    }}
-                    sx={{ marginBottom: 2 }}
+                  label="Course Name"
+                  variant="outlined"
+                  fullWidth
+                  value={selectedCourse.courseName}
+                  onChange={(e) =>
+                    setSelectedCourse({
+                      ...selectedCourse,
+                      courseName: e.target.value,
+                    })
+                  }
+                  sx={{ marginBottom: 2 }}
                 />
-                <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => {
-                        const foundCourse = courses.find(
-                            (course) =>
-                                course.courseName.toLowerCase() === searchQuery.toLowerCase()
-                        );
-                        handleCourseSelect(foundCourse);
-                    }}
-                    fullWidth
-                    sx={{ marginBottom: 2 }}
-                >
-                    Search
-                </Button>
-
-                {/* Display selected course details for editing */}
-                {selectedCourse && (
-                    <Box sx={{ padding: 2 }}>
-                        <Divider sx={{ margin: "20px 0" }} />
-                        <Typography variant="h5" gutterBottom>
-                            Editing Course: {selectedCourse.courseName}
-                        </Typography>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    label="Course Name"
-                                    variant="outlined"
-                                    fullWidth
-                                    value={selectedCourse.courseName}
-                                    onChange={(e) =>
-                                        setSelectedCourse({
-                                            ...selectedCourse,
-                                            courseName: e.target.value,
-                                        })
-                                    }
-                                    sx={{ marginBottom: 2 }}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    label="Start Date"
-                                    type="date"
-                                    variant="outlined"
-                                    fullWidth
-                                    value={selectedCourse.startDate}
-                                    onChange={(e) =>
-                                        setSelectedCourse({
-                                            ...selectedCourse,
-                                            startDate: e.target.value,
-                                        })
-                                    }
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    sx={{ marginBottom: 2 }}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    label="End Date"
-                                    type="date"
-                                    variant="outlined"
-                                    fullWidth
-                                    value={selectedCourse.endDate}
-                                    onChange={(e) =>
-                                        setSelectedCourse({
-                                            ...selectedCourse,
-                                            endDate: e.target.value,
-                                        })
-                                    }
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    sx={{ marginBottom: 2 }}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    label="Number of Students"
-                                    type="number"
-                                    variant="outlined"
-                                    fullWidth
-                                    value={selectedCourse.numberOfStudents}
-                                    onChange={(e) =>
-                                        setSelectedCourse({
-                                            ...selectedCourse,
-                                            numberOfStudents: parseInt(e.target.value),
-                                        })
-                                    }
-                                    sx={{ marginBottom: 2 }}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Typography variant="h6" gutterBottom>
-                                    Schedule Details
-                                </Typography>
-                            </Grid>
-                            {selectedCourse.schedule.map((item, index) => (
-                                <Grid container item xs={12} key={index} spacing={2}>
-                                    <Grid item xs={2}>
-                                        <TextField
-                                            label="Day Number"
-                                            variant="outlined"
-                                            fullWidth
-                                            value={item.day}
-                                            disabled
-                                            sx={{ marginBottom: 2 }}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={2}>
-                                        <TextField
-                                            label="Date"
-                                            variant="outlined"
-                                            fullWidth
-                                            value={item.date}
-                                            disabled
-                                            sx={{ marginBottom: 2 }}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        <TextField
-                                            label="Weekday"
-                                            variant="outlined"
-                                            fullWidth
-                                            value={item.weekday}
-                                            disabled
-                                            sx={{ marginBottom: 2 }}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={5}>
-                                        <TextField
-                                            label="Description"
-                                            variant="outlined"
-                                            fullWidth
-                                            value={item.description}
-                                            onChange={(e) => {
-                                                const updatedSchedule = [...selectedCourse.schedule];
-                                                updatedSchedule[index].description = e.target.value;
-                                                setSelectedCourse({
-                                                    ...selectedCourse,
-                                                    schedule: updatedSchedule,
-                                                });
-                                            }}
-                                            sx={{ marginBottom: 2 }}
-                                        />
-                                    </Grid>
-                                </Grid>
-                            ))}
-                        </Grid>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            onClick={handleSaveChanges}
-                            sx={{ marginTop: 2 }}
-                        >
-                            Save Changes
-                        </Button>
-                    </Box>
-                )}
-            </Paper>
-        </Container>
-    );
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Class ID"
+                  variant="outlined"
+                  fullWidth
+                  value={selectedCourse.classId}
+                  onChange={(e) =>
+                    setSelectedCourse({
+                      ...selectedCourse,
+                      classId: e.target.value,
+                    })
+                  }
+                  sx={{ marginBottom: 2 }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Start Date"
+                  type="date"
+                  variant="outlined"
+                  fullWidth
+                  value={selectedCourse.startDate}
+                  onChange={(e) =>
+                    setSelectedCourse({
+                      ...selectedCourse,
+                      startDate: e.target.value,
+                    })
+                  }
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  sx={{ marginBottom: 2 }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="End Date"
+                  type="date"
+                  variant="outlined"
+                  fullWidth
+                  value={selectedCourse.endDate}
+                  onChange={(e) =>
+                    setSelectedCourse({
+                      ...selectedCourse,
+                      endDate: e.target.value,
+                    })
+                  }
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  sx={{ marginBottom: 2 }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="Number of Students"
+                  type="number"
+                  variant="outlined"
+                  fullWidth
+                  value={selectedCourse.numberOfStudents}
+                  onChange={(e) =>
+                    setSelectedCourse({
+                      ...selectedCourse,
+                      numberOfStudents: parseInt(e.target.value),
+                    })
+                  }
+                  sx={{ marginBottom: 2 }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <FormControl fullWidth variant="outlined" sx={{ marginBottom: 2 }}>
+                  <InputLabel id="group-label">Group</InputLabel>
+                  <Select
+                    labelId="group-label"
+                    value={selectedCourse.group}
+                    onChange={(e) =>
+                      setSelectedCourse({
+                        ...selectedCourse,
+                        group: e.target.value,
+                      })
+                    }
+                    label="Group"
+                  >
+                    <MenuItem value="North">North</MenuItem>
+                    <MenuItem value="South">South</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="h6" gutterBottom>
+                  Schedule Details
+                </Typography>
+              </Grid>
+              {selectedCourse.schedule.map((item, index) => (
+                <Grid container item xs={12} key={index} spacing={2}>
+                  {/* <Grid item xs={2}>
+                    <TextField
+                      label="Day Number"
+                      variant="outlined"
+                      fullWidth
+                      value={item.day}
+                      
+                      sx={{ marginBottom: 2 }}
+                    />
+                  </Grid> */}
+                  <Grid item xs={2}>
+                    <TextField
+                      label="Date"
+                      variant="outlined"
+                      fullWidth
+                      value={item.date}
+                      
+                      sx={{ marginBottom: 2 }}
+                    />
+                  </Grid>
+                  <Grid item xs={3}>
+                    <TextField
+                      label="Day"
+                      variant="outlined"
+                      fullWidth
+                      value={item.weekday}
+                      
+                      sx={{ marginBottom: 2 }}
+                    />
+                  </Grid>
+                  <Grid item xs={5}>
+                    <TextField
+                      label="Description"
+                      variant="outlined"
+                      fullWidth
+                      value={item.description}
+                      onChange={(e) => {
+                        const updatedSchedule = [...selectedCourse.schedule];
+                        updatedSchedule[index].description = e.target.value;
+                        setSelectedCourse({
+                          ...selectedCourse,
+                          schedule: updatedSchedule,
+                        });
+                      }}
+                      sx={{ marginBottom: 2 }}
+                    />
+                  </Grid>
+                </Grid>
+              ))}
+            </Grid>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleSaveChanges}
+              sx={{ marginTop: 2 }}
+            >
+              Save Changes
+            </Button>
+          </Box>
+        )}
+      </Paper>
+    </Container>
+  );
 }
 
 export default EditCourse;
-
-// import React, { useState } from "react";
-// import { TextField, Box, Button, Container, Grid, Typography, Divider, Paper, InputAdornment, IconButton } from "@mui/material";
-// import SearchIcon from "@mui/icons-material/Search";
-// import "../css/EditCourse.css";
-//
-// function EditCourse() {
-//   // State variable to store course details
-//   const [courses, setCourses] = useState([
-//     {
-//       id: 1,
-//       courseName: "Induction",
-//       startDate: "2024-01-16",
-//       endDate: "2024-02-02",
-//       numberOfStudents: 20,
-//       schedule: [
-//         { day: 1, date: "2024-01-15", weekday: "Monday", description: "" },
-//         { day: 2, date: "2024-01-16", weekday: "Tuesday", description: "" },
-//         // Add more schedule items as needed
-//       ],
-//     },
-//     // Add more courses as needed
-//   ]);
-//
-//   // State variables for search and selected course
-//   const [searchQuery, setSearchQuery] = useState("");
-//   const [selectedCourse, setSelectedCourse] = useState(null);
-//
-//   // Function to handle search input change
-//   const handleSearchChange = (event) => {
-//     setSearchQuery(event.target.value);
-//   };
-//
-//   // Function to handle course selection
-//   const handleCourseSelect = (course) => {
-//     setSelectedCourse(course);
-//   };
-//
-//   // Function to handle saving changes
-//   const handleSaveChanges = () => {
-//     // Logic to save changes to the selected course
-//     console.log("Changes saved:", selectedCourse);
-//   };
-//
-//   return (
-//       <Container maxWidth="sm">
-//         <Paper elevation={3} sx={{ padding: 3, marginTop: 3 }}>
-//           <Typography variant="h4" gutterBottom>
-//             Edit Course
-//           </Typography>
-//           {/* Search input for filtering courses */}
-//           <TextField
-//               label="Search Courses"
-//               variant="outlined"
-//               value={searchQuery}
-//               onChange={handleSearchChange}
-//               fullWidth
-//               InputProps={{
-//                 endAdornment: (
-//                     <InputAdornment position="end">
-//                       <IconButton>
-//                         <SearchIcon />
-//                       </IconButton>
-//                     </InputAdornment>
-//                 ),
-//               }}
-//               sx={{ marginBottom: 2 }}
-//           />
-//           <Button
-//               variant="contained"
-//               color="primary"
-//               onClick={() => {
-//                 const foundCourse = courses.find(
-//                     (course) =>
-//                         course.courseName.toLowerCase() === searchQuery.toLowerCase()
-//                 );
-//                 handleCourseSelect(foundCourse);
-//               }}
-//               fullWidth
-//               sx={{ marginBottom: 2 }}
-//           >
-//             Search
-//           </Button>
-//
-//           {/* Display selected course details for editing */}
-//           {selectedCourse && (
-//               <Box>
-//                 <Divider sx={{ margin: "20px 0" }} />
-//                 <Typography variant="h5" gutterBottom>
-//                   Editing Course: {selectedCourse.courseName}
-//                 </Typography>
-//                 <Grid container spacing={2}>
-//                   <Grid item xs={12} sm={6}>
-//                     <TextField
-//                         label="Course Name"
-//                         variant="outlined"
-//                         fullWidth
-//                         value={selectedCourse.courseName}
-//                         onChange={(e) =>
-//                             setSelectedCourse({
-//                               ...selectedCourse,
-//                               courseName: e.target.value,
-//                             })
-//                         }
-//                         sx={{ marginBottom: 2 }}
-//                     />
-//                   </Grid>
-//                   <Grid item xs={12} sm={6}>
-//                     <TextField
-//                         label="Start Date"
-//                         type="date"
-//                         variant="outlined"
-//                         fullWidth
-//                         value={selectedCourse.startDate}
-//                         onChange={(e) =>
-//                             setSelectedCourse({
-//                               ...selectedCourse,
-//                               startDate: e.target.value,
-//                             })
-//                         }
-//                         InputLabelProps={{
-//                           shrink: true,
-//                         }}
-//                         sx={{ marginBottom: 2 }}
-//                     />
-//                   </Grid>
-//                   <Grid item xs={12} sm={6}>
-//                     <TextField
-//                         label="End Date"
-//                         type="date"
-//                         variant="outlined"
-//                         fullWidth
-//                         value={selectedCourse.endDate}
-//                         onChange={(e) =>
-//                             setSelectedCourse({
-//                               ...selectedCourse,
-//                               endDate: e.target.value,
-//                             })
-//                         }
-//                         InputLabelProps={{
-//                           shrink: true,
-//                         }}
-//                         sx={{ marginBottom: 2 }}
-//                     />
-//                   </Grid>
-//                   <Grid item xs={12} sm={6}>
-//                     <TextField
-//                         label="Number of Students"
-//                         type="number"
-//                         variant="outlined"
-//                         fullWidth
-//                         value={selectedCourse.numberOfStudents}
-//                         onChange={(e) =>
-//                             setSelectedCourse({
-//                               ...selectedCourse,
-//                               numberOfStudents: parseInt(e.target.value),
-//                             })
-//                         }
-//                         sx={{ marginBottom: 2 }}
-//                     />
-//                   </Grid>
-//                   <Grid item xs={12}>
-//                     <Typography variant="h6" gutterBottom>
-//                       Schedule Details
-//                     </Typography>
-//                   </Grid>
-//                   {selectedCourse.schedule.map((item, index) => (
-//                       <Grid container item xs={12} key={index} spacing={2}>
-//                         <Grid item xs={2}>
-//                           <TextField
-//                               label="Day Number"
-//                               variant="outlined"
-//                               fullWidth
-//                               value={item.day}
-//                               disabled
-//                               sx={{ marginBottom: 2 }}
-//                           />
-//                         </Grid>
-//                         <Grid item xs={2}>
-//                           <TextField
-//                               label="Date"
-//                               variant="outlined"
-//                               fullWidth
-//                               value={item.date}
-//                               disabled
-//                               sx={{ marginBottom: 2 }}
-//                           />
-//                         </Grid>
-//                         <Grid item xs={3}>
-//                           <TextField
-//                               label="Weekday"
-//                               variant="outlined"
-//                               fullWidth
-//                               value={item.weekday}
-//                               disabled
-//                               sx={{ marginBottom: 2 }}
-//                           />
-//                         </Grid>
-//                         <Grid item xs={5}>
-//                           <TextField
-//                               label="Description"
-//                               variant="outlined"
-//                               fullWidth
-//                               value={item.description}
-//                               onChange={(e) => {
-//                                 const updatedSchedule = [...selectedCourse.schedule];
-//                                 updatedSchedule[index].description = e.target.value;
-//                                 setSelectedCourse({
-//                                   ...selectedCourse,
-//                                   schedule: updatedSchedule,
-//                                 });
-//                               }}
-//                               sx={{ marginBottom: 2 }}
-//                           />
-//                         </Grid>
-//                       </Grid>
-//                   ))}
-//                 </Grid>
-//                 <Button
-//                     variant="contained"
-//                     color="primary"
-//                     onClick={handleSaveChanges}
-//                     sx={{ marginTop: 2 }}
-//                 >
-//                   Save Changes
-//                 </Button>
-//               </Box>
-//           )}
-//         </Paper>
-//       </Container>
-//   );
-// }
-//
-// export default EditCourse;
-
-
-
-
-
-// import React, { useState } from "react";
-// import { TextField, Button, Grid, Typography, Divider } from "@mui/material";
-// import "../css/EditCourse.css";
-// import InputAdornment from '@mui/material/InputAdornment';
-// import IconButton from '@mui/material/IconButton';
-// import SearchIcon from '@mui/icons-material/Search';
-//
-// function EditCourse() {
-//   // State variable to store course details
-//   const [courses, setCourses] = useState([
-//     {
-//       id: 1,
-//       courseName: "Induction",
-//       startDate: "2024-01-16",
-//       endDate: "2024-02-02",
-//       numberOfStudents: 20,
-//       schedule: [
-//         { day: 1, date: "2024-01-15", weekday: "Monday", description: "" },
-//         { day: 2, date: "2024-01-15", weekday: "Tuesday", description: "" },
-//       ],
-//     },
-//   ]);
-//
-//   // State variables for search and selected course
-//   const [searchQuery, setSearchQuery] = useState("");
-//   const [selectedCourse, setSelectedCourse] = useState(null);
-//
-//   // Function to handle search input change
-//   const handleSearchChange = (event) => {
-//     setSearchQuery(event.target.value);
-//   };
-//
-//   // Function to handle course selection
-//   const handleCourseSelect = (course) => {
-//     setSelectedCourse(course);
-//   };
-//
-//   // Function to handle saving changes
-//   const handleSaveChanges = () => {
-//     // Logic to save changes to the selected course
-//     console.log("Changes saved:", selectedCourse);
-//   };
-//
-//   return (
-//     <div className="container">
-//       <h1 className="edit-h1">Edit Course</h1>
-//       {/* Search input for filtering courses */}
-//       <TextField
-//         label="Search Courses"
-//         variant="outlined"
-//         value={searchQuery}
-//         onChange={handleSearchChange}
-//         fullWidth
-//         InputProps={{
-//           endAdornment: (
-//             <InputAdornment position="end">
-//               {courses.map((course) => (  // Move IconButton inside map function
-//                 <IconButton key={course.id} onClick={() => handleCourseSelect(course)}>
-//                   <SearchIcon />
-//                 </IconButton>
-//               ))}
-//             </InputAdornment>
-//           ),
-//           style: { paddingRight: "30px" } // Adjust the padding to fit the search icon properly
-//         }}
-//         style={{ marginBottom: "20px" }}
-//       />
-//
-//       {/* Display filtered courses */}
-//       {courses.map((course) => (
-//         <div key={course.id}>
-//           <Button
-//
-//             onClick={() => handleCourseSelect(course)}
-//             style={{ marginBottom: "10px" }}
-//             variant="contained"
-//             color="primary"
-//           >
-//             {/* {course.courseName} - {course.startDate} to {course.endDate} */}
-//             Search
-//           </Button>
-//         </div>
-//       ))}
-//
-//       {/* Display selected course details for editing */}
-//       {selectedCourse && (
-//         <div>
-//           <Divider style={{ margin: "20px 0" }} />
-//           <Typography variant="h5">Editing Course: {selectedCourse.courseName}</Typography>
-//           <Grid container spacing={2} style={{ marginTop: "20px" }}>
-//             <Grid item xs={12} sm={6}>
-//               <TextField
-//                 label="Course Name"
-//                 variant="outlined"
-//                 fullWidth
-//                 value={selectedCourse.courseName}
-//                 onChange={(e) =>
-//                   setSelectedCourse({ ...selectedCourse, courseName: e.target.value })
-//                 }
-//               />
-//             </Grid>
-//             <Grid item xs={12} sm={6}>
-//               <TextField
-//                 label="Start Date"
-//                 type="date"
-//                 variant="outlined"
-//                 fullWidth
-//                 value={selectedCourse.startDate}
-//                 onChange={(e) =>
-//                   setSelectedCourse({ ...selectedCourse, startDate: e.target.value })
-//                 }
-//                 InputLabelProps={{
-//                   shrink: true,
-//                 }}
-//               />
-//             </Grid>
-//             <Grid item xs={12} sm={6}>
-//               <TextField
-//                 label="End Date"
-//                 type="date"
-//                 variant="outlined"
-//                 fullWidth
-//                 value={selectedCourse.endDate}
-//                 onChange={(e) =>
-//                   setSelectedCourse({ ...selectedCourse, endDate: e.target.value })
-//                 }
-//                 InputLabelProps={{
-//                   shrink: true,
-//                 }}
-//               />
-//             </Grid>
-//             <Grid item xs={12} sm={6}>
-//               <TextField
-//                 label="Number of Students"
-//                 type="number"
-//                 variant="outlined"
-//                 fullWidth
-//                 value={selectedCourse.numberOfStudents}
-//                 onChange={(e) =>
-//                   setSelectedCourse({
-//                     ...selectedCourse,
-//                     numberOfStudents: parseInt(e.target.value),
-//                   })
-//                 }
-//               />
-//             </Grid>
-//             {/* Schedule details */}
-//             <Grid item xs={12}>
-//               <Typography variant="h6">Schedule Details</Typography>
-//             </Grid>
-//             {selectedCourse.schedule.map((item, index) => (
-//               <Grid container item xs={12} key={index}>
-//                 <Grid item xs={2}>
-//                   <TextField
-//                     label="Day Number"
-//                     variant="outlined"
-//                     value={item.day}
-//
-//                   />
-//                 </Grid>
-//                 <Grid item xs={2}>
-//                   <TextField
-//                     label="Date"
-//                     variant="outlined"
-//                     value={item.date}
-//
-//                   />
-//                 </Grid>
-//                 <Grid item xs={3}>
-//                   <TextField
-//                     label="Weekday"
-//                     variant="outlined"
-//                     value={item.weekday}
-//
-//                   />
-//                 </Grid>
-//                 <Grid item xs={5}>
-//                   <TextField
-//                     label="Description"
-//                     variant="outlined"
-//                     fullWidth
-//                     value={item.description}
-//                     onChange={(e) => {
-//                       const updatedSchedule = [...selectedCourse.schedule];
-//                       updatedSchedule[index].description = e.target.value;
-//                       setSelectedCourse({
-//                         ...selectedCourse,
-//                         schedule: updatedSchedule,
-//                       });
-//                     }}
-//                   />
-//                 </Grid>
-//               </Grid>
-//             ))}
-//           </Grid>
-//           {/* Button to save changes */}
-//           <Button
-//             variant="contained"
-//             color="primary"
-//             onClick={handleSaveChanges}
-//             style={{ marginTop: "20px" }}
-//           >
-//             Save Changes
-//           </Button>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-//
-// export default EditCourse;
