@@ -1,0 +1,25 @@
+.container {
+    margin-top: 1rem;
+}
+
+.MuiPaper-root {
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.MuiTypography-h4 {
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.MuiTypography-body1 {
+    margin-bottom: 2rem;
+}
+
+.MuiGrid-container {
+    margin-bottom: 1rem;
+}
+
+.MuiFormControlLabel-root {
+    margin-left: 0;
+}
