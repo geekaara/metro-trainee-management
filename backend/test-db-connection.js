@@ -1,6 +1,11 @@
 const mysql = require("mysql2");
 require("dotenv").config();
 
+console.log("DB_HOST:", process.env.DB_HOST);
+console.log("DB_USER:", process.env.DB_USER);
+console.log("DB_PASSWORD:", process.env.DB_PASSWORD);
+console.log("DB_DATABASE:", process.env.DB_DATABASE);
+
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -11,13 +16,5 @@ const pool = mysql.createPool({
   queueLimit: 0,
 });
 
-const db = pool.promise();
+module.exports = pool.promise();
 
-(async () => {
-  try {
-    const [rows, fields] = await db.query("SELECT 1 + 1 AS solution");
-    console.log("The solution is: ", rows[0].solution);
-  } catch (error) {
-    console.error("Database connection error:", error.message);
-  }
-})();

@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const db = require("../config/database");
+const db = require("../test-db-connection");
 
 // Controller to update a course
 exports.updateCourse = asyncHandler(async (req, res, next) => {
