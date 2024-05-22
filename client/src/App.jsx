@@ -9,6 +9,7 @@ import ViewSchedules from "./pages/ViewSchedules";
 import AddCourse from "./pages/AddCourse";
 import EditCourse from "./pages/EditCourse";
 import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage"; 
 import AddQualifications from "./pages/AddQualifications";
 import AddInstructorAvailability from "./pages/AddInstructorAvailability";
 
@@ -20,6 +21,7 @@ function App() {
         <Router>
             <Routes>
                 <Route path="/" element={<LoginPage />} />
+                <Route path="/signup" element={<SignupPage />} />
                 <Route path="/dashboard" element={<WithNavbar><Dashboard /></WithNavbar>} />
                 <Route path="/add-instructors" element={<WithNavbar><AddInstructor /></WithNavbar>} />
                 <Route path="/qualifications" element={<WithNavbar><AddQualifications /></WithNavbar>} />

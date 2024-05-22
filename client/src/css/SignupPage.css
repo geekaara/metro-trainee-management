@@ -1,0 +1,40 @@
+/* SignupPage.css */
+
+.main-grid {
+    height: 100vh;
+}
+
+.image-grid {
+    /* Position relative allows the pseudo-element to be positioned absolutely within this container */
+    position: relative;
+    background-image: url('../images/Banner.png'); /* Adjust path as necessary */
+    background-repeat: no-repeat;
+    /*background-size: small;*/
+    background-position: center;
+    background-color: #0073CF ;
+    filter: blur(0px);
+
+}
+
+.paper-grid {
+    display: 'flex';
+    flex-direction: 'column';
+    align-items: 'center';
+    justify-content: 'center';
+    min-height: '100vh';
+    padding: 4;
+}
+
+.symbol-background {
+  
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 100px;
+    height: 100px;
+}
+
+.submit-button {
+    margin-top: 24px;
+    margin-bottom: 16px;
+}
