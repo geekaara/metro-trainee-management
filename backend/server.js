@@ -7,7 +7,8 @@ const cors = require("cors");
 const instructorsRoute = require("./routes/instructors");
 const coursesRoute = require("./routes/courses");
 const userRoutes = require('./routes/userRoutes');
-
+const leavesRoutes = require('./routes/leaves');
+const viewScheduleRoutes = require('./routes/instructorSchedule');
 
 app.use(express.json());
 app.use(cors());
@@ -16,6 +17,8 @@ app.use(cors());
 app.use("/instructors", instructorsRoute);
 app.use("/courses", coursesRoute);
 app.use('/users', userRoutes);
+app.use('/leaves', leavesRoutes);
+app.use('/instructorschedule', viewScheduleRoutes);
 
 app.get("/api", (req, res) => {
   res.json({ message: "Trainee Management!" });
