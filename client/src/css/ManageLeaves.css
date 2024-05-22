@@ -1,22 +1,9 @@
-.manageLeaves {
+.container {
     margin-top: 2rem;
 }
 
-.heading {
-    font-weight: bold;
+.MuiTextField-root {
     margin-bottom: 1rem;
-}
-
-.subheading {
-    margin-bottom: 2rem;
-}
-
-.currentLeavesList {
-    margin-top: 1rem;
-}
-
-.addNewLeave {
-    margin-top: 2rem;
 }
 
 .MuiButton-containedPrimary {
@@ -24,28 +11,19 @@
     color: white;
 }
 
+.MuiDivider-root {
+    margin: 20px 0;
+}
+
+.MuiPaper-root {
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.MuiTypography-h6 {
+    margin-bottom: 1rem;
+}
+
 .MuiButton-containedPrimary:hover {
     background-color: #115293;
 }
-
-
-/*.manageLeaves{*/
-/*    width:700px;*/
-/*    padding: 20px;*/
-
-/*}*/
-
-/*.currentLeaves{*/
-/*    margin-top: 30px;*/
-/*}*/
-
-/*.currentLeavesList{*/
-/*    background-color: lightgray;*/
-/*    padding: 20px;*/
-/*    height: 300px;*/
-/*    overflow-y: scroll;*/
-/*}*/
-
-/*.addNewLeave{*/
-/*    margin-top: 30px;*/
-/*}*/

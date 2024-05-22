@@ -6,11 +6,12 @@
 .viewSchedule-dateControls {
     display: flex;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
+
 }
 
 .viewSchedule{
-    width: 700px;
+    width: 1000px;
     padding: 20px;
 }
 

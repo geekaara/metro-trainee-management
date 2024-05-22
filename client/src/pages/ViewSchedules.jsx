@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, MenuItem, Select } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, MenuItem, Select, Paper,Container } from '@mui/material';
 import useScheduleData from '../services/ScheduleService';
 import "../css/ViewSchedule.css";
 
@@ -97,6 +97,8 @@ const ViewSchedules = () => {
   
 
   return (
+    <Container maxWidth="md">
+    <Paper elevation={3} sx={{ padding: 3, marginTop: 3, width:1025 }}>
     <div className='viewSchedule'>
       <p className='heading'> View Instructor Schedule</p>
       
@@ -131,6 +133,9 @@ const ViewSchedules = () => {
         </Table>
       </TableContainer>
     </div>
+    </Paper>
+    </Container>
+
   );
 };
 
