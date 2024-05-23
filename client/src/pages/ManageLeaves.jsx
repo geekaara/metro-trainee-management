@@ -161,12 +161,11 @@ function ManageLeaves() {
                             <FormControl fullWidth variant="outlined" size="small">
                                 <InputLabel>Leave Type</InputLabel>
                                 <Select label="Leave Type">
-                                    <MenuItem value="Casual">Casual</MenuItem>
                                     <MenuItem value="Annual">Annual</MenuItem>
                                     <MenuItem value="Sick">Sick</MenuItem>
-                                    <MenuItem value="Sick">Professional Development</MenuItem>
-                                    <MenuItem value="Sick">Driving weeks</MenuItem>
-                                    <MenuItem value="Sick">Drivers Day off</MenuItem>
+                                    <MenuItem value="CarerLeave">Carers Leave</MenuItem>
+                                    <MenuItem value="FatigueDay">Fatigue Day</MenuItem>
+                                    <MenuItem value="ParentalLeave">Parental Leave</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>

@@ -149,15 +149,7 @@ function AddCourse() {
                 variant="outlined"
               />
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                label="Class ID"
-                fullWidth
-                value={classId}
-                onChange={(e) => setClassId(e.target.value)}
-                variant="outlined"
-              />
-            </Grid>
+            
             <Grid item xs={6}>
               <TextField
                 label="Start Date"
@@ -238,21 +230,40 @@ function AddCourse() {
                   display: "flex",
                   justifyContent: "space-around",
                   width: "100%",
+                  alignItems:"center",
+                  flexWrap:"wrap",
+                  gap:2
                 }}
               >
                 {/* <Typography variant="h6" gutterBottom>
                   Day {item.day}
                 </Typography> */}
-                <Typography variant="h6" gutterBottom>
+                <Typography variant="h8" gutterBottom>
                    {item.date}
                 </Typography>
-                <Typography variant="h6" gutterBottom>
+                <Typography variant="h8" gutterBottom>
                    {item.weekday}
                 </Typography>
+                <FormControl sx={{width:200 }} variant="outlined">
+                                <InputLabel>Module</InputLabel>
+                                <Select label="Module">
+                                    <MenuItem value="1">INDUCTION01</MenuItem>
+                                    <MenuItem value="2">INDUCTION02</MenuItem>
+                                    
+                                </Select>
+                  </FormControl>
+                <FormControl sx={{width:200}} variant="outlined">
+                                <InputLabel>Instructor</InputLabel>
+                                <Select label="Instructor">
+                                    <MenuItem value="1">Jon Doe</MenuItem>
+                                    <MenuItem value="2">Jane Doe</MenuItem>
+                                    
+                                </Select>
+                            </FormControl>
                 <TextField
                   label="Description"
                   multiline
-                  sx={{ width: '40%' }}
+                  sx={{ width: '60%' }}
                   value={item.description}
                   onChange={(e) => {
                     const updatedSchedule = [...generatedSchedule];
