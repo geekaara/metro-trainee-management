@@ -134,7 +134,7 @@ function AddCourse() {
 
   return (
     <Container maxWidth="md">
-      <Paper elevation={3} sx={{ padding: 3, marginTop: 3 }}>
+      <Paper elevation={3} sx={{ padding: 3, marginTop: 3, width:1025 }}>
         <Typography variant="h4" gutterBottom>
           Add New Course Details
         </Typography>
@@ -216,64 +216,66 @@ function AddCourse() {
           <>
             <Divider sx={{ margin: "20px 0" }} />
             <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-              <Typography variant="h6" ml={11} >Date</Typography>
-              <Typography variant="h6" mr={8} >Day</Typography>
-              <Typography variant="h6" mr={22}>Description</Typography>
+              <Typography variant="h6" ml={4} >Date</Typography>
+              <Typography variant="h6" ml={-35} >Day</Typography>
+              <Typography variant="h6" mr={35}>Details</Typography>
             </Box>
-            {generatedSchedule.map((item, index) => (
-              <Paper
-                key={index}
-                elevation={3}
-                sx={{
-                  padding: "20px",
-                  marginBottom: "20px",
-                  display: "flex",
-                  justifyContent: "space-around",
-                  width: "100%",
-                  alignItems:"center",
-                  flexWrap:"wrap",
-                  gap:2
-                }}
-              >
-                {/* <Typography variant="h6" gutterBottom>
-                  Day {item.day}
-                </Typography> */}
-                <Typography variant="h8" gutterBottom>
-                   {item.date}
-                </Typography>
-                <Typography variant="h8" gutterBottom>
-                   {item.weekday}
-                </Typography>
-                <FormControl sx={{width:200 }} variant="outlined">
-                                <InputLabel>Module</InputLabel>
-                                <Select label="Module">
-                                    <MenuItem value="1">INDUCTION01</MenuItem>
-                                    <MenuItem value="2">INDUCTION02</MenuItem>
-                                    
-                                </Select>
-                  </FormControl>
-                <FormControl sx={{width:200}} variant="outlined">
-                                <InputLabel>Instructor</InputLabel>
-                                <Select label="Instructor">
-                                    <MenuItem value="1">Jon Doe</MenuItem>
-                                    <MenuItem value="2">Jane Doe</MenuItem>
-                                    
-                                </Select>
-                            </FormControl>
-                <TextField
-                  label="Description"
-                  multiline
-                  sx={{ width: '60%' }}
-                  value={item.description}
-                  onChange={(e) => {
-                    const updatedSchedule = [...generatedSchedule];
-                    updatedSchedule[index].description = e.target.value;
-                    setGeneratedSchedule(updatedSchedule);
-                  }}
-                  variant="outlined"
-                />
-              </Paper>
-            ))}
+            <Box sx={{ marginTop: 2, marginBottom: 2 }}>
+  {generatedSchedule.map((item, index) => (
+    <Paper
+      key={index}
+      elevation={3}
+      sx={{
+        padding: 2,
+        marginBottom: 2,
+        display: "flex",
+        flexDirection: "column", // Arrange items vertically
+        gap: 2, // Add vertical spacing between Paper components
+      }}
+    >
+      <Grid container spacing={2}>
+        <Grid item xs={6} sm={2}>
+          <Typography variant="body1">{item.date}</Typography>
+        </Grid>
+        <Grid item xs={6} sm={2}>
+          <Typography variant="body1">{item.weekday}</Typography>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <FormControl fullWidth variant="outlined">
+            <InputLabel>Module</InputLabel>
+            <Select label="Module">
+              <MenuItem value="1">INDUCTION01</MenuItem>
+              <MenuItem value="2">INDUCTION02</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12} sm={4}>
+          <FormControl fullWidth variant="outlined">
+            <InputLabel>Instructor</InputLabel>
+            <Select label="Instructor">
+              <MenuItem value="1">Jon Doe</MenuItem>
+              <MenuItem value="2">Jane Doe</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={6} sm={20} sx={{ textAlign: "right", marginLeft: "320px" }}>
+          <TextField
+            label="Description"
+            multiline
+            fullWidth
+            value={item.description}
+            onChange={(e) => {
+              const updatedSchedule = [...generatedSchedule];
+              updatedSchedule[index].description = e.target.value;
+              setGeneratedSchedule(updatedSchedule);
+            }}
+            variant="outlined"
+          />
+        </Grid>
+      </Grid>
+    </Paper>
+  ))}
+</Box>
             <Button
               variant="contained"
               color="primary"

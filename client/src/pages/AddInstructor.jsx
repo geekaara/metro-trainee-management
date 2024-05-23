@@ -17,6 +17,7 @@ import {useNavigate} from "react-router-dom";
 
 function AddInstructor() {
     const navigate = useNavigate();
+    const [group, setGroup] = useState("");
     const [instructorDetails, setInstructorDetails] = useState({
         title: '',
         firstName: '',
@@ -55,7 +56,21 @@ function AddInstructor() {
                     <Box sx={{ mt: 2 }}>
                         <Grid container spacing={3}>
                             <Grid item xs={12} sm={4}>
-                                <FormControl fullWidth>
+                            <FormControl fullWidth variant="outlined">
+                                <InputLabel id="group-label">Title</InputLabel>
+                                <Select
+                                labelId="group-label"
+                                value={group}
+                                onChange={(e) => setGroup(e.target.value)}
+                                label="Group"
+                                >
+                                <MenuItem value="North" >Mr</MenuItem>
+                                <MenuItem value="South">Mrs</MenuItem>
+                                <MenuItem value="South">Ms</MenuItem>
+                                <MenuItem value="South">Dr</MenuItem>
+                                </Select>
+                            </FormControl>
+                                {/* <FormControl fullWidth>
                                     <InputLabel id="title-label">Title</InputLabel>
                                     <Select
                                         labelId="title-label"
@@ -69,7 +84,7 @@ function AddInstructor() {
                                         <MenuItem value="Ms">Ms</MenuItem>
                                         <MenuItem value="Dr">Dr</MenuItem>
                                     </Select>
-                                </FormControl>
+                                </FormControl> */}
                             </Grid>
                             <Grid item xs={12} sm={4}>
                                 <TextField
@@ -103,7 +118,22 @@ function AddInstructor() {
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <FormControl fullWidth>
+
+                            <FormControl fullWidth variant="outlined">
+                                <InputLabel id="group-label">Gender</InputLabel>
+                                <Select
+                                labelId="group-label"
+                                value={group}
+                                onChange={(e) => setGroup(e.target.value)}
+                                label="Group"
+                                >
+                                <MenuItem value="Male">Male</MenuItem>
+                                <MenuItem value="Female">Female</MenuItem>
+                                <MenuItem value="Other">Other</MenuItem>
+                                
+                                </Select>
+                            </FormControl>
+                                {/* <FormControl fullWidth>
                                     <InputLabel id="gender-label">Gender</InputLabel>
                                     <Select
                                         labelId="gender-label"
@@ -116,7 +146,7 @@ function AddInstructor() {
                                         <MenuItem value="Female">Female</MenuItem>
                                         <MenuItem value="Other">Other</MenuItem>
                                     </Select>
-                                </FormControl>
+                                </FormControl> */}
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField
