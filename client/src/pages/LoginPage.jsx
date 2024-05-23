@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';  // Import useNavigate
 import {
     Grid,
@@ -16,15 +16,41 @@ import "../css/LoginPage.css";
 
 export default function LoginPage() {
     const navigate = useNavigate();  // Create a navigate function
+    const [errors, setErrors] = useState({});
+
+    const validate = (data) => {
+        let errors = {};
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@metrotrains\.com\.au$/;
+
+        // Validate email
+        if (!data.get('email')) {
+            errors.email = "Email address is required";
+        } else if (!emailRegex.test(data.get('email').trim())) {
+            errors.email = "Email address is invalid";
+        }
+
+        // Validate password
+        if (!data.get('password')) {
+            errors.password = "Password is required";
+        }
+
+        return errors;
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
-        navigate('/dashboard');
+        const validationErrors = validate(data);
+        setErrors(validationErrors);
+
+        if (Object.keys(validationErrors).length === 0) {
+            console.log({
+                email: data.get('email'),
+                password: data.get('password'),
+            });
+            // Perform login logic here
+            navigate('/add-instructors');
+        }
     };
 
     return (
@@ -41,11 +67,6 @@ export default function LoginPage() {
                     padding: 4
                 }}>
                     <div className="symbol-background"></div> {/* Background for symbol.png */}
-                    {/* Avatar and TrainIcon component are commented out
-                    <Avatar className="avatar">
-                        <TrainIcon />
-                    </Avatar>
-                    */}
                     <Typography component="h1" variant="h5" style={{ fontWeight: 'bold' }}>
                         Sign in
                     </Typography>
@@ -59,6 +80,8 @@ export default function LoginPage() {
                             name="email"
                             autoComplete="email"
                             autoFocus
+                            error={!!errors.email}
+                            helperText={errors.email}
                         />
                         <TextField
                             margin="normal"
@@ -69,6 +92,8 @@ export default function LoginPage() {
                             type="password"
                             id="password"
                             autoComplete="current-password"
+                            error={!!errors.password}
+                            helperText={errors.password}
                         />
                         <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}
@@ -102,6 +127,124 @@ export default function LoginPage() {
         </Grid>
     );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React from 'react';
+// import { useNavigate } from 'react-router-dom';  // Import useNavigate
+// import {
+//     Grid,
+//     CssBaseline,
+//     Box,
+//     Paper,
+//     Typography,
+//     Button,
+//     Link,
+//     TextField,
+//     FormControlLabel,
+//     Checkbox
+// } from '@mui/material';
+// import "../css/LoginPage.css";
+
+// export default function LoginPage() {
+//     const navigate = useNavigate();  // Create a navigate function
+
+//     const handleSubmit = (event) => {
+//         event.preventDefault();
+//         const data = new FormData(event.currentTarget);
+//         console.log({
+//             email: data.get('email'),
+//             password: data.get('password'),
+//         });
+//         navigate('/dashboard');
+//     };
+
+//     return (
+//         <Grid container component="main" className="main-grid">
+//             <CssBaseline />
+//             <Grid item xs={false} sm={4} md={7} className="image-grid" />
+//             <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+//                 <Box className="paper-grid" sx={{
+//                     display: 'flex',
+//                     flexDirection: 'column',
+//                     alignItems: 'center',
+//                     justifyContent: 'center',
+//                     minHeight: '100vh',
+//                     padding: 4
+//                 }}>
+//                     <div className="symbol-background"></div> {/* Background for symbol.png */}
+//                     {/* Avatar and TrainIcon component are commented out
+//                     <Avatar className="avatar">
+//                         <TrainIcon />
+//                     </Avatar>
+//                     */}
+//                     <Typography component="h1" variant="h5" style={{ fontWeight: 'bold' }}>
+//                         Sign in
+//                     </Typography>
+//                     <Box component="form" noValidate onSubmit={handleSubmit} className="form" sx={{ mt: 1 }}>
+//                         <TextField
+//                             margin="normal"
+//                             required
+//                             fullWidth
+//                             id="email"
+//                             label="Email Address"
+//                             name="email"
+//                             autoComplete="email"
+//                             autoFocus
+//                         />
+//                         <TextField
+//                             margin="normal"
+//                             required
+//                             fullWidth
+//                             name="password"
+//                             label="Password"
+//                             type="password"
+//                             id="password"
+//                             autoComplete="current-password"
+//                         />
+//                         <FormControlLabel
+//                             control={<Checkbox value="remember" color="primary" />}
+//                             label="Remember me"
+//                         />
+//                         <Button
+//                             type="submit"
+//                             fullWidth
+//                             variant="contained"
+//                             color="primary"
+//                             className="submit-button"
+//                             sx={{ mt: 3, mb: 2 }}
+//                         >
+//                             Sign In
+//                         </Button>
+//                         <Grid container>
+//                             <Grid item xs>
+//                                 <Link href="#" variant="body2">
+//                                     Forgot password?
+//                                 </Link>
+//                             </Grid>
+//                             <Grid item>
+//                                 <Link href="/signup" variant="body2">
+//                                     {"Don't have an account? Sign Up"}
+//                                 </Link>
+//                             </Grid>
+//                         </Grid>
+//                     </Box>
+//                 </Box>
+//             </Grid>
+//         </Grid>
+//     );
+// }
 
 
 // import React from 'react';

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Grid,
@@ -12,20 +12,57 @@ import {
 } from '@mui/material';
 import "../css/SignupPage.css";
 
-
 export default function SignupPage() {
     const navigate = useNavigate();
+    const [errors, setErrors] = useState({});
+
+    const validate = (data) => {
+        let errors = {};
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@metrotrains\.com\.au$/;
+
+        // Validate email
+        if (!data.get('email')) {
+            errors.email = "Email address is required";
+        } else if (!/\S+@\S+\.\S+/.test(data.get('email'))) {
+            errors.email = "Email address is invalid. Ensure it contains '@' and a domain.";
+        } else if (!emailRegex.test(data.get('email').trim())) {
+            errors.email = "Email address must be from the domain @metrotrains.com.au";
+        }
+
+        // Validate password
+        if (!data.get('password')) {
+            errors.password = "Password is required";
+        } else if (data.get('password').length < 8) {
+            errors.password = "Password must be 8 or more characters";
+        } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}/.test(data.get('password'))) {
+            errors.password = "Password must contain at least one uppercase letter, one lowercase letter, one number, one special character, and be at least 8 characters long";
+        }
+
+        // Validate confirm password
+        if (!data.get('confirmPassword')) {
+            errors.confirmPassword = "Confirm Password is required";
+        } else if (data.get('password') !== data.get('confirmPassword')) {
+            errors.confirmPassword = "Passwords do not match";
+        }
+
+        return errors;
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-            confirmPassword: data.get('confirmPassword'),
-        });
-        // Perform signup logic here
-        navigate('/dashboard');
+        const validationErrors = validate(data);
+        setErrors(validationErrors);
+
+        if (Object.keys(validationErrors).length === 0) {
+            console.log({
+                email: data.get('email'),
+                password: data.get('password'),
+                confirmPassword: data.get('confirmPassword'),
+            });
+            // Perform signup logic here
+            navigate('/');
+        }
     };
 
     return (
@@ -55,6 +92,8 @@ export default function SignupPage() {
                             name="email"
                             autoComplete="email"
                             autoFocus
+                            error={!!errors.email}
+                            helperText={errors.email}
                         />
                         <TextField
                             margin="normal"
@@ -65,6 +104,8 @@ export default function SignupPage() {
                             type="password"
                             id="password"
                             autoComplete="new-password"
+                            error={!!errors.password}
+                            helperText={errors.password}
                         />
                         <TextField
                             margin="normal"
@@ -75,6 +116,8 @@ export default function SignupPage() {
                             type="password"
                             id="confirmPassword"
                             autoComplete="new-password"
+                            error={!!errors.confirmPassword}
+                            helperText={errors.confirmPassword}
                         />
                         <Button
                             type="submit"

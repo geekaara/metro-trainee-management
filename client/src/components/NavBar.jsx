@@ -70,13 +70,13 @@ function Navbar(props) {
      
         </li>
 
-        <li className="nav-item">
+        {/* <li className="nav-item">
           <Link className="nav-link" to="/">
             <div style={{ display: "flex", alignItems: "center" }}>
               <span style={{ marginRight: "90px" }}>Dashboard</span>
             </div>
           </Link>
-        </li>
+        </li> */}
 
         <li className="nav-item">
           <span className="nav-link" onClick={toggleInstructorDropdown}>
@@ -135,6 +135,13 @@ function Navbar(props) {
               </li>
             </ul>
           )}
+        </li>
+        <li className="nav-item">
+          <Link className="nav-link" to="/">
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <span style={{ marginRight: "120px", marginTop:"100px" }}>Logout</span>
+            </div>
+          </Link>
         </li>
       </ul>
     </nav>
