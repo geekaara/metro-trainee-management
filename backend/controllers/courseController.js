@@ -40,6 +40,64 @@ exports.updateCourse = asyncHandler(async (req, res, next) => {
   }
 });
 
+exports.courses_post = asyncHandler(async (req, res, next) => {
+  const {
+    courseName,
+    startDate,
+    endDate,
+    groupName,
+    numberOfStudents,
+    schedule,
+  } = req.body;
+
+  try {
+    // Start a transaction
+    await db.query('START TRANSACTION');
+
+    // Insert course data
+    const [courseResult] = await db.query(
+      `
+      INSERT INTO courses (course_name, start_date, end_date, group_name, number_of_students)
+      VALUES (?, ?, ?, ?, ?)
+      `,
+      [courseName, startDate, endDate, groupName, numberOfStudents]
+    );
+    const courseId = courseResult.insertId;
+
+    // Insert schedule data
+    for (const item of schedule) {
+      const [scheduleResult] = await db.query(
+        `
+        INSERT INTO schedule (courseId, moduleId, date)
+        VALUES (?, ?, ?)
+        `,
+        [courseId, item.moduleId, item.date]
+      );
+      const scheduleId = scheduleResult.insertId;
+
+      // Insert scheduleInstructors data
+      if (item.instructorId) {
+        await db.query(
+          `
+          INSERT INTO scheduleInstructors (courseId, moduleId, date, instructorId)
+          VALUES (?, ?, ?, ?)
+          `,
+          [courseId, item.moduleId,item.date,item.instructorId]
+        );
+      }
+    }
+
+    // Commit the transaction
+    await db.query('COMMIT');
+    res.status(201).json({ message: 'Course and schedule saved successfully' });
+  } catch (error) {
+    // Rollback the transaction
+    await db.query('ROLLBACK');
+    console.error('Error saving course and schedule:', error);
+    res.status(500).json({ message: 'Error saving course and schedule', error });
+  }
+});
+
 exports.instructor_get = asyncHandler(async (req, res, next) => {
   res.send("NOT IMPLEMENTED: leaves GET");
   });

@@ -6,24 +6,44 @@
     });
 
     // Handle instructor create on POST.
-    exports.leave_create = asyncHandler(async (req, res, next) => {
-    const { userid, startdate, enddate, type, remarks} = req.body;
-    
-        try{
+    exports.leave_create_post = asyncHandler(async (req, res, next) => {
+        const { instructorId, startDate, endDate, type, remarks } = req.body;
+        
+        try {
             const [result] = await db.query(
-                "INSERT INTO leaves (userid, startdate, enddate, type, remarks) VALUES (?, ?, ?, ?, ?)",
-                [userid, startdate, enddate, type, remarks]
+                "INSERT INTO leaves (instructorId, start_date, end_date, type, remarks) VALUES (?, ?, ?, ?, ?)",
+                [instructorId, startDate, endDate, type, remarks]
             );
         
             res.status(201).send({
-                message: "Instructor added successfully!"
+                message: "Absence added successfully!"
             });
-        }
-    
-        catch (error) {
-        console.error("Failed to add Leave:", error.message);
-        res.status(500).send({ message: "Failed to add leave", error: error.message });
+        } catch (error) {
+            console.error("Failed to add Absence:", error.message);
+            res.status(500).send({ message: "Failed to add absence", error: error.message });
         }
     });
+    
+    exports.leave_search_get = asyncHandler(async (req, res, next) => {
+        const { query } = req.query; 
+
+        try {
+            
+            const searchResults = await db.query(`
+            SELECT leaves.*, CONCAT( instructors.first_name, ' ', instructors.last_name) AS employee_name
+            FROM leaves
+            INNER JOIN instructors ON leaves.instructorId = instructors.id
+            WHERE CONCAT( instructors.first_name, ' ', instructors.last_name) = ?
+        `, [query]);
+
+            
+            res.status(200).json({ leaves: searchResults });
+        } catch (error) {
+            
+            console.error('Error searching for leaves:', error);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    });
+    
 
 

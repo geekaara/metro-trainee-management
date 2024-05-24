@@ -25,6 +25,8 @@ const courseController = require("../controllers/courseController");
 
 //router.put("/edit/:id", courseController.updateCourse);
 
+router.post("/add", courseController.courses_post);
+
 router.get("/view", courseController.instructor_get);
 router.post("/fetchinstructor",courseController.instructor_post );
 

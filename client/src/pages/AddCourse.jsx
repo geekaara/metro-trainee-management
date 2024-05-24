@@ -15,6 +15,7 @@ import {
   InputLabel,
 } from "@mui/material";
 import "../css/AddCourse.css";
+import ScheduleItem from "./ScheduleItem";
 
 function AddCourse() {
   const [courseName, setCourseName] = useState("");
@@ -25,10 +26,45 @@ function AddCourse() {
   const [group, setGroup] = useState("");
   const [generatedSchedule, setGeneratedSchedule] = useState([]);
   const [publicHolidays, setPublicHolidays] = useState([]);
+  const [modules, setModules] = useState([]);
+  const [instructors, setInstructors] = useState([]);
+
+
+
 
   useEffect(() => {
     fetchPublicHolidays();
+    fetchModules();
   }, []);
+
+  const fetchModules = async () => {
+    try {
+      const response = await axios.get("http://localhost:3001/modules/fetch");
+      setModules(response.data);
+    } catch (error) {
+      console.error("Error fetching modules:", error);
+    }
+  };
+
+  const handleModuleChange = (moduleId, date, index) => {
+    const updatedSchedule = [...generatedSchedule];
+    updatedSchedule[index].moduleId = moduleId;
+    setGeneratedSchedule(updatedSchedule);
+  };
+
+  const handleInstructorChange = (instructorId, date, index) => {
+    const updatedSchedule = [...generatedSchedule];
+    updatedSchedule[index].instructorId = instructorId;
+    setGeneratedSchedule(updatedSchedule);
+  };
+
+  const handleDescriptionChange = (description, index) => {
+    const updatedSchedule = [...generatedSchedule];
+    updatedSchedule[index].description = description;
+    setGeneratedSchedule(updatedSchedule);
+  };
+  
+
 
   const fetchPublicHolidays = async (fromDate, toDate) => {
     try {
@@ -117,20 +153,28 @@ function AddCourse() {
 
   const handleSave = async () => {
     try {
-      const response = await axios.post("http://localhost:3001/courses/add", {
+      const payload = {
         courseName,
         startDate,
         endDate,
-        numberOfStudents,
-        classId,
         group,
-      });
+        numberOfStudents,
+        
+        schedule: generatedSchedule.map((item) => ({       
+          date: item.date.split("/").reverse().join("-"), 
+          moduleId: item.moduleId || 1, 
+          instructorId: item.instructorId || 1, 
+        })),
+      };
+  
+      const response = await axios.post("http://localhost:3001/courses/add", payload);
       alert("Course saved successfully!");
     } catch (error) {
       console.error("Error saving the course:", error);
-      alert("Course saved successfully!");
+      alert("Error saving the course!");
     }
   };
+  
 
   return (
     <Container maxWidth="md">
@@ -222,58 +266,16 @@ function AddCourse() {
             </Box>
             <Box sx={{ marginTop: 2, marginBottom: 2 }}>
   {generatedSchedule.map((item, index) => (
-    <Paper
-      key={index}
-      elevation={3}
-      sx={{
-        padding: 2,
-        marginBottom: 2,
-        display: "flex",
-        flexDirection: "column", // Arrange items vertically
-        gap: 2, // Add vertical spacing between Paper components
-      }}
-    >
-      <Grid container spacing={2}>
-        <Grid item xs={6} sm={2}>
-          <Typography variant="body1">{item.date}</Typography>
-        </Grid>
-        <Grid item xs={6} sm={2}>
-          <Typography variant="body1">{item.weekday}</Typography>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <FormControl fullWidth variant="outlined">
-            <InputLabel>Module</InputLabel>
-            <Select label="Module">
-              <MenuItem value="1">INDUCTION01</MenuItem>
-              <MenuItem value="2">INDUCTION02</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12} sm={4}>
-          <FormControl fullWidth variant="outlined">
-            <InputLabel>Instructor</InputLabel>
-            <Select label="Instructor">
-              <MenuItem value="1">Jon Doe</MenuItem>
-              <MenuItem value="2">Jane Doe</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={6} sm={20} sx={{ textAlign: "right", marginLeft: "320px" }}>
-          <TextField
-            label="Description"
-            multiline
-            fullWidth
-            value={item.description}
-            onChange={(e) => {
-              const updatedSchedule = [...generatedSchedule];
-              updatedSchedule[index].description = e.target.value;
-              setGeneratedSchedule(updatedSchedule);
-            }}
-            variant="outlined"
-          />
-        </Grid>
-      </Grid>
-    </Paper>
+     <ScheduleItem
+     key={index}
+     item={item}
+     modules={modules}
+     instructors={instructors}
+     onModuleChange={handleModuleChange}
+     onInstructorChange={handleInstructorChange}
+     index={index}
+     onDescriptionChange={handleDescriptionChange}
+   />
   ))}
 </Box>
             <Button
