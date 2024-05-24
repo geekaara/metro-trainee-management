@@ -24,6 +24,7 @@
         }
     });
     
+    
     exports.leave_search_get = asyncHandler(async (req, res, next) => {
         const { query } = req.query; 
 

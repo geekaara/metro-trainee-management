@@ -46,12 +46,13 @@ function ManageLeaves() {
       
   
       if (searchData.length > 0) {
-        const { employee_name, start_date, end_date } = searchData[0];
+        const { employee_name, start_date, end_date,instructorId } = searchData[0];
         const [first_name, last_name] = employee_name.split(" ");
   
         setFirstName(first_name);
         setLastName(last_name);
         setInstructorFound(true);
+
         setInstructorId(instructorId);
 
       } else {
