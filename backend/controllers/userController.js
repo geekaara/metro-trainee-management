@@ -19,3 +19,20 @@ exports.user_login_post = asyncHandler(async (req, res, next) => {
         res.status(500).send({ message: "Failed to login user", error: error.message });
     }
 });
+
+// Handle user signup on POST.
+exports.user_signup_post = asyncHandler(async (req, res, next) => {
+    const { email, password } = req.body;
+    try {
+        const [user] = await db.query("INSERT INTO users (email, password) VALUES (?, ?)", [email, password]);
+
+        if (user.length === 0){
+            return res.status(201).send({ message: "Invalid Credentials" });
+        }
+        res.status(201).send({ message: "User created successfully" });
+    } catch (error) {
+        console.error("Failed to create user:", error.message);
+        res.status(500).send({ message: "Failed to create user", error: error.message });
+    }
+});
+

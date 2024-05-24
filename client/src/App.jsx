@@ -1,4 +1,3 @@
-
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/NavBar";
@@ -23,8 +22,7 @@ function App() {
         <Router>
              <ToastContainer />
             <Routes>
-           
-                <Route path="/" element={<LoginPage />} />
+                <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
                 <Route path="/dashboard" element={<WithNavbar><Dashboard /></WithNavbar>} />
                 <Route path="/add-instructors" element={<WithNavbar><AddInstructor /></WithNavbar>} />
