@@ -9,9 +9,10 @@ import {
     FormControlLabel,
     Checkbox,
     TextField,
-    Button
+    Button,
+    Alert
 } from '@mui/material';
-import { format } from 'date-fns';
+import { format, startOfWeek, endOfWeek, isWithinInterval } from 'date-fns';
 import "../css/AddInstructorAvailability.css";
 
 const getDayWithSuffix = (date) => {
@@ -31,6 +32,7 @@ export default function AddInstructorAvailability() {
     const [endDate, setEndDate] = useState('');
     const [availableDays, setAvailableDays] = useState([]);
     const [availability, setAvailability] = useState({});
+    const [error, setError] = useState('');
 
     const navigate = useNavigate();
 
@@ -38,6 +40,20 @@ export default function AddInstructorAvailability() {
         if (startDate && endDate) {
             const start = new Date(startDate);
             const end = new Date(endDate);
+
+            // Check if the selected range is within a single week (Monday to Sunday)
+            const startOfWeekDate = startOfWeek(start, { weekStartsOn: 1 });
+            const endOfWeekDate = endOfWeek(start, { weekStartsOn: 1 });
+
+            if (!isWithinInterval(end, { start: startOfWeekDate, end: endOfWeekDate })) {
+                setError('Please select a date range within a single week (Monday to Sunday).');
+                setAvailableDays([]);
+                setAvailability({});
+                return;
+            }
+
+            setError('');
+
             const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             let days = [];
             let currentDate = start;
@@ -81,10 +97,10 @@ export default function AddInstructorAvailability() {
         <Container maxWidth="md">
             <Paper elevation={3} sx={{ padding: 3, marginTop: 3 }}>
                 <Typography variant="h4" gutterBottom>
-                    Instructor Availability
+                    Availability
                 </Typography>
                 <Typography variant="body1" gutterBottom>
-                    Please select your availability below.
+                    Please complete the following form.
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate>
                     <Grid container spacing={3}>
@@ -112,6 +128,11 @@ export default function AddInstructorAvailability() {
                                 fullWidth
                             />
                         </Grid>
+                        {error && (
+                            <Grid item xs={12}>
+                                <Alert severity="error">{error}</Alert>
+                            </Grid>
+                        )}
                         <Grid item xs={12}>
                             <Typography variant="h6" gutterBottom>
                                 Weekly Availability
@@ -120,12 +141,12 @@ export default function AddInstructorAvailability() {
                         {availableDays.map((day) => (
                             <Grid container item xs={12} key={day.isoDate}>
                                 <Grid item xs={6}>
-                                    <Typography variant="body1" style={{ fontWeight: 'bold', fontSize:'17px' }}>
+                                    <Typography variant="body1" style={{ fontWeight: 'bold' }}>
                                         {day.dayName}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <Typography variant="body2" style={{ fontWeight: 'bold', fontSize:'16px' }}>
+                                    <Typography variant="body2" style={{ fontWeight: 'bold' }}>
                                         {day.date}
                                     </Typography>
                                     <FormControlLabel
@@ -146,7 +167,7 @@ export default function AddInstructorAvailability() {
                                 <Button variant="contained" color="secondary" onClick={handleBack}>
                                     Back
                                 </Button>
-                                <Button type="submit" variant="contained" color="primary">
+                                <Button type="submit" variant="contained" color="primary" disabled={!!error}>
                                     Submit
                                 </Button>
                             </Box>
@@ -158,6 +179,166 @@ export default function AddInstructorAvailability() {
     );
 }
 
+// import React, { useState, useEffect } from 'react';
+// import { useNavigate } from 'react-router-dom';
+// import {
+//     Container,
+//     Paper,
+//     Box,
+//     Typography,
+//     Grid,
+//     FormControlLabel,
+//     Checkbox,
+//     TextField,
+//     Button
+// } from '@mui/material';
+// import { format } from 'date-fns';
+// import "../css/AddInstructorAvailability.css";
+//
+// const getDayWithSuffix = (date) => {
+//     const day = format(date, 'd');
+//     if (day.endsWith('1') && day !== '11') return `${day}st`;
+//     if (day.endsWith('2') && day !== '12') return `${day}nd`;
+//     if (day.endsWith('3') && day !== '13') return `${day}rd`;
+//     return `${day}th`;
+// };
+//
+// const formatDate = (date) => {
+//     return `${getDayWithSuffix(date)} ${format(date, 'MMMM, yyyy')}`;
+// };
+//
+// export default function AddInstructorAvailability() {
+//     const [startDate, setStartDate] = useState('');
+//     const [endDate, setEndDate] = useState('');
+//     const [availableDays, setAvailableDays] = useState([]);
+//     const [availability, setAvailability] = useState({});
+//
+//     const navigate = useNavigate();
+//
+//     useEffect(() => {
+//         if (startDate && endDate) {
+//             const start = new Date(startDate);
+//             const end = new Date(endDate);
+//             const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+//             let days = [];
+//             let currentDate = start;
+//
+//             while (currentDate <= end) {
+//                 days.push({
+//                     date: formatDate(currentDate),
+//                     dayName: dayNames[currentDate.getDay()],
+//                     isoDate: currentDate.toISOString().split('T')[0], // Store ISO date for state management
+//                 });
+//                 currentDate.setDate(currentDate.getDate() + 1);
+//             }
+//
+//             setAvailableDays(days);
+//             const initialAvailability = days.reduce((acc, day) => ({ ...acc, [day.isoDate]: false }), {});
+//             setAvailability(initialAvailability);
+//         } else {
+//             setAvailableDays([]);
+//             setAvailability({});
+//         }
+//     }, [startDate, endDate]);
+//
+//     const handleCheckboxChange = (event) => {
+//         setAvailability({
+//             ...availability,
+//             [event.target.name]: event.target.checked,
+//         });
+//     };
+//
+//     const handleSubmit = (event) => {
+//         event.preventDefault();
+//         // Handle form submission
+//         console.log({ startDate, endDate, availability });
+//     };
+//
+//     const handleBack = () => {
+//         navigate('/qualifications');
+//     };
+//
+//     return (
+//         <Container maxWidth="md">
+//             <Paper elevation={3} sx={{ padding: 3, marginTop: 3 }}>
+//                 <Typography variant="h4" gutterBottom>
+//                     Instructor Availability
+//                 </Typography>
+//                 <Typography variant="body1" gutterBottom>
+//                     Please select your availability below.
+//                 </Typography>
+//                 <Box component="form" onSubmit={handleSubmit} noValidate>
+//                     <Grid container spacing={3}>
+//                         <Grid item xs={12} sm={6}>
+//                             <TextField
+//                                 label="Start Date"
+//                                 type="date"
+//                                 value={startDate}
+//                                 onChange={(e) => setStartDate(e.target.value)}
+//                                 InputLabelProps={{
+//                                     shrink: true,
+//                                 }}
+//                                 fullWidth
+//                             />
+//                         </Grid>
+//                         <Grid item xs={12} sm={6}>
+//                             <TextField
+//                                 label="End Date"
+//                                 type="date"
+//                                 value={endDate}
+//                                 onChange={(e) => setEndDate(e.target.value)}
+//                                 InputLabelProps={{
+//                                     shrink: true,
+//                                 }}
+//                                 fullWidth
+//                             />
+//                         </Grid>
+//                         <Grid item xs={12}>
+//                             <Typography variant="h6" gutterBottom>
+//                                 Weekly Availability
+//                             </Typography>
+//                         </Grid>
+//                         {availableDays.map((day) => (
+//                             <Grid container item xs={12} key={day.isoDate}>
+//                                 <Grid item xs={6}>
+//                                     <Typography variant="body1" style={{ fontWeight: 'bold', fontSize:'17px' }}>
+//                                         {day.dayName}
+//                                     </Typography>
+//                                 </Grid>
+//                                 <Grid item xs={6}>
+//                                     <Typography variant="body2" style={{ fontWeight: 'bold', fontSize:'16px' }}>
+//                                         {day.date}
+//                                     </Typography>
+//                                     <FormControlLabel
+//                                         control={
+//                                             <Checkbox
+//                                                 checked={availability[day.isoDate]}
+//                                                 onChange={handleCheckboxChange}
+//                                                 name={day.isoDate}
+//                                             />
+//                                         }
+//                                         label=""
+//                                     />
+//                                 </Grid>
+//                             </Grid>
+//                         ))}
+//                         <Grid item xs={12}>
+//                             <Box display="flex" justifyContent="space-between">
+//                                 <Button variant="contained" color="secondary" onClick={handleBack}>
+//                                     Back
+//                                 </Button>
+//                                 <Button type="submit" variant="contained" color="primary">
+//                                     Submit
+//                                 </Button>
+//                             </Box>
+//                         </Grid>
+//                     </Grid>
+//                 </Box>
+//             </Paper>
+//         </Container>
+//     );
+// }
+//
 
 // import React, { useState } from 'react';
 // import { useNavigate } from 'react-router-dom';

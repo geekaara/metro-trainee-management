@@ -8,34 +8,62 @@ import {
     Typography,
     Button,
     TextField,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
+    FormControlLabel,
+    Checkbox,
+    IconButton
 } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 import "../css/AddQualifications.css";
 
 export default function AddQualifications() {
     const navigate = useNavigate();
-    const [qualification, setQualification] = useState('');
-    const [customQualification, setCustomQualification] = useState('');
+    const [qualifications, setQualifications] = useState({
+        'Phase 1': false,
+        'Phase 2': false,
+        'Phase 3': false,
+        'Phase 4': false,
+        'Phase 5': false,
+        'Phase 6': false,
+        'Other': false
+    });
+    const [customQualifications, setCustomQualifications] = useState(['']);
 
     const handleQualificationChange = (event) => {
-        setQualification(event.target.value);
-        if (event.target.value !== 'Other') {
-            setCustomQualification('');
+        const { name, checked } = event.target;
+        setQualifications(prevState => ({
+            ...prevState,
+            [name]: checked
+        }));
+
+        if (name === 'Other' && !checked) {
+            setCustomQualifications(['']);
         }
     };
 
-    const handleCustomQualificationChange = (event) => {
-        setCustomQualification(event.target.value);
+    const handleCustomQualificationChange = (index, event) => {
+        const newCustomQualifications = [...customQualifications];
+        newCustomQualifications[index] = event.target.value;
+        setCustomQualifications(newCustomQualifications);
+    };
+
+    const addCustomQualification = () => {
+        setCustomQualifications([...customQualifications, '']);
+    };
+
+    const removeCustomQualification = (index) => {
+        const newCustomQualifications = [...customQualifications];
+        newCustomQualifications.splice(index, 1);
+        setCustomQualifications(newCustomQualifications);
     };
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const finalQualification = qualification === 'Other' ? customQualification : qualification;
-        console.log(finalQualification);
-        // Handle form submission with finalQualification
+        const selectedQualifications = Object.keys(qualifications).filter(key => qualifications[key]);
+        const validCustomQualifications = customQualifications.filter(q => q.trim() !== '');
+        const finalQualifications = [...selectedQualifications, ...validCustomQualifications];
+        console.log(finalQualifications);
+        // Handle form submission with finalQualifications
         navigate('/availability');  // Navigate to the next step
     };
 
@@ -54,36 +82,55 @@ export default function AddQualifications() {
                 </Typography>
                 <Box component="form" onSubmit={handleSubmit} noValidate>
                     <Grid container spacing={3}>
-                        <Grid item xs={12}>
-                            <FormControl fullWidth variant="outlined">
-                                <InputLabel id="qualification-label">Qualification</InputLabel>
-                                <Select
-                                    labelId="qualification-label"
-                                    value={qualification}
-                                    onChange={handleQualificationChange}
-                                    label="Qualification"
-                                >
-                                    <MenuItem value="">Select</MenuItem>
-                                    <MenuItem value="Phase 1">Phase 1</MenuItem>
-                                    <MenuItem value="Phase 2">Phase 2</MenuItem>
-                                    <MenuItem value="Phase 3">Phase 3</MenuItem>
-                                    <MenuItem value="Phase 4">Phase 4</MenuItem>
-                                    <MenuItem value="Phase 5">Phase 5</MenuItem>
-                                    <MenuItem value="Phase 6">Phase 6</MenuItem>
-                                    <MenuItem value="Other">Other</MenuItem>
-                                </Select>
-                            </FormControl>
-                            {qualification === 'Other' && (
-                                <TextField
-                                    margin="normal"
-                                    variant="outlined"
-                                    fullWidth
-                                    label="Enter Qualification"
-                                    value={customQualification}
-                                    onChange={handleCustomQualificationChange}
+                        {Object.keys(qualifications).map((key) => (
+                            <Grid item xs={12} key={key}>
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={qualifications[key]}
+                                            onChange={handleQualificationChange}
+                                            name={key}
+                                            color="primary"
+                                        />
+                                    }
+                                    label={key}
                                 />
-                            )}
-                        </Grid>
+                            </Grid>
+                        ))}
+                        {qualifications['Other'] && (
+                            <Grid item xs={12}>
+                                <Typography variant="body1" gutterBottom>
+                                    Enter Qualifications
+                                </Typography>
+                                {customQualifications.map((customQualification, index) => (
+                                    <Box key={index} display="flex" alignItems="center" mb={2}>
+                                        <TextField
+                                            margin="normal"
+                                            variant="outlined"
+                                            fullWidth
+                                            label={`Other Qualification ${index + 1}`}
+                                            value={customQualification}
+                                            onChange={(e) => handleCustomQualificationChange(index, e)}
+                                        />
+                                        <IconButton
+                                            color="secondary"
+                                            onClick={() => removeCustomQualification(index)}
+                                            disabled={customQualifications.length === 1}
+                                        >
+                                            <RemoveIcon />
+                                        </IconButton>
+                                    </Box>
+                                ))}
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    startIcon={<AddIcon />}
+                                    onClick={addCustomQualification}
+                                >
+                                    Add Another Qualification
+                                </Button>
+                            </Grid>
+                        )}
                         <Grid item xs={12}>
                             <Box display="flex" justifyContent="space-between">
                                 <Button variant="contained" color="secondary" onClick={handleBack}>
