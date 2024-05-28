@@ -1,14 +1,12 @@
-import React, { useState,useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, MenuItem, Select, Paper, Container, CircularProgress, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, MenuItem, Select, Paper, Container } from '@mui/material';
 import useScheduleData from '../services/ScheduleService';
 import "../css/ViewSchedule.css";
 
 const ViewSchedules = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-  const { scheduleData, loading, error } = useScheduleData(currentMonth, currentYear); // Example userid
-
-console.log(scheduleData);
+  const { scheduleData, loading, error } = useScheduleData(currentMonth, currentYear);
 
   const handleMonthChange = (event) => {
     setCurrentMonth(event.target.value);
@@ -20,7 +18,7 @@ console.log(scheduleData);
 
   const renderTableHeaders = () => {
     const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
-    const headers = [<TableCell style={{ minWidth: "120px" }} key="instructor">Trainer Name</TableCell>];
+    const headers = [<TableCell style={{ minWidth: "120px" }} key="instructor">Instructor ID</TableCell>];
 
     for (let i = 1; i <= daysInMonth; i++) {
       const currentDate = new Date(currentYear, currentMonth - 1, i);
@@ -34,73 +32,71 @@ console.log(scheduleData);
   };
 
   const renderTableCells = () => {
-    const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
-    const cells = [];
-  
-    // Check if scheduleData is not null and has modules and leaves arrays
-    if (scheduleData && scheduleData.modules && scheduleData.leaves) {
-      const uniqueInstructors = [scheduleData.instructor];
-  
-      uniqueInstructors.forEach((instructor, index) => {
-        const rowCells = [];
-  
-        rowCells.push(
-          <TableCell key={`instructor-${index}`} style={{ fontWeight: 'bold', minWidth: '120px' }}>
-            {instructor}
-          </TableCell>
-        );
-  
-        const instructorSchedule = Array(daysInMonth).fill(null);
-  
-        // Process modules
-        scheduleData.modules.forEach(module => {
-          const moduleDate = new Date(module.date);
-          if (moduleDate.getMonth() + 1 === currentMonth && moduleDate.getFullYear() === currentYear) {
-            const dayOfMonth = moduleDate.getDate();
-            instructorSchedule[dayOfMonth - 1] = (
-              <TableCell style={{ minWidth: "120px" }} key={`module-${dayOfMonth}`}>
-                {module.name}
-              </TableCell>
-            );
-          }
-        });
-  
-        // Process leaves
-        scheduleData.leaves.forEach(leave => {
-          const leaveDate = new Date(leave.date);
-          if (leaveDate.getMonth() + 1 === currentMonth && leaveDate.getFullYear() === currentYear) {
-            const dayOfMonth = leaveDate.getDate();
-            instructorSchedule[dayOfMonth - 1] = (
-              <TableCell key={`leave-${dayOfMonth}`} style={{ backgroundColor: 'black', color: 'white', width: '120px' }}>
-                {leave.reason}
-              </TableCell>
-            );
-          }
-        });
-  
-        for (let j = 0; j < daysInMonth; j++) {
-          rowCells.push(instructorSchedule[j] || <TableCell style={{ width: "120px" }} key={`${index}-${j}`}></TableCell>);
-        }
-  
-        cells.push(<TableRow key={index}>{rowCells}</TableRow>);
-      });
-    } else {
-      cells.push(
-        <TableRow key="empty">
-          <TableCell colSpan={daysInMonth + 1} align="center">No schedule data available</TableCell>
+    if (loading || error || !scheduleData) {
+      return (
+        <TableRow>
+          <TableCell colSpan={32} align="center">Loading...</TableCell>
         </TableRow>
       );
     }
   
-    return cells;
-  };
+    const instructors = new Set(scheduleData.map(entry => entry.entries.map(e => e.instructorId)).flat());
+    const rows = [];
   
+    instructors.forEach(instructorId => {
+      const rowData = [instructorId];
+      for (let i = 1; i <= 31; i++) {
+        const currentDate = new Date(currentYear, currentMonth - 1, i).toISOString().split('T')[0];
+        const schedule = scheduleData.find(entry => entry.date === currentDate);
+        const entry = schedule?.entries.find(e => e.instructorId === instructorId);
+  
+        
+        if (entry) {
+          rowData.push(entry);
+        } else {
+          rowData.push('');
+        }
+      }
+      rows.push(rowData);
+    });
+  
+    return rows.map((row, index) => (
+      <TableRow key={index}>
+        {row.map((cell, index) => (
+          <TableCell key={index} className={getCellClassName(cell)}>{getCellContent(cell)}</TableCell>
+        ))}
+      </TableRow>
+    ));
+  };
+
+  
+  const getCellClassName = (cell) => {
+    if (cell && cell.type === 'module') {
+      return 'module-cell';
+    } else if (cell && cell.type === 'leave') {
+      return 'leave-cell';
+    } else {
+      return ''; 
+    }
+  };
+
+  
+  const getCellContent = (cell) => {
+    if (cell && cell.type === 'module') {
+      return cell.name;
+    } else if (cell && cell.type === 'leave') {
+      return cell.reason;
+    } else {
+      return '';
+    }
+  };
   
   return (
     <Container maxWidth="md">
       <Paper elevation={3} sx={{ padding: 3, marginTop: 3, width: 1025 }}>
         <div className='viewSchedule'>
           <p className='heading'>View Instructor Schedule</p>
+
           <div className='viewSchedule-dateControls'>
             <Select size='small' value={currentMonth} onChange={handleMonthChange}>
               {Array.from({ length: 12 }, (_, i) => (
@@ -117,13 +113,13 @@ console.log(scheduleData);
               ))}
             </Select>
           </div>
+
           <TableContainer style={{ minHeight: '400px', backgroundColor: 'lightgray', minWidth: 'auto' }} component={Paper}>
-            <Table style={{ backgroundColor: '#FFF' }}>
+            <Table style={{ backgroundColor: '#FFF' }} >
               <TableHead>
                 <TableRow>
                   {renderTableHeaders()}
                 </TableRow>
-        
               </TableHead>
               <TableBody>
                 {renderTableCells()}

@@ -18,3 +18,8 @@
 /*.viewSchedule-dateControls{*/
 /*    margin-bottom: 20px;*/
 /*}*/
+
+.leave-cell{
+    background-color: black;
+    color: white;
+}
