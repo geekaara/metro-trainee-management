@@ -1,74 +1,86 @@
 const asyncHandler = require("express-async-handler");
-const db = require("../test-db-connection"); 
+const db = require("../test-db-connection");
 
 exports.schedule_get = asyncHandler(async (req, res, next) => {
   try {
+    const { month, year } = req.query;
 
-    const { month, year, userid } = req.query;
-
-    // Query to fetch leaves for the specified month, year, and userid
+    // Query to fetch leaves for the specified month and year
     const leavesQuery = `
       SELECT
-        userid,
-        startdate,
-        enddate,
+        id,
+        instructorId,
+        start_date,
+        end_date,
         type
       FROM
         leaves
       WHERE
-        MONTH(startdate) = ? AND YEAR(startdate) = ? AND userid = ?
+        MONTH(start_date) = ? AND YEAR(start_date) = ?
     `;
 
-    const [leavesResults] = await db.query(leavesQuery, [month, year, userid]);
+    const [leavesResults] = await db.query(leavesQuery, [month, year]);
 
-    // Query to fetch course schedule for the specified month, year, and userid
-    const coursesQuery = `
+    // Query to fetch module schedule for the specified month and year
+    const modulesQuery = `
       SELECT
         s.date,
-        c.title
+        m.module_name,
+        s.instructorId
       FROM
-        schedule s
-        INNER JOIN course c ON s.course_id = c.id
+        scheduleInstructors s
+      JOIN
+        module m ON s.moduleId = m.id
       WHERE
-        MONTH(s.date) = ? AND YEAR(s.date) = ? AND s.instructor_id = ?
+        MONTH(s.date) = ? AND YEAR(s.date) = ?
     `;
 
-    const [coursesResults] = await db.query(coursesQuery, [month, year, userid]);
+    const [modulesResults] = await db.query(modulesQuery, [month, year]);
 
-    
-    const combinedResults = [];
+    const combinedResults = {};
 
-    // Group courses by date
-    const coursesMap = {};
-    coursesResults.forEach(course => {
-      const date = course.date.toISOString().slice(0, 10);
-      if (!coursesMap[date]) {
-        coursesMap[date] = [];
-      }
-      coursesMap[date].push({ date, title: course.title });
-    });
-
-    // Iterate over leaves and generate leave dates array
+    // Iterate over leaves and generate leave dates array for each instructor
     leavesResults.forEach(leave => {
-      const leaveDates = [];
-      const currentDate = new Date(leave.startdate);
-      const endDate = new Date(leave.enddate);
-      
+      const currentDate = new Date(leave.start_date);
+      const endDate = new Date(leave.end_date);
+
       while (currentDate <= endDate) {
-        leaveDates.push(currentDate.toISOString().slice(0, 10));
+        const dateKey = currentDate.toISOString().slice(0, 10);
+        if (!combinedResults[dateKey]) {
+          combinedResults[dateKey] = {
+            date: dateKey,
+            entries: []
+          };
+        }
+        combinedResults[dateKey].entries.push({
+          instructorId: leave.instructorId,
+          type: 'leave',
+          reason: leave.type
+        });
         currentDate.setDate(currentDate.getDate() + 1);
       }
+    });
 
-      combinedResults.push({
-        instructor: userid,
-        month,
-        year,
-        leaves: leaveDates.map(date => ({ date, reason: leave.type })),
-        courses: coursesMap[leaveDates[0]] || []
+    // Add modules to the combined results for each instructor
+    modulesResults.forEach(module => {
+      const dateKey = module.date.toISOString().slice(0, 10);
+      if (!combinedResults[dateKey]) {
+        combinedResults[dateKey] = {
+          date: dateKey,
+          entries: []
+        };
+      }
+      combinedResults[dateKey].entries.push({
+        instructorId: module.instructorId,
+        type: 'module',
+        name: module.module_name
       });
     });
 
-    res.status(200).json(combinedResults);
+    // Convert combinedResults object to array
+    const scheduleArray = Object.values(combinedResults);
+
+    res.status(200).json(scheduleArray);
   } catch (error) {
     console.error("Failed to fetch schedule:", error.message);
     res.status(500).send({ message: "Failed to fetch schedule", error: error.message });

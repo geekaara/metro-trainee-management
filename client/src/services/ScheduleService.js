@@ -1,32 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
-const useScheduleData = () => {
-  const [scheduleData, setScheduleData] = useState([
-    {
-      "instructor": "John Doe",
-      "month": "May",
-      "year":"2024",
-      "leaves": [
-        { "date": "2024-05-05", "reason": "Personal Leave" }
-      ],
-      "courses": [
-        { "date": "2024-05-01", "title": "SWIRC-RAN" },
-        { "date": "2024-05-03", "title": "DD-SKN" }
-      ]
-    },
-    {
-      "instructor": "Jane Smith",
-      "month": "May",
-      "year":"2024",
-      "leaves": [],
-      "courses": [
-        { "date": "2024-05-02", "title": "SWIRC-RAN" },
-        { "date": "2024-05-04", "title": "DD-SKN" }
-      ]
-    }
-  ]);
+const useScheduleData = (month, year, userid) => {
+  const [scheduleData, setScheduleData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  return scheduleData;
+  useEffect(() => {
+    const fetchScheduleData = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get('http://localhost:3001/instructorschedule/view', {
+          params: { month, year }
+        });
+        setScheduleData(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError(err);
+        setLoading(false);
+      }
+    };
+
+    fetchScheduleData();
+  }, [month, year]);
+
+  return { scheduleData, loading, error };
 };
 
 export default useScheduleData;
