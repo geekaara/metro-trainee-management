@@ -159,12 +159,13 @@ function AddCourse() {
         endDate,
         group,
         numberOfStudents,
-        
-        schedule: generatedSchedule.map((item) => ({       
-          date: item.date.split("/").reverse().join("-"), 
-          moduleId: item.moduleId || 1, 
-          instructorId: item.instructorId || 1, 
-        })),
+        schedule: generatedSchedule
+          .filter(item => item.instructorId) // Filter out items with no instructor selected
+          .map((item) => ({
+            date: item.date.split("/").reverse().join("-"),
+            moduleId: item.moduleId || 1,
+            instructorId: item.instructorId || 1,
+          })),
       };
   
       const response = await axios.post("http://localhost:3001/courses/add", payload);
@@ -174,6 +175,7 @@ function AddCourse() {
       alert("Error saving the course!");
     }
   };
+  
   
 
   return (
