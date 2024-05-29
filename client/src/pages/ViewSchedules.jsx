@@ -16,21 +16,6 @@ const ViewSchedules = () => {
     setCurrentYear(event.target.value);
   };
 
-  const renderTableHeaders = () => {
-    const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
-    const headers = [<TableCell style={{ minWidth: "120px" }} key="instructor">Instructor ID</TableCell>];
-
-    for (let i = 1; i <= daysInMonth; i++) {
-      const currentDate = new Date(currentYear, currentMonth - 1, i);
-      const formattedDate = currentDate.toLocaleDateString('en-US', { day: '2-digit', month: 'short' });
-      const dayOfWeek = currentDate.toLocaleDateString('en-US', { weekday: 'short' });
-      const headerText = `${formattedDate} (${dayOfWeek})`;
-      headers.push(<TableCell style={{ minWidth: "130px" }} key={i}>{headerText}</TableCell>);
-    }
-
-    return headers;
-  };
-
   const renderTableCells = () => {
     if (loading || error || !scheduleData) {
       return (
@@ -40,57 +25,29 @@ const ViewSchedules = () => {
       );
     }
   
-    const instructors = new Set(scheduleData.map(entry => entry.entries.map(e => e.instructorId)).flat());
-    const rows = [];
-  
-    instructors.forEach(instructorId => {
-      const rowData = [instructorId];
-      for (let i = 1; i <= 31; i++) {
-        const currentDate = new Date(currentYear, currentMonth - 1, i).toISOString().split('T')[0];
-        const schedule = scheduleData.find(entry => entry.date === currentDate);
-        const entry = schedule?.entries.find(e => e.instructorId === instructorId);
-  
-        
-        if (entry) {
-          rowData.push(entry);
-        } else {
-          rowData.push('');
-        }
-      }
-      rows.push(rowData);
-    });
-  
-    return rows.map((row, index) => (
+    return scheduleData.map((instructorData, index) => (
       <TableRow key={index}>
-        {row.map((cell, index) => (
-          <TableCell key={index} className={getCellClassName(cell)}>{getCellContent(cell)}</TableCell>
-        ))}
+        <TableCell>{instructorData.instructor}</TableCell>
+        {[...Array(31)].map((_, i) => {
+          const currentDate = `${currentYear}-${currentMonth.toString().padStart(2, '0')}-${(i + 1).toString().padStart(2, '0')}`;
+          const leave = instructorData.leaves ? instructorData.leaves.find(item => item.date === currentDate) : null;
+          const module = instructorData.modules ? instructorData.modules.find(item => item.date === currentDate) : null;
+          const content = leave ? leave.reason : (module ? module.title : '');
+          
+          // Define the background and font color based on cell type
+          const cellStyle = {
+            backgroundColor: leave ? 'black' : '', // Set background color to black for leave cells
+            color: leave ? 'white' : 'inherit' // Set font color to white for leave cells
+          };
+          
+          return <TableCell key={i} style={cellStyle}>{content}</TableCell>;
+        })}
       </TableRow>
     ));
   };
+  
+  
 
-  
-  const getCellClassName = (cell) => {
-    if (cell && cell.type === 'module') {
-      return 'module-cell';
-    } else if (cell && cell.type === 'leave') {
-      return 'leave-cell';
-    } else {
-      return ''; 
-    }
-  };
-
-  
-  const getCellContent = (cell) => {
-    if (cell && cell.type === 'module') {
-      return cell.name;
-    } else if (cell && cell.type === 'leave') {
-      return cell.reason;
-    } else {
-      return '';
-    }
-  };
-  
   return (
     <Container maxWidth="md">
       <Paper elevation={3} sx={{ padding: 3, marginTop: 3, width: 1025 }}>
@@ -118,7 +75,10 @@ const ViewSchedules = () => {
             <Table style={{ backgroundColor: '#FFF' }} >
               <TableHead>
                 <TableRow>
-                  {renderTableHeaders()}
+                  <TableCell>Instructor</TableCell>
+                  {[...Array(31)].map((_, i) => (
+                    <TableCell key={i + 1}>{`${new Date(currentYear, currentMonth - 1, i + 1).toLocaleString('default', { day: '2-digit', weekday: 'short' })}`}</TableCell>
+                  ))}
                 </TableRow>
               </TableHead>
               <TableBody>

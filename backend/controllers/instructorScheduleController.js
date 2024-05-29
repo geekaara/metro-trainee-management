@@ -8,15 +8,18 @@ exports.schedule_get = asyncHandler(async (req, res, next) => {
     // Query to fetch leaves for the specified month and year
     const leavesQuery = `
       SELECT
-        id,
-        instructorId,
-        start_date,
-        end_date,
-        type
+        l.id,
+        l.instructorId,
+        l.start_date,
+        l.end_date,
+        l.type AS reason,
+        CONCAT(i.title, ' ', i.first_name, ' ', i.last_name) AS instructorName
       FROM
-        leaves
+        leaves l
+      JOIN
+        instructors i ON l.instructorId = i.id
       WHERE
-        MONTH(start_date) = ? AND YEAR(start_date) = ?
+        MONTH(l.start_date) = ? AND YEAR(l.start_date) = ?
     `;
 
     const [leavesResults] = await db.query(leavesQuery, [month, year]);
@@ -25,64 +28,93 @@ exports.schedule_get = asyncHandler(async (req, res, next) => {
     const modulesQuery = `
       SELECT
         s.date,
-        m.module_name,
-        s.instructorId
+        m.module_name AS title,
+        s.instructorId,
+        CONCAT(i.title, ' ', i.first_name, ' ', i.last_name) AS instructorName
       FROM
         scheduleInstructors s
       JOIN
         module m ON s.moduleId = m.id
+      JOIN 
+        instructors i ON s.instructorId = i.id
       WHERE
         MONTH(s.date) = ? AND YEAR(s.date) = ?
     `;
 
     const [modulesResults] = await db.query(modulesQuery, [month, year]);
 
-    const combinedResults = {};
+    // Combine leaves and modules for each instructor
+    const instructorsData = {};
 
-    // Iterate over leaves and generate leave dates array for each instructor
+    // Process leaves
     leavesResults.forEach(leave => {
-      const currentDate = new Date(leave.start_date);
+      const startDate = new Date(leave.start_date);
       const endDate = new Date(leave.end_date);
-
-      while (currentDate <= endDate) {
-        const dateKey = currentDate.toISOString().slice(0, 10);
-        if (!combinedResults[dateKey]) {
-          combinedResults[dateKey] = {
-            date: dateKey,
-            entries: []
+      const datesInRange = getDatesInRange(startDate, endDate);
+      
+      datesInRange.forEach(date => {
+        const formattedDate = date.toISOString().slice(0, 10);
+        if (!instructorsData[leave.instructorId]) {
+          instructorsData[leave.instructorId] = {
+            instructorId: leave.instructorId,
+            instructor: leave.instructorName,
+            month: getMonthName(month),
+            year: year,
+            leaves: [],
+            modules: []
           };
         }
-        combinedResults[dateKey].entries.push({
-          instructorId: leave.instructorId,
-          type: 'leave',
-          reason: leave.type
+        instructorsData[leave.instructorId].leaves.push({
+          date: formattedDate,
+          reason: leave.reason
         });
-        currentDate.setDate(currentDate.getDate() + 1);
-      }
-    });
-
-    // Add modules to the combined results for each instructor
-    modulesResults.forEach(module => {
-      const dateKey = module.date.toISOString().slice(0, 10);
-      if (!combinedResults[dateKey]) {
-        combinedResults[dateKey] = {
-          date: dateKey,
-          entries: []
-        };
-      }
-      combinedResults[dateKey].entries.push({
-        instructorId: module.instructorId,
-        type: 'module',
-        name: module.module_name
       });
     });
 
-    // Convert combinedResults object to array
-    const scheduleArray = Object.values(combinedResults);
+    // Process modules
+    modulesResults.forEach(module => {
+      const moduleDate = new Date(module.date); // Parse module date string to Date object
+      if (!instructorsData[module.instructorId]) {
+        instructorsData[module.instructorId] = {
+          instructorId: module.instructorId,
+          instructor: module.instructorName,
+          month: getMonthName(month),
+          year: year,
+          leaves: [],
+          modules: []
+        };
+      }
+      instructorsData[module.instructorId].modules.push({
+        date: moduleDate.toISOString().slice(0, 10),
+        title: module.title
+      });
+    });
 
-    res.status(200).json(scheduleArray);
+    // Convert instructorsData object to array
+    const instructorsArray = Object.values(instructorsData);
+
+    res.status(200).json(instructorsArray);
   } catch (error) {
     console.error("Failed to fetch schedule:", error.message);
     res.status(500).send({ message: "Failed to fetch schedule", error: error.message });
   }
 });
+
+// Function to get month name from month number
+function getMonthName(monthNumber) {
+  const months = [
+    "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+  ];
+  return months[monthNumber - 1];
+}
+
+// Function to get all dates between two dates
+function getDatesInRange(startDate, endDate) {
+  const dates = [];
+  let currentDate = startDate;
+  while (currentDate <= endDate) {
+    dates.push(new Date(currentDate));
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+  return dates;
+}
