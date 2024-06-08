@@ -10,6 +10,7 @@ function Navbar(props) {
   const [showInstructorDropdown, setShowInstructorDropdown] = useState(false);
   const [showModuleDropdown, setShowModuleDropdown] = useState(false);
   const [showCourseDropdown, setShowCourseDropdown] = useState(false);
+  const [showAdminDropDown, setShowAdminDropDown] = useState(false);
 
   const toggleInstructorDropdown = () => {
     setShowInstructorDropdown(!showInstructorDropdown);
@@ -24,6 +25,11 @@ function Navbar(props) {
   const toggleCourseDropdown = () => {
     setShowCourseDropdown(!showCourseDropdown);
     setShowModuleDropdown(false); // Close the module dropdown when opening course dropdown
+  };
+
+  const toggleAdminDropdown = () => {
+    setShowAdminDropDown(!showAdminDropDown);
+    setShowCourseDropdown(false); // Close the module dropdown when opening course dropdown
   };
 
   return (
@@ -91,6 +97,11 @@ function Navbar(props) {
 
           {showInstructorDropdown && (
             <ul className="navbar-nav flex-column">
+               <li className="nav-item">
+                <Link className="nav-link" to="/view-instructors">
+                  <span style={{ marginRight: "0px" }}>View Instructors</span>
+                </Link>
+              </li>
               <li className="nav-item">
                 <Link className="nav-link" to="/add-instructors">
                   <span style={{ marginRight: "0px" }}>Add New Instructor</span>
@@ -136,6 +147,31 @@ function Navbar(props) {
             </ul>
           )}
         </li>
+
+        <li className="nav-item">
+          <span className="nav-link" onClick={toggleAdminDropdown}>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              Config
+              <Icon
+                as={showAdminDropDown ? FaChevronUp : FaChevronDown}
+                style={{ marginLeft: "90px" }}
+              />
+            </div>
+          </span>
+
+          {showAdminDropDown && (
+            <ul className="navbar-nav flex-column">
+              <li className="nav-item">
+                <Link className="nav-link" to="/add-qualification">
+                  <span style={{ marginRight: "15px" }}>Add Qualification</span>
+                </Link>
+              </li>
+             
+            </ul>
+          )}
+        </li>
+       
+       
         <li className="nav-item">
           <Link className="nav-link" to="/">
             <div style={{ display: "flex", alignItems: "center" }}>

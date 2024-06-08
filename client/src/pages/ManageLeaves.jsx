@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   TextField,
   Grid,
@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import axios from "axios";
+import { getLeavesById } from "../services/LeaveService";
 
 function ManageLeaves() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -33,49 +34,19 @@ function ManageLeaves() {
   const [instructorFound, setInstructorFound] = useState(false);
 
   
-  const handleSearch = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:3001/leaves/search?query=${searchQuery}`
-      );
-      
   
-      const data = response.data.leaves;
-      const searchData = data[0];
-
-      
-  
-      if (searchData.length > 0) {
-        const { employee_name, start_date, end_date,instructorId } = searchData[0];
-        const [first_name, last_name] = employee_name.split(" ");
-  
-        setFirstName(first_name);
-        setLastName(last_name);
-        setInstructorFound(true);
-
-        setInstructorId(instructorId);
-
-      } else {
-        setFirstName("");
-        setLastName("");
-        setInstructorFound(false);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {     
+        const instructorResponse = await getLeavesById(); 
+        setLeaves(instructorResponse);
+      } catch (error) {
+        console.error("Error getting instructor leaves:", error);
       }
-  
-      const updatedLeaves = searchData.map((leave) => ({
-        ...leave,
-        start_date: new Date(leave.start_date).toISOString().split('T')[0],
-        end_date: new Date(leave.end_date).toISOString().split('T')[0],
-      }));
+    };
 
-      setLeaves(updatedLeaves);
-
-    } catch (error) {
-      console.error("Error searching for employee:", error);
-    }
-  };
-  
-  
-  
+    fetchData();
+  }, []);
 
   const handleAddLeave = async (e) => {
     e.preventDefault(); 
@@ -103,25 +74,7 @@ function ManageLeaves() {
         <Box className="container">
           <form noValidate autoComplete="off">
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={8}>
-                <TextField
-                  variant="outlined"
-                  label="Employee Name"
-                  fullWidth
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton onClick={handleSearch}>
-                          <SearchIcon />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </Grid>
-              <Grid item xs={12} sm={4} />
+             
               <Grid item xs={12} sm={4}>
                 <TextField
                   variant="outlined"

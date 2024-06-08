@@ -7,17 +7,14 @@ console.log("DB_PORT:", process.env.DB_PORT);
 console.log("DB_PASSWORD:", process.env.DB_PASSWORD);
 console.log("DB_DATABASE:", process.env.DB_DATABASE);
 
-const pool = mysql.createPool({
+const connection = mysql.createConnection({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-  dateStrings:true
+  dateStrings: true
 });
 
-module.exports = pool.promise();
+module.exports = connection.promise();
 

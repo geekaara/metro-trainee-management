@@ -25,20 +25,23 @@
     });
     
     
-    exports.leave_search_get = asyncHandler(async (req, res, next) => {
-        const { query } = req.query; 
-
+    exports.getLeavesById = asyncHandler(async (req, res, next) => {
+        const { instructorId } = req.body; 
         try {
             
             const searchResults = await db.query(`
-            SELECT leaves.*, CONCAT( instructors.first_name, ' ', instructors.last_name) AS employee_name
-            FROM leaves
-            INNER JOIN instructors ON leaves.instructorId = instructors.id
-            WHERE CONCAT( instructors.first_name, ' ', instructors.last_name) = ?
-        `, [query]);
+            SELECT 
+            CONCAT(instructors.title,' ', instructors.first_name, ' ', instructors.last_name) AS employee_name,
+            leaves.start_date,
+            leaves.end_date,
+            leaves.type,
+            leaves.remarks
+            FROM instructors JOIN leaves ON instructors.id=leaves.instructorId
+            WHERE insructors.id=?;
+        `, [instructorId]);
 
             
-            res.status(200).json({ leaves: searchResults });
+            res.status(200).json( searchResults[0] );
         } catch (error) {
             
             console.error('Error searching for leaves:', error);

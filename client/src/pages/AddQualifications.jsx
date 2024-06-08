@@ -15,61 +15,62 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import "../css/AddQualifications.css";
+import { useEffect } from 'react';
+import { getQualification } from '../services/QualificationService';
 
-export default function AddQualifications() {
+export default function AddQualifications({saveQualificationDetails}) {
     const navigate = useNavigate();
-    const [qualifications, setQualifications] = useState({
-        'Phase 1': false,
-        'Phase 2': false,
-        'Phase 3': false,
-        'Phase 4': false,
-        'Phase 5': false,
-        'Phase 6': false,
-        'Other': false
-    });
-    const [customQualifications, setCustomQualifications] = useState(['']);
+    const [qualifications, setQualifications] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const qualificationData = await getQualification();
+            console.log(qualificationData)
+            setQualifications(qualificationData);
+          } catch (error) {
+            console.error("Error fetching qualification data:", error);
+          }
+        };
+    
+        fetchData();
+      }, []);
+
+    
+
+    const [selectedQualifications, setSelectedQualifications] = useState([]);
 
     const handleQualificationChange = (event) => {
         const { name, checked } = event.target;
-        setQualifications(prevState => ({
-            ...prevState,
-            [name]: checked
-        }));
-
-        if (name === 'Other' && !checked) {
-            setCustomQualifications(['']);
+    
+        console.log(name);
+        // Find the qualification by id
+        const qualification = qualifications.find((qualification) => qualification.id === parseInt(name));
+    
+        if (!qualification) {
+            return; // Qualification not found
         }
+    
+        // Update the checked state of the qualification
+        qualification.checked = checked;
+    
+        // Update the state with the updated qualifications
+        setQualifications([...qualifications]);
+    
+        // Filter the selected qualifications
+        const selectedIds = qualifications.filter((qualification) => qualification.checked).map((qualification) => qualification.id);
+    
+        // Update the selectedQualifications state with the selected IDs
+        setSelectedQualifications(selectedIds);
+    
+        // Pass the selected qualifications to the parent component
+        saveQualificationDetails({ qualifications: selectedIds });
     };
+    
 
-    const handleCustomQualificationChange = (index, event) => {
-        const newCustomQualifications = [...customQualifications];
-        newCustomQualifications[index] = event.target.value;
-        setCustomQualifications(newCustomQualifications);
-    };
+    
 
-    const addCustomQualification = () => {
-        setCustomQualifications([...customQualifications, '']);
-    };
-
-    const removeCustomQualification = (index) => {
-        const newCustomQualifications = [...customQualifications];
-        newCustomQualifications.splice(index, 1);
-        setCustomQualifications(newCustomQualifications);
-    };
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const selectedQualifications = Object.keys(qualifications).filter(key => qualifications[key]);
-        const validCustomQualifications = customQualifications.filter(q => q.trim() !== '');
-        const finalQualifications = [...selectedQualifications, ...validCustomQualifications];
-        console.log(finalQualifications);
-        // Handle form submission with finalQualifications
-        navigate('/availability');  // Navigate to the next step
-    };
-
-    const handleBack = () => {
-        navigate('/add-instructors');
-    };
+    
 
     return (
         <Container maxWidth="md">
@@ -80,67 +81,26 @@ export default function AddQualifications() {
                 <Typography variant="body1" gutterBottom>
                     Please complete the following form.
                 </Typography>
-                <Box component="form" onSubmit={handleSubmit} noValidate>
+                <Box component="form" noValidate>
                     <Grid container spacing={3}>
-                        {Object.keys(qualifications).map((key) => (
-                            <Grid item xs={12} key={key}>
+                    {qualifications.map((qualification) => (
+                            <Grid item xs={12} key={qualification.id}>
                                 <FormControlLabel
                                     control={
                                         <Checkbox
-                                            checked={qualifications[key]}
+                                        
+                                            checked={qualification.checked || false}
                                             onChange={handleQualificationChange}
-                                            name={key}
+                                            name={`${qualification.id}`}
                                             color="primary"
                                         />
                                     }
-                                    label={key}
+                                    label={qualification.qualification_name}
                                 />
                             </Grid>
                         ))}
-                        {qualifications['Other'] && (
-                            <Grid item xs={12}>
-                                <Typography variant="body1" gutterBottom>
-                                    Enter Qualifications
-                                </Typography>
-                                {customQualifications.map((customQualification, index) => (
-                                    <Box key={index} display="flex" alignItems="center" mb={2}>
-                                        <TextField
-                                            margin="normal"
-                                            variant="outlined"
-                                            fullWidth
-                                            label={`Other Qualification ${index + 1}`}
-                                            value={customQualification}
-                                            onChange={(e) => handleCustomQualificationChange(index, e)}
-                                        />
-                                        <IconButton
-                                            color="secondary"
-                                            onClick={() => removeCustomQualification(index)}
-                                            disabled={customQualifications.length === 1}
-                                        >
-                                            <RemoveIcon />
-                                        </IconButton>
-                                    </Box>
-                                ))}
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    startIcon={<AddIcon />}
-                                    onClick={addCustomQualification}
-                                >
-                                    Add Another Qualification
-                                </Button>
-                            </Grid>
-                        )}
-                        <Grid item xs={12}>
-                            <Box display="flex" justifyContent="space-between">
-                                <Button variant="contained" color="secondary" onClick={handleBack}>
-                                    Back
-                                </Button>
-                                <Button type="submit" variant="contained" color="primary">
-                                    Next
-                                </Button>
-                            </Box>
-                        </Grid>
+                       
+                       
                     </Grid>
                 </Box>
             </Paper>
