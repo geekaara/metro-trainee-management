@@ -105,7 +105,7 @@ function AddInstructor() {
           await addInstructor(instructorDetails);
           console.log("Instructor added successfully!");
           // Redirect to desired route after successful addition
-          navigate("/instructors");
+          navigate("/view-instructors");
       } catch (error) {
           console.error("Error adding instructor:", error);
       }
