@@ -14,5 +14,9 @@ router.put("/update", instructorController.instructor_update);
 // Delete instructor
 router.delete("/remove", instructorController.instructor_delete);
 
+router.get("/check-empId", instructorController.check_empId_exists);
+
+router.get("/check-email", instructorController.check_email_exists);
+
 module.exports = router;
 

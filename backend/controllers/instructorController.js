@@ -12,12 +12,24 @@ exports.instructor_get =  async (req, res) => {
 };
 
 // Handle instructor create on POST.
+// Handle instructor create on POST.
 exports.instructor_post= async (req, res) => {
   const instructor = req.body;
   const qualifications=req.body.qualifications;
   const availability=req.body.availability;
-  
+
   try {
+    // Check if Employee ID already exists
+    const [existingEmpId] = await db.query("SELECT id FROM instructors WHERE empId = ?", [instructor.empId]);
+    if (existingEmpId.length > 0) {
+      return res.status(400).json({ error: "Employee ID already exists" });
+    }
+
+    // Check if Email already exists
+    const [existingEmail] = await db.query("SELECT id FROM instructors WHERE email = ?", [instructor.email]);
+    if (existingEmail.length > 0) {
+      return res.status(400).json({ error: "Email already exists" });
+    }
 
     await db.beginTransaction();
 
@@ -35,38 +47,31 @@ exports.instructor_post= async (req, res) => {
       instructor.end_date
     ]);
 
-
     const { insertId } = basicDetailsResult;
 
-     //Insert qualifications
-     for (const element of qualifications) {
-    
+    //Insert qualifications
+    for (const element of qualifications) {
       await db.query("INSERT INTO instructorQualification (instructorId, qualificationId) VALUES (?, ?)", [
          insertId,
           element
       ]);
-      }
+    }
 
-     // Insert availability
-      for (const element of availability) {
+    // Insert availability
+    for (const element of availability) {
+      await db.query("INSERT INTO instructorAvailability (instructorId, day) VALUES (?, ?)", [
+          insertId,
+          element
+      ]);
+    }
 
-          await db.query("INSERT INTO instructorAvailability (instructorId, day) VALUES (?, ?)", [
-              insertId,
-              element
-          ]);
-      }
+    // Commit the transaction
+    await db.commit();
 
-     // Commit the transaction
-      await db.commit();
-
-      res.status(201).json({ message: "Instructor created successfully" });
- 
-
+    res.status(201).json({ message: "Instructor created successfully" });
   } catch (error) {
-
     res.status(400).json({ error: error.message });
     await db.rollback();
-
   }
 };
 
@@ -148,3 +153,32 @@ exports.instructor_delete = async (req, res) => {
   }
 };
 
+// Check if Employee ID exists
+exports.check_empId_exists = async (req, res) => {
+  const { empId } = req.query;
+  try {
+    const [result] = await db.query("SELECT id FROM instructors WHERE empId = ?", [empId]);
+    if (result.length > 0) {
+      res.status(200).json({ exists: true });
+    } else {
+      res.status(200).json({ exists: false });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+// Check if Email exists
+exports.check_email_exists = async (req, res) => {
+  const { email } = req.query;
+  try {
+    const [result] = await db.query("SELECT id FROM instructors WHERE email = ?", [email]);
+    if (result.length > 0) {
+      res.status(200).json({ exists: true });
+    } else {
+      res.status(200).json({ exists: false });
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
