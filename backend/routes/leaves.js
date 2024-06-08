@@ -6,6 +6,6 @@ router.get("/fetch", leaveController.leave_get);
 
 router.post("/create", leaveController.leave_create_post);
 
-router.get("/fetchbyid", leaveController.getLeavesById);
+router.post("/fetchbyid", leaveController.getLeavesById);
 
 module.exports = router;

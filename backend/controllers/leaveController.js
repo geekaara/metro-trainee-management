@@ -27,18 +27,20 @@
     
     exports.getLeavesById = asyncHandler(async (req, res, next) => {
         const { instructorId } = req.body; 
+        
         try {
             
             const searchResults = await db.query(`
             SELECT 
-            CONCAT(instructors.title,' ', instructors.first_name, ' ', instructors.last_name) AS employee_name,
+            CONCAT(instructors.title,' ', instructors.first_name, ' ', instructors.last_name) AS instructor_name,
             leaves.start_date,
             leaves.end_date,
             leaves.type,
             leaves.remarks
-            FROM instructors JOIN leaves ON instructors.id=leaves.instructorId
-            WHERE insructors.id=?;
+            FROM instructors JOIN leaves ON instructors.id = leaves.instructorId WHERE 
+            instructors.id=?;
         `, [instructorId]);
+        
 
             
             res.status(200).json( searchResults[0] );

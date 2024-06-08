@@ -19,10 +19,11 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 import axios from "axios";
 import { getLeavesById } from "../services/LeaveService";
+import { useParams } from 'react-router-dom';
 
 function ManageLeaves() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [firstName, setFirstName] = useState("");
+  const [instructorName, setinstructorName] = useState("");
   const [lastName, setLastName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -33,18 +34,20 @@ function ManageLeaves() {
   const [leaves, setLeaves] = useState([]);
   const [instructorFound, setInstructorFound] = useState(false);
 
+  let { id } = useParams();
   
+  const fetchData = async () => {
+    try {     
+      const response = await getLeavesById(id); 
+      setinstructorName(response[0].instructor_name)
+      setLeaves(response);
+    } catch (error) {
+      console.error("Error getting instructor leaves:", error);
+    }
+  };
+
   
   useEffect(() => {
-    const fetchData = async () => {
-      try {     
-        const instructorResponse = await getLeavesById(); 
-        setLeaves(instructorResponse);
-      } catch (error) {
-        console.error("Error getting instructor leaves:", error);
-      }
-    };
-
     fetchData();
   }, []);
 
@@ -52,13 +55,14 @@ function ManageLeaves() {
     e.preventDefault(); 
     try {
       const response = await axios.post("http://localhost:3001/leaves/create", {
-        instructorId: instructorId, 
+        instructorId: id,
         startDate,
         endDate,
         type,
-        remarks,
+        remarks
       });
       alert("Absence added successfully!");
+      fetchData();
     } catch (error) {
       console.error("Error adding absence:", error);
       alert("Error adding absence!");
@@ -72,33 +76,24 @@ function ManageLeaves() {
           Manage Leaves
         </Typography>
         <Box className="container">
-          <form noValidate autoComplete="off">
+          
             <Grid container spacing={2}>
              
-              <Grid item xs={12} sm={4}>
+              <Grid item xs={6} sm={6}>
                 <TextField
                   variant="outlined"
-                  label="First Name"
+                  label="Instructor Name"
                   size="small"
                   fullWidth
-                  value={firstName}
+                  value={instructorName}
                   disabled
                 />
               </Grid>
-              <Grid item xs={12} sm={4}>
-                <TextField
-                  variant="outlined"
-                  label="Last Name"
-                  size="small"
-                  fullWidth
-                  value={lastName}
-                  disabled
-                />
-              </Grid>
+             
             </Grid>
-          </form>
+         
 
-          {instructorFound && (
+          
             <Box sx={{ marginTop: "20px" }}>
               <Typography variant="h6" gutterBottom>
                 Current Leaves
@@ -235,7 +230,7 @@ function ManageLeaves() {
                 </form>
               </Box>
             </Box>
-          )}
+         
         </Box>
       </Paper>
     </Container>
