@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Container,
@@ -8,22 +8,17 @@ import {
     Grid,
     FormControlLabel,
     Checkbox,
-    TextField,
-    Button,
-    Alert
+    TextField
 } from '@mui/material';
-import { format, startOfWeek, endOfWeek, isWithinInterval } from 'date-fns';
 import "../css/AddInstructorAvailability.css";
-
 
 const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 
 export default function AddInstructorAvailability({fetchedInstructorDetails,saveAvailabilityDetails}) {
     const [startEndDates, setStartEndDates] = useState({
-        startDate:'',
-        endDate:''
-    
+        startDate: '',
+        endDate: ''
     });
     const [availability, setAvailability] = useState({});
     const [error, setError] = useState('');
@@ -51,7 +46,6 @@ export default function AddInstructorAvailability({fetchedInstructorDetails,save
 
     const navigate = useNavigate();
 
-
     const handleBack = () => {
         navigate('/qualifications');
     };
@@ -62,23 +56,16 @@ export default function AddInstructorAvailability({fetchedInstructorDetails,save
             ...prevAvailability,
             [name]: checked
         }));
-        console.log(startEndDates)
-        saveAvailabilityDetails({ availability: { ...availability, [name]: checked } },
-            startEndDates);
+        saveAvailabilityDetails({ availability: { ...availability, [name]: checked } }, startEndDates);
     };
 
-    const handleInputChange =  (event) => {
+    const handleInputChange = (event) => {
         const { name, value } = event.target;
-        setStartEndDates({
-            ...startEndDates,
+        setStartEndDates(prevDates => ({
+            ...prevDates,
             [name]: value
-        });
-
-
-        saveAvailabilityDetails(availability,{ 
-            ...startEndDates,
-        [name]: value });
-
+        }));
+        saveAvailabilityDetails(availability, { ...startEndDates, [name]: value });
     };
 
     return (
@@ -90,7 +77,7 @@ export default function AddInstructorAvailability({fetchedInstructorDetails,save
                 <Typography variant="body1" gutterBottom>
                     Please complete the following form.
                 </Typography>
-                <Box component="form"  noValidate>
+                <Box component="form" noValidate>
                     <Grid container spacing={3}>
                         <Grid item xs={12} sm={6}>
                             <TextField
@@ -118,35 +105,33 @@ export default function AddInstructorAvailability({fetchedInstructorDetails,save
                                 fullWidth
                             />
                         </Grid>
-                      
                         <Grid item xs={12}>
                             <Typography variant="h6" gutterBottom>
                                 Weekly Availability
                             </Typography>
                         </Grid>
                         {dayNames.map((day) => (
-                            <Grid key={day} container item xs={12} >
+                            <Grid key={day} container item xs={12}>
                                 <Grid item xs={6}>
                                     <Typography variant="body1" style={{ fontWeight: 'bold' }}>
                                         {day}
                                     </Typography>
                                 </Grid>
                                 <Grid item xs={6}>
-                                    
                                     <FormControlLabel
                                         control={
                                             <Checkbox
-                                            checked={availability[day] || false}
-                                            onChange={handleAvailabilityChange}
-                                            name={day}
+                                                checked={availability[day] || false}
+                                                onChange={handleAvailabilityChange}
+                                                name={day}
+                                                inputProps={{ 'aria-label': day }}
                                             />
                                         }
-                                        label=""
+                                        label={day}
                                     />
                                 </Grid>
                             </Grid>
                         ))}
-                       
                     </Grid>
                 </Box>
             </Paper>
