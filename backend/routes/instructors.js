@@ -5,6 +5,9 @@ const instructorController = require("../controllers/instructorController");
 // Display instructor create form on GET.
 router.get("/fetch", instructorController.instructor_get);
 
+// Get Instructor by Id
+router.post("/fetchbyid", instructorController.fetchInstructorbyid);
+
 // Handle instructor create on POST.
 router.post("/create", instructorController.instructor_post);
 

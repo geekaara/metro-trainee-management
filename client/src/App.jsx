@@ -15,6 +15,7 @@ import AddInstructorAvailability from "./pages/AddInstructorAvailability";
 import { ToastContainer } from "react-toastify";
 
 import './css/style.css';
+import EditInstructor from "./pages/EditInstructor";
 
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
                 {/* <Route path="/qualifications" element={<WithNavbar><AddQualifications /></WithNavbar>} />
                 <Route path="/availability" element={<WithNavbar><AddInstructorAvailability /></WithNavbar>} /> */}
                 <Route path="/view-instructors" element={<WithNavbar><ViewInstructors /></WithNavbar>} />
+                <Route path="/view-instructors/:id" element={<WithNavbar><EditInstructor /></WithNavbar>} />
                 <Route path="/:id/manage-leaves" element={<WithNavbar><ManageLeaves /></WithNavbar>} />
                 <Route path="/view-schedules" element={<WithNavbar><ViewSchedules /></WithNavbar>} />
                 <Route path="/add-courses" element={<WithNavbar><AddCourse /></WithNavbar>} />

@@ -39,7 +39,9 @@ function ManageLeaves() {
   const fetchData = async () => {
     try {     
       const response = await getLeavesById(id); 
-      setinstructorName(response[0].instructor_name)
+      
+     setinstructorName(response[0].instructor_name);
+
       setLeaves(response);
     } catch (error) {
       console.error("Error getting instructor leaves:", error);
@@ -92,10 +94,13 @@ function ManageLeaves() {
              
             </Grid>
          
-
+          
           
             <Box sx={{ marginTop: "20px" }}>
-              <Typography variant="h6" gutterBottom>
+
+            {leaves.length > 0 && leaves[0].start_date && (
+                <>
+                 <Typography variant="h6" gutterBottom>
                 Current Leaves
               </Typography>
 
@@ -142,6 +147,9 @@ function ManageLeaves() {
                 ))}
               </Box>
 
+                </>
+            )}
+             
               <Box sx={{ marginTop: "20px" }}>
                 <Typography variant="h6" gutterBottom>
                   Add New Absence

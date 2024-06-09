@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
   Container,
   Box,
@@ -14,20 +14,29 @@ import {
 } from '@mui/material';
 import { checkEmpIdExists, checkEmailExists } from '../services/InstructorService';
 
-function BasicDetails({ saveBasicDetails }) {
-  const [instructorDetails, setInstructorDetails] = useState({
-    title: '',
-    firstName: '',
-    lastName: '',
-    formalName: '',
-    gender: '',
-    contactNo: '',
-    employeeID: '',
-    email: ''
-  });
+function BasicDetails({ fetchedInstructorDetails,saveBasicDetails }) {
+    const [instructorDetails, setInstructorDetails] = useState({
+        title: fetchedInstructorDetails.title || '',
+        firstName: fetchedInstructorDetails.firstName || '',
+        lastName: fetchedInstructorDetails.lastName || '',
+        formalName: fetchedInstructorDetails.formalName || '',
+        gender: fetchedInstructorDetails.gender || '',
+        contactNo: fetchedInstructorDetails.contactNo || '',
+        employeeID: fetchedInstructorDetails.employeeID || '',
+        email: fetchedInstructorDetails.email || ''
+      });
 
   const [isEmpIdValid, setIsEmpIdValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
+
+  useEffect(() => {
+   console.log(fetchedInstructorDetails)
+
+   setInstructorDetails({
+    ...fetchedInstructorDetails,
+    ...instructorDetails
+   })
+  }, [fetchedInstructorDetails]);
 
   const handleInputChange = async (event) => {
     const { name, value } = event.target;
@@ -80,7 +89,7 @@ function BasicDetails({ saveBasicDetails }) {
                   <MenuItem value="Mr">Mr</MenuItem>
                   <MenuItem value="Mrs">Mrs</MenuItem>
                   <MenuItem value="Ms">Ms</MenuItem>
-                  <MenuItem value="Dr">Dr</MenuItem>
+                  <MenuItem value="Dr.">Dr</MenuItem>
                 </Select>
               </FormControl>
             </Grid>

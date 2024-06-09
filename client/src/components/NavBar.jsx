@@ -107,11 +107,7 @@ function Navbar(props) {
                   <span style={{ marginRight: "0px" }}>Add New Instructor</span>
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/manage-leaves">
-                  <span style={{ marginRight: "26px" }}>Manage Leaves</span>
-                </Link>
-              </li>
+            
               <li className="nav-item">
                 <Link className="nav-link" to="/view-schedules">
                   <span style={{ marginRight: "25px" }}>View Schedules</span>

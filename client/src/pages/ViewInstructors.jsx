@@ -57,7 +57,7 @@ function ViewInstructor() {
 
   const handleEditInstructor=(id)=>{
     console.log("Clicked Instructor ID:", id);
-    navigate(`/${id}`);
+    navigate(`${id}`);
   }
 
   const handleChangeRowsPerPage = (event) => {

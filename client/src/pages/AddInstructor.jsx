@@ -129,11 +129,11 @@ function AddInstructor() {
                             {(() => {
                                 switch (activeStep) {
                                     case 0:
-                                        return <BasicDetails saveBasicDetails={saveBasicDetails} />;
+                                        return <BasicDetails fetchedInstructorDetails={instructorDetails} saveBasicDetails={saveBasicDetails} />;
                                     case 1:
-                                        return <AddQualifications saveQualificationDetails={saveQualificationDetails} />;
+                                        return <AddQualifications fetchedInstructorDetails={instructorDetails} saveQualificationDetails={saveQualificationDetails} />;
                                     case 2:
-                                        return <AddInstructorAvailability saveAvailabilityDetails={saveAvailabilityDetails} />;
+                                        return <AddInstructorAvailability fetchedInstructorDetails={instructorDetails} saveAvailabilityDetails={saveAvailabilityDetails} />;
                                     default:
                                         return (
                                             <Typography variant="h5">

@@ -19,7 +19,7 @@ import "../css/AddInstructorAvailability.css";
 const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 
-export default function AddInstructorAvailability({saveAvailabilityDetails}) {
+export default function AddInstructorAvailability({fetchedInstructorDetails,saveAvailabilityDetails}) {
     const [startEndDates, setStartEndDates] = useState({
         startDate:'',
         endDate:''
@@ -28,6 +28,26 @@ export default function AddInstructorAvailability({saveAvailabilityDetails}) {
     const [availability, setAvailability] = useState({});
     const [error, setError] = useState('');
     
+    useEffect(() => {
+        console.log(fetchedInstructorDetails)
+     
+        setStartEndDates({
+            startDate:fetchedInstructorDetails.startDate,
+            endDate:fetchedInstructorDetails.endDate
+        });
+
+        if (fetchedInstructorDetails && fetchedInstructorDetails.availability) {
+            const initialAvailability = {};
+            fetchedInstructorDetails.availability.forEach(day => {
+                initialAvailability[day] = true;
+            });
+            setAvailability(initialAvailability);
+        }
+       
+
+       }, [fetchedInstructorDetails]);
+     
+      
 
     const navigate = useNavigate();
 

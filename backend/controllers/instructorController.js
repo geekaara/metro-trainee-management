@@ -11,7 +11,47 @@ exports.instructor_get =  async (req, res) => {
   }
 };
 
-// Handle instructor create on POST.
+// Display instructor create form on GET.
+exports.fetchInstructorbyid =  async (req, res) => {
+  const {id} = req.body;
+  
+  try {
+    const instructorQuery = await db.query("SELECT * FROM  instructors WHERE id=?",[id]);
+
+    const availabilityQuery = await db.query("SELECT day FROM  instructorAvailability WHERE instructorId=?",[id]);
+
+    const qualificationQuery = await db.query("SELECT qualificationId FROM  instructorQualification WHERE instructorId=?",[id]);
+
+
+   
+  
+    const availabilityValues = availabilityQuery[0].map(item => item.day);
+    const qualificationValues = qualificationQuery[0].map(item => item.qualificationId);
+
+    // console.log(instructorQuery[0]);
+    // console.log(availabilityValues);
+    // console.log(qualificationValues);
+
+
+    const instructorData = instructorQuery[0]; 
+
+    instructorData[0].availability=availabilityValues;
+    instructorData[0].qualifications=qualificationValues;
+    
+
+
+    res.status(200).json(instructorData);
+
+
+
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+
+
+
 // Handle instructor create on POST.
 exports.instructor_post= async (req, res) => {
   const instructor = req.body;

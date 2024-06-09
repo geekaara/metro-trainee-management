@@ -37,7 +37,7 @@
             leaves.end_date,
             leaves.type,
             leaves.remarks
-            FROM instructors JOIN leaves ON instructors.id = leaves.instructorId WHERE 
+            FROM instructors LEFT JOIN leaves ON instructors.id = leaves.instructorId WHERE 
             instructors.id=?;
         `, [instructorId]);
         
