@@ -10,13 +10,14 @@ import AddCourse from "./pages/AddCourse";
 import EditCourse from "./pages/EditCourse";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage"; 
-import AddQualifications from "./pages/AddQualifications";
+
 import AddInstructorAvailability from "./pages/AddInstructorAvailability";
 import { ToastContainer } from "react-toastify";
 
 import './css/style.css';
 import EditInstructor from "./pages/EditInstructor";
 import useAuth from "./services/AuthService";
+import NewQualification from "./pages/NewQualification";
 
 
 
@@ -37,8 +38,8 @@ function App() {
                 <Route exact path="/" element={<PrivateRoute/>}>
                     <Route path="/dashboard" element={<WithNavbar><Dashboard /></WithNavbar>} />
                     <Route path="/add-instructors" element={<WithNavbar><AddInstructor /></WithNavbar>} />
-                    {/* <Route path="/qualifications" element={<WithNavbar><AddQualifications /></WithNavbar>} />
-                    <Route path="/availability" element={<WithNavbar><AddInstructorAvailability /></WithNavbar>} /> */}
+                    <Route path="/add-qualification" element={<WithNavbar><NewQualification /></WithNavbar>} />
+                    {/* <Route path="/availability" element={<WithNavbar><AddInstructorAvailability /></WithNavbar>} />  */}
                     <Route path="/view-instructors" element={<WithNavbar><ViewInstructors /></WithNavbar>} />
                     <Route path="/view-instructors/:id" element={<WithNavbar><EditInstructor /></WithNavbar>} />
                     <Route path="/:id/manage-leaves" element={<WithNavbar><ManageLeaves /></WithNavbar>} />

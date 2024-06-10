@@ -14,10 +14,10 @@ exports.qualification_get =  async (req, res) => {
 
 // Add new Qualification
 exports.qualification_post = async (req, res) => {
-  const name = req.body.name;
-  console.log(name)
+  const name = req.body;
+  const data=name.qualification_name
   try {
-    const qualification = await db.query("INSERT INTO qualification (qualification_name) VALUES (?)", [name]);
+    const qualification = await db.query("INSERT INTO qualification (qualification_name) VALUES (?)", [data]);
 
     const response = {
         id: qualification.id,

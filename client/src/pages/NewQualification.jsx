@@ -15,19 +15,23 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { getQualification,addQualification } from "../services/QualificationService";
 
-function AddQualification() {
+function NewQualification() {
   const [qualificationName, setQualificationName] = useState("");
   const [qualifications, setQualifications] = useState([]);
 
+
+  
   useEffect(() => {
     fetchQualifications();
   }, []);
 
   const fetchQualifications = async () => {
     try {
-      const response = await axios.get("http://localhost:3001/qualification/all");
-      setQualifications(response.data);
+      const qualificationData = await getQualification();
+      console.log("Fetched qualifications:", qualificationData);
+      setQualifications(qualificationData);
     } catch (error) {
       console.error("Error fetching qualifications:", error);
     }
@@ -35,10 +39,8 @@ function AddQualification() {
 
   const handleSave = async () => {
     try {
-      const response = await axios.post("http://localhost:3001/qualification/add", {
-        qualificationName: qualificationName
-      });
-      console.log("Qualification saved successfully:", response.data);
+      const response =  await addQualification(qualificationName)
+      console.log("Qualification saved successfully:", response);
       setQualificationName("");
       fetchQualifications();
     } catch (error) {
@@ -47,29 +49,7 @@ function AddQualification() {
     }
   };
 
-  const handleEdit = async (qualificationId, newName) => {
-    try {
-      await axios.put(`http://localhost:3001/qualification/update/${qualificationId}`, {
-        qualificationName: newName
-      });
-      console.log("Qualification updated successfully:", qualificationId);
-      fetchQualifications();
-    } catch (error) {
-      console.error("Error updating qualification:", error);
-      alert("Error updating qualification. Please try again.");
-    }
-  };
-
-  const handleDelete = async (qualificationId) => {
-    try {
-      await axios.delete(`http://localhost:3001/qualification/delete/${qualificationId}`);
-      console.log("Qualification deleted successfully:", qualificationId);
-      fetchQualifications();
-    } catch (error) {
-      console.error("Error deleting qualification:", error);
-      alert("Error deleting qualification. Please try again.");
-    }
-  };
+  
 
   return (
     <Container maxWidth="md">
@@ -106,19 +86,21 @@ function AddQualification() {
           <TableHead>
             <TableRow>
               <TableCell>Qualification Name</TableCell>
-              <TableCell align="right">Actions</TableCell>
+             
             </TableRow>
           </TableHead>
           <TableBody>
-            {qualifications.map((qualification) => (
-              <TableRow key={qualification.id}>
-                <TableCell>{qualification.name}</TableCell>
-                <TableCell align="right">
-                  <Button onClick={() => handleEdit(qualification.id, "New Qualification Name")}>Edit</Button>
-                  <Button onClick={() => handleDelete(qualification.id)}>Delete</Button>
-                </TableCell>
+          {qualifications && qualifications.length > 0 ? (
+              qualifications.map((qualification) => (
+                <TableRow key={qualification.id}>
+                  <TableCell>{qualification.qualification_name}</TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={1}>No data found.</TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </TableContainer>
@@ -126,4 +108,4 @@ function AddQualification() {
   );
 }
 
-export default AddQualification;
+export default NewQualification;

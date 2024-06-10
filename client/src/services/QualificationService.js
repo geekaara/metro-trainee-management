@@ -3,9 +3,9 @@ import axios from "axios";
 
 const API_URL = "http://localhost:3001/qualification"; 
 
-export const addQualification = async (qualificationData) => {
+export const addQualification = async (qualifiation_name) => {
   try {
-    const response = await axios.post(`${API_URL}/create`, qualificationData);
+    const response = await axios.post(`${API_URL}/create`, {qualification_name:qualifiation_name});
     return response.data;
   } catch (error) {
     console.error("Error adding qualification:", error);
