@@ -1,7 +1,7 @@
 // instructorService.js
 import axios from "axios";
 
-const API_URL = "http://localhost:3001/qualification"; // Your API URL
+const API_URL = "http://localhost:3001/qualification"; 
 
 export const addQualification = async (qualificationData) => {
   try {

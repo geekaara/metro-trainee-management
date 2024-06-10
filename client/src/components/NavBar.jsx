@@ -5,8 +5,13 @@ import metroImage from "../images/Banner.png";
 import { Box, Icon } from "@mui/material";
 import { FaChevronUp, FaChevronDown } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
+import useAuth from "../services/AuthService";
+import { useNavigate } from "react-router-dom";
 
 function Navbar(props) {
+
+  const { logout } = useAuth();
+
   const [showInstructorDropdown, setShowInstructorDropdown] = useState(false);
   const [showModuleDropdown, setShowModuleDropdown] = useState(false);
   const [showCourseDropdown, setShowCourseDropdown] = useState(false);
@@ -30,6 +35,12 @@ function Navbar(props) {
   const toggleAdminDropdown = () => {
     setShowAdminDropDown(!showAdminDropDown);
     setShowCourseDropdown(false); // Close the module dropdown when opening course dropdown
+  };
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login");
   };
 
   return (
@@ -169,7 +180,7 @@ function Navbar(props) {
        
        
         <li className="nav-item">
-          <Link className="nav-link" to="/">
+          <Link className="nav-link" onClick={handleLogout}>
             <div style={{ display: "flex", alignItems: "center" }}>
               <span style={{ marginRight: "120px", marginTop:"100px" }}>Logout</span>
             </div>

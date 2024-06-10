@@ -12,8 +12,17 @@ exports.user_login_post = asyncHandler(async (req, res, next) => {
             return res.status(401).send({ message: "Invalid email or password" });
         }
 
+        console.log(user)
         // If the login is successful, you can set up a session or generate a token here
-        res.status(200).send({ message: "Login successful" });
+        res.status(200).send(
+            {
+                user:{
+                    id: user[0].id,
+                    email: user[0].email, 
+                }, 
+                message: "Login successful"
+            }
+            );
     } catch (error) {
         console.error("Failed to login user:", error.message);
         res.status(500).send({ message: "Failed to login user", error: error.message });
