@@ -1,44 +1,109 @@
 const asyncHandler = require("express-async-handler");
 const db = require("../test-db-connection");
 
-// Controller to update a course
-exports.updateCourse = asyncHandler(async (req, res, next) => {
-  const courseId = req.params.id;
-  const { courseName, startDate, endDate, numberOfStudents, schedule } =
-    req.body;
+// Fetch course details by name
+exports.getCourseDetailsByName = asyncHandler(async (req, res, next) => {
+    const courseName = req.params.name.trim();
+    console.log("Searching for course:", courseName); // Debugging statement
 
-  try {
-    // Update course details
-    await db.query(
-      "UPDATE courses SET name = ?, start_date = ?, end_date = ?, number_of_students = ? WHERE id = ?",
-      [courseName, startDate, endDate, numberOfStudents, courseId]
-    );
+    try {
+        // Fetch the course details by course name
+        const [courseDetails] = await db.query(
+            "SELECT * FROM courses WHERE course_name = ?",
+            [courseName]
+        );
+        console.log("Course details result:", courseDetails); // Debugging statement
 
-    // Update schedule details (assuming you have a separate table for the schedule)
-    await Promise.all(
-      schedule.map((item) =>
-        db.query(
-          "UPDATE course_schedule SET day = ?, date = ?, weekday = ?, description = ? WHERE course_id = ? AND day = ?",
-          [
-            item.day,
-            item.date,
-            item.weekday,
-            item.description,
-            courseId,
-            item.day,
-          ]
-        )
-      )
-    );
+        if (courseDetails.length === 0) {
+            console.log("Course not found:", courseName); // Debugging statement
+            return res.status(404).json({ message: "Course not found" });
+        }
 
-    res.status(200).json({ message: "Course updated successfully!" });
-  } catch (error) {
-    console.error("Failed to update course:", error.message);
-    res
-      .status(500)
-      .send({ message: "Failed to update course", error: error.message });
-  }
+        const courseId = courseDetails[0].id;
+        console.log("Course ID:", courseId); // Debugging statement
+
+        // Fetch the schedule details using the course ID and join with instructor and module tables
+        const [scheduleDetails] = await db.query(
+
+            `SELECT si.date, si.moduleId, m.module_name, si.instructorId, i.first_name AS instructor_name
+             FROM scheduleInstructors si
+             JOIN instructors i ON si.instructorId = i.id
+             JOIN module m ON si.moduleId = m.id
+             WHERE si.courseId = ?`,
+            [courseId]
+        );
+
+        console.log("Schedule details result:", scheduleDetails); // Debugging statement
+
+        res.status(200).json({ course: courseDetails[0], schedule: scheduleDetails });
+    } catch (error) {
+        console.error("Failed to fetch course details:", error);
+        res.status(500).send({ message: "Failed to fetch course details", error: error.message });
+    }
 });
+
+
+// Update course details by name
+exports.updateCourseByName = asyncHandler(async (req, res, next) => {
+    const courseName = req.params.name.trim();
+    const { startDate, endDate, groupName, numberOfStudents, schedule } = req.body;
+    try {
+        // Fetch the course ID by course name
+        const [courseDetails] = await db.query(
+            "SELECT id FROM courses WHERE course_name = ?",
+            [courseName]
+        );
+
+        if (courseDetails.length === 0) {
+            return res.status(404).json({ message: "Course not found" });
+        }
+
+        const courseId = courseDetails[0].id;
+
+        // Start a transaction
+        await db.query('START TRANSACTION');
+
+        // Update course details
+        await db.query(
+            "UPDATE courses SET start_date = ?, end_date = ?, group_name = ?, number_of_students = ? WHERE id = ?",
+            [startDate, endDate, groupName, numberOfStudents, courseId]
+        );
+
+        // Delete existing schedule for the course
+        await db.query("DELETE FROM scheduleInstructors WHERE courseId = ?", [courseId]);
+        await db.query("DELETE FROM schedule WHERE courseId = ?", [courseId]);
+
+        // Insert updated schedule
+        await Promise.all(
+            schedule.map((item) =>
+                db.query(
+                    "INSERT INTO schedule (courseId, moduleId, date) VALUES (?, ?, ?)",
+                    [courseId, item.moduleId, item.date]
+                )
+            )
+        );
+
+        await Promise.all(
+            schedule.map((item) =>
+                db.query(
+                    "INSERT INTO scheduleInstructors (courseId, moduleId, date, instructorId) VALUES (?, ?, ?, ?)",
+                    [courseId, item.moduleId, item.date, item.instructorId]
+                )
+            )
+        );
+
+        // Commit the transaction
+        await db.query('COMMIT');
+
+        res.status(200).json({ success: true, message: 'Course updated successfully' });
+    } catch (error) {
+        // Rollback the transaction in case of error
+        await db.query('ROLLBACK');
+        console.error("Failed to update course:", error);
+        res.status(500).send({ success: false, message: 'Failed to update course', error: error.message });
+    }
+});
+
 
 exports.courses_post = asyncHandler(async (req, res, next) => {
   const {
@@ -98,9 +163,16 @@ exports.courses_post = asyncHandler(async (req, res, next) => {
   }
 });
 
+// Fetch instructors
 exports.instructor_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: leaves GET");
-  });
+    try {
+        const [instructors] = await db.query('SELECT * FROM instructors');
+        res.status(200).json(instructors);
+    } catch (error) {
+        console.error('Error fetching instructors:', error);
+        res.status(500).json({ message: 'Error fetching instructors', error });
+    }
+});
 
 
   exports.instructor_post = asyncHandler(async (req, res, next) => {

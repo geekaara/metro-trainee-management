@@ -66,7 +66,7 @@ export default function SignupPage() {
             try {
                 const response = await axios.post('http://localhost:3001/users/register', userDetails);
                 console.log('Signup successful:', response.data);
-                navigate('/login');
+                navigate('/');
                 toast.success("Successfully Registered!!", {
                     position: "top-center",
                     autoClose: 3000,
@@ -160,7 +160,7 @@ export default function SignupPage() {
                         </Button>
                         <Grid container>
                             <Grid item xs>
-                                <Link href="/login" variant="body2">
+                                <Link href="/" variant="body2">
                                     {"Already have an account? Sign In"}
                                 </Link>
                             </Grid>

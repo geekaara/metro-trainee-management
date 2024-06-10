@@ -157,7 +157,7 @@ function AddCourse() {
         courseName,
         startDate,
         endDate,
-        group,
+        groupName: group,
         numberOfStudents,
         schedule: generatedSchedule
           .filter(item => item.instructorId) // Filter out items with no instructor selected

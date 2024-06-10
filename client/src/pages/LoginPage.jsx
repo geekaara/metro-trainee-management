@@ -57,7 +57,7 @@ export default function LoginPage() {
             try {
                 const response = await login(userDetails); 
                 console.log('Login successful:', response.data);
-                navigate('/dashboard');
+                navigate('/add-instructors');
                 setLoginSuccess(true);
                 toast.success("Logged in successfully!", {
                     position: "top-center",
@@ -70,7 +70,7 @@ export default function LoginPage() {
                 });
             } catch (error) {
                 console.error('Failed to login:', error);
-                toast.error("Failed to login. Please try again.", {
+                toast.error("Invalid Credentials. Please try again.", {
                     position: "top-center",
                     autoClose: 3000,
                     hideProgressBar: true,

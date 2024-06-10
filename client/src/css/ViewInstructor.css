@@ -1,0 +1,9 @@
+/* ViewInstructor.css */
+.view-instructor-container {
+    padding: 16px;
+    margin: 16px;
+    box-sizing: border-box;
+    max-width: 1200px; /* Adjust as needed */
+    margin-left: auto;
+    margin-right: auto;
+}
