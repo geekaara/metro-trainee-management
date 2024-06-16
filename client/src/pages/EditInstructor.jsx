@@ -14,6 +14,7 @@ import AddInstructorAvailability from './AddInstructorAvailability';
 import BasicDetails from './BasicDetails';
 import { addInstructor, getInstructorById, updateInstructor } from '../services/InstructorService';
 
+// Define the steps for the stepper
 const steps = [
     'Basic Details',
     'Qualifications',
@@ -21,6 +22,7 @@ const steps = [
 ];
 
 function EditInstructor() {
+    // Initialize useNavigate hook for navigation
     const navigate = useNavigate();
     const [instructorDetails, setInstructorDetails] = useState({
         title: '',
@@ -43,7 +45,7 @@ function EditInstructor() {
     const [dataLoaded, setDataLoaded] = useState(false);
 
     let { id } = useParams();
-  
+  // Function to fetch instructor data by ID
     const fetchData = async () => {
       try {     
         const response = await getInstructorById(id); 
@@ -72,7 +74,7 @@ function EditInstructor() {
       }
     };
   
-    
+    // Fetch data when component mounts
     useEffect(() => {
       
       fetchData();
@@ -90,21 +92,21 @@ function EditInstructor() {
     const handleReset = () => {
         setActiveStep(0);
     };
-
+   // Function to save basic details
     const saveBasicDetails = (basicDetails) => {
         setInstructorDetails({
             ...instructorDetails,
             ...basicDetails
         });
     };
-
+// Function to save qualification details
     const saveQualificationDetails = (qualificationDetails) => {
         setInstructorDetails({
             ...instructorDetails,
             ...qualificationDetails
         });
     };
-
+// Function to save availability details
     const saveAvailabilityDetails = (availability, startEndDates) => {
         if (availability.availability) {
             const selectedDays = Object.keys(availability.availability).filter(day => availability.availability[day]);
@@ -120,7 +122,7 @@ function EditInstructor() {
             });
         }
     };
-
+ // Function to handle finish step and update instructor details
     const handleFinish = async () => {
         try {
             await updateInstructor(instructorDetails);

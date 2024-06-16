@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../test-db-connection"); // Adjusted path as necessary
+const db = require("../test-db-connection"); 
 const courseController = require("../controllers/courseController");
 
 
@@ -23,14 +23,6 @@ router.get("/instructors", courseController.instructor_get);
 router.post("/fetchinstructor", courseController.instructor_post);
 
 
-//
-// router.get("/courses", courseController.getCourseDetails);
-//
-// router.put("/update/:id", courseController.updateCourse);
-//
-// router.get("/view", courseController.instructor_get);
-//
-// router.post("/fetchinstructor",courseController.instructor_post );
 
 module.exports = router;
 

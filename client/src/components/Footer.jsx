@@ -1,5 +1,6 @@
 import React from "react";
 
+// Footer functional component
 function Footer() {
   return (
     <footer className="mt-auto py-3 bg-grey text-white">

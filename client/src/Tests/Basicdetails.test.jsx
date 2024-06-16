@@ -8,32 +8,40 @@ jest.mock('../services/InstructorService', () => ({
   checkEmpIdExists: jest.fn(),
   checkEmailExists: jest.fn(),
 }));
-
+// Mock function for saveBasicDetails
 const saveBasicDetailsMock = jest.fn();
 
 describe('BasicDetails Component', () => {
+  // Define valid basic details for the instructor
   const validBasicDetails = {
+    title: 'Mr',
     firstName: 'John',
     lastName: 'Doe',
     formalName: 'John Doe',
+    gender: 'Male',
     contactNo: '1234567890',
     employeeID: 'E123',
     email: 'john.doe@metrotrains.com.au'
   };
-
+// Clear all mocks and clean up the DOM after each test
   afterEach(() => {
     jest.clearAllMocks();
     cleanup();
   });
 
   test('renders BasicDetails component and fills in the form', async () => {
+    // Test case to check if the BasicDetails component renders correctly and handles form input
+
+    
     await act(async () => {
-      render(<BasicDetails saveBasicDetails={saveBasicDetailsMock} />);
+      render(<BasicDetails fetchedInstructorDetails={validBasicDetails} saveBasicDetails={saveBasicDetailsMock} />);
     });
 
-    // Fill in the form fields one by one and check the function call
+    // Clear and fill in the form fields one by one and check the function call
     await act(async () => {
-      userEvent.type(screen.getByLabelText(/first name/i), validBasicDetails.firstName);
+      const firstNameField = screen.getByLabelText(/first name/i);
+      fireEvent.change(firstNameField, { target: { value: '' } });  // Clear the field
+      userEvent.type(firstNameField, validBasicDetails.firstName);
     });
     await waitFor(() => {
       expect(saveBasicDetailsMock).toHaveBeenLastCalledWith(expect.objectContaining({
@@ -42,7 +50,9 @@ describe('BasicDetails Component', () => {
     });
 
     await act(async () => {
-      userEvent.type(screen.getByLabelText(/last name/i), validBasicDetails.lastName);
+      const lastNameField = screen.getByLabelText(/last name/i);
+      fireEvent.change(lastNameField, { target: { value: '' } });  // Clear the field
+      userEvent.type(lastNameField, validBasicDetails.lastName);
     });
     await waitFor(() => {
       expect(saveBasicDetailsMock).toHaveBeenLastCalledWith(expect.objectContaining({
@@ -51,7 +61,9 @@ describe('BasicDetails Component', () => {
     });
 
     await act(async () => {
-      userEvent.type(screen.getByLabelText(/formal name/i), validBasicDetails.formalName);
+      const formalNameField = screen.getByLabelText(/formal name/i);
+      fireEvent.change(formalNameField, { target: { value: '' } });  // Clear the field
+      userEvent.type(formalNameField, validBasicDetails.formalName);
     });
     await waitFor(() => {
       expect(saveBasicDetailsMock).toHaveBeenLastCalledWith(expect.objectContaining({
@@ -60,7 +72,9 @@ describe('BasicDetails Component', () => {
     });
 
     await act(async () => {
-      userEvent.type(screen.getByLabelText(/primary contact no/i), validBasicDetails.contactNo);
+      const contactNoField = screen.getByLabelText(/primary contact no/i);
+      fireEvent.change(contactNoField, { target: { value: '' } });  // Clear the field
+      userEvent.type(contactNoField, validBasicDetails.contactNo);
     });
     await waitFor(() => {
       expect(saveBasicDetailsMock).toHaveBeenLastCalledWith(expect.objectContaining({
@@ -69,7 +83,9 @@ describe('BasicDetails Component', () => {
     });
 
     await act(async () => {
-      userEvent.type(screen.getByLabelText(/employee id/i), validBasicDetails.employeeID);
+      const employeeIDField = screen.getByLabelText(/employee id/i);
+      fireEvent.change(employeeIDField, { target: { value: '' } });  // Clear the field
+      userEvent.type(employeeIDField, validBasicDetails.employeeID);
     });
     await waitFor(() => {
       expect(saveBasicDetailsMock).toHaveBeenLastCalledWith(expect.objectContaining({
@@ -78,7 +94,9 @@ describe('BasicDetails Component', () => {
     });
 
     await act(async () => {
-      userEvent.type(screen.getByLabelText(/primary email/i), validBasicDetails.email);
+      const emailField = screen.getByLabelText(/primary email/i);
+      fireEvent.change(emailField, { target: { value: '' } });  // Clear the field
+      userEvent.type(emailField, validBasicDetails.email);
     });
     await waitFor(() => {
       expect(saveBasicDetailsMock).toHaveBeenLastCalledWith(expect.objectContaining({
@@ -106,4 +124,44 @@ describe('BasicDetails Component', () => {
       expect(screen.getByText(/email already exists/i)).toBeInTheDocument();
     });
   });
+
+
+  test('shows error message for duplicate employee ID', async () => {
+    // Test case to check if the error message is shown for duplicate email
+    checkEmpIdExists.mockResolvedValue(true);
+
+    await act(async () => {
+      render(<BasicDetails fetchedInstructorDetails={validBasicDetails} saveBasicDetails={saveBasicDetailsMock} />);
+    });
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(/employee id/i), { target: { value: 'E124' } });
+    });
+
+    await waitFor(() => {
+      expect(checkEmpIdExists).toHaveBeenCalledWith('E124');
+      expect(screen.getByText(/employee id already exists/i)).toBeInTheDocument();
+    });
+  });
+
+  test('shows error message for duplicate email', async () => {
+    checkEmailExists.mockResolvedValue(true);
+
+    await act(async () => {
+      render(<BasicDetails fetchedInstructorDetails={validBasicDetails} saveBasicDetails={saveBasicDetailsMock} />);
+    });
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(/primary email/i), { target: { value: 'jane.doe@metrotrains.com.au' } });
+    });
+
+    await waitFor(() => {
+      expect(checkEmailExists).toHaveBeenCalledWith('jane.doe@metrotrains.com.au');
+      expect(screen.getByText(/email already exists/i)).toBeInTheDocument();
+    });
+  });
+
+
+
+
 });

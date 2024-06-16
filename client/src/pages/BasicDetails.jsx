@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Container,
   Box,
@@ -14,41 +14,40 @@ import {
 } from '@mui/material';
 import { checkEmpIdExists, checkEmailExists } from '../services/InstructorService';
 
-function BasicDetails({ fetchedInstructorDetails,saveBasicDetails }) {
-    const [instructorDetails, setInstructorDetails] = useState({
-        title: fetchedInstructorDetails.title || '',
-        firstName: fetchedInstructorDetails.firstName || '',
-        lastName: fetchedInstructorDetails.lastName || '',
-        formalName: fetchedInstructorDetails.formalName || '',
-        gender: fetchedInstructorDetails.gender || '',
-        contactNo: fetchedInstructorDetails.contactNo || '',
-        employeeID: fetchedInstructorDetails.employeeID || '',
-        email: fetchedInstructorDetails.email || ''
-      });
-
+function BasicDetails({ fetchedInstructorDetails = {}, saveBasicDetails }) {
+  // State for instructor details
+  const [instructorDetails, setInstructorDetails] = useState({
+    title: fetchedInstructorDetails.title || '',
+    firstName: fetchedInstructorDetails.firstName || '',
+    lastName: fetchedInstructorDetails.lastName || '',
+    formalName: fetchedInstructorDetails.formalName || '',
+    gender: fetchedInstructorDetails.gender || '',
+    contactNo: fetchedInstructorDetails.contactNo || '',
+    employeeID: fetchedInstructorDetails.employeeID || '',
+    email: fetchedInstructorDetails.email || ''
+  });
+// State to check if Employee ID and Email are valid
   const [isEmpIdValid, setIsEmpIdValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
 
   useEffect(() => {
-   console.log(fetchedInstructorDetails)
-
-   setInstructorDetails({
-    ...fetchedInstructorDetails,
-    ...instructorDetails
-   })
+    setInstructorDetails({
+      ...fetchedInstructorDetails,
+      ...instructorDetails
+    });
   }, [fetchedInstructorDetails]);
-
+ // Handle input change
   const handleInputChange = async (event) => {
     const { name, value } = event.target;
     setInstructorDetails({
       ...instructorDetails,
       [name]: value
     });
-    saveBasicDetails({ 
+    saveBasicDetails({
       ...instructorDetails,
       [name]: value
     });
-
+// Check if Employee ID exists
     if (name === "employeeID") {
       try {
         const exists = await checkEmpIdExists(value);
@@ -57,7 +56,7 @@ function BasicDetails({ fetchedInstructorDetails,saveBasicDetails }) {
         console.error("Error checking Employee ID:", err);
       }
     }
-
+  // Check if Email exists
     if (name === "email") {
       try {
         const exists = await checkEmailExists(value);
@@ -85,6 +84,7 @@ function BasicDetails({ fetchedInstructorDetails,saveBasicDetails }) {
                   name="title"
                   value={instructorDetails.title}
                   onChange={handleInputChange}
+                  label="title"
                 >
                   <MenuItem value="Mr">Mr</MenuItem>
                   <MenuItem value="Mrs">Mrs</MenuItem>

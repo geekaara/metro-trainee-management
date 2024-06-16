@@ -7,15 +7,15 @@ const ViewSchedules = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const { scheduleData, loading, error } = useScheduleData(currentMonth, currentYear);
-
+// Handle month change
   const handleMonthChange = (event) => {
     setCurrentMonth(event.target.value);
   };
-
+ // Handle year change
   const handleYearChange = (event) => {
     setCurrentYear(event.target.value);
   };
-
+// Render table cells based on schedule data
   const renderTableCells = () => {
     if (loading || error || !scheduleData) {
       return (

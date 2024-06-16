@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const db = require('../test-db-connection'); // Adjust the path if necessary
+const db = require('../test-db-connection'); 
 
 // Handle user login on POST.
 exports.user_login_post = asyncHandler(async (req, res, next) => {

@@ -19,12 +19,14 @@ import "../css/LoginPage.css";
 import useAuth from '../services/AuthService';
 
 export default function LoginPage() {
+    // Initialize useNavigate hook for navigation
     const navigate = useNavigate();
+    // State for form errors
     const [errors, setErrors] = useState({});
     const [loginSuccess, setLoginSuccess] = useState(false);
 
     const { login } = useAuth();
-
+ // Function to validate form input
     const validate = (data) => {
         let errors = {};
         const emailRegex = /^[a-zA-Z0-9._%+-]+@metrotrains\.com\.au$/;
@@ -41,7 +43,7 @@ export default function LoginPage() {
 
         return errors;
     };
-
+ // Function to handle form submission
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -59,15 +61,6 @@ export default function LoginPage() {
                 console.log('Login successful:', response.data);
                 navigate('/add-instructors');
                 setLoginSuccess(true);
-                toast.success("Logged in successfully!", {
-                    position: "top-center",
-                    autoClose: 3000,
-                    hideProgressBar: true,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
             } catch (error) {
                 console.error('Failed to login:', error);
                 toast.error("Invalid Credentials. Please try again.", {

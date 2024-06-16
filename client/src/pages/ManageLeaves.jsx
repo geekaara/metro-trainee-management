@@ -16,12 +16,15 @@ import {
   IconButton,
   Box,
 } from "@mui/material";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import SearchIcon from "@mui/icons-material/Search";
 import axios from "axios";
 import { getLeavesById } from "../services/LeaveService";
 import { useParams } from 'react-router-dom';
 
 function ManageLeaves() {
+  // State variables for form fields and instructor details
   const [searchQuery, setSearchQuery] = useState("");
   const [instructorName, setinstructorName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -35,7 +38,7 @@ function ManageLeaves() {
   const [instructorFound, setInstructorFound] = useState(false);
 
   let { id } = useParams();
-  
+  // Function to fetch instructor leaves data by ID
   const fetchData = async () => {
     try {     
       const response = await getLeavesById(id); 
@@ -52,7 +55,7 @@ function ManageLeaves() {
   useEffect(() => {
     fetchData();
   }, []);
-
+// Function to handle adding new leave
   const handleAddLeave = async (e) => {
     e.preventDefault(); 
     try {

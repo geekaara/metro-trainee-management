@@ -1,9 +1,10 @@
 /* ViewInstructor.css */
 .view-instructor-container {
     padding: 16px;
-    margin: 16px;
+    margin: 10px;
     box-sizing: border-box;
-    max-width: 1200px; /* Adjust as needed */
-    margin-left: auto;
+    width: 1000px; /* Adjust as needed */
+    height: 1400px;
+    margin-left: 50px;
     margin-right: auto;
 }

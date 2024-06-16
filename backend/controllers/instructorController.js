@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const db = require("../test-db-connection"); // Adjust the path if necessary
+const db = require("../test-db-connection"); 
 
 // Display instructor create form on GET.
 exports.instructor_get =  async (req, res) => {
@@ -22,15 +22,9 @@ exports.fetchInstructorbyid =  async (req, res) => {
 
     const qualificationQuery = await db.query("SELECT qualificationId FROM  instructorQualification WHERE instructorId=?",[id]);
 
-
-   
   
     const availabilityValues = availabilityQuery[0].map(item => item.day);
     const qualificationValues = qualificationQuery[0].map(item => item.qualificationId);
-
-    // console.log(instructorQuery[0]);
-    // console.log(availabilityValues);
-    // console.log(qualificationValues);
 
 
     const instructorData = instructorQuery[0]; 
@@ -38,7 +32,6 @@ exports.fetchInstructorbyid =  async (req, res) => {
     instructorData[0].availability=availabilityValues;
     instructorData[0].qualifications=qualificationValues;
     
-
 
     res.status(200).json(instructorData);
 

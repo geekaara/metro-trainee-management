@@ -1,6 +1,6 @@
     const asyncHandler = require("express-async-handler");
-    const db = require("../test-db-connection"); // Adjust the path if necessary
-
+    const db = require("../test-db-connection"); 
+// Placeholder handler for GET request to leaves route
     exports.leave_get = asyncHandler(async (req, res, next) => {
     res.send("NOT IMPLEMENTED: leaves GET");
     });
@@ -24,12 +24,12 @@
         }
     });
     
-    
+    // Handle fetching leaves by instructor ID
     exports.getLeavesById = asyncHandler(async (req, res, next) => {
         const { instructorId } = req.body; 
         
         try {
-            
+            // Query to fetch leaves based on instructor ID
             const searchResults = await db.query(`
             SELECT 
             CONCAT(instructors.title,' ', instructors.first_name, ' ', instructors.last_name) AS instructor_name,
@@ -42,10 +42,10 @@
         `, [instructorId]);
         
 
-            
+             // Sending the search results in the response
             res.status(200).json( searchResults[0] );
         } catch (error) {
-            
+            // Handling errors during fetching leaves
             console.error('Error searching for leaves:', error);
             res.status(500).json({ message: 'Internal server error' });
         }

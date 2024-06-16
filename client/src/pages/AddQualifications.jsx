@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Grid,
@@ -6,74 +6,47 @@ import {
     Paper,
     Box,
     Typography,
-    Button,
-    TextField,
     FormControlLabel,
-    Checkbox,
-    IconButton
+    Checkbox
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import "../css/AddQualifications.css";
-import { useEffect } from 'react';
 import { getQualification } from '../services/QualificationService';
 
-export default function AddQualifications({fetchedInstructorDetails,saveQualificationDetails}) {
+export default function AddQualifications({ fetchedInstructorDetails = { qualifications: [] }, saveQualificationDetails }) {
+    
     const navigate = useNavigate();
+    // State for qualifications
     const [qualifications, setQualifications] = useState([]);
-   
 
     useEffect(() => {
-        console.log(fetchedInstructorDetails)
         const fetchData = async () => {
-          try {
-            const qualificationData = await getQualification();
-
-            const updatedQualifications = qualificationData.map(qualification => ({
-                ...qualification,
-                checked: fetchedInstructorDetails.qualifications.includes(qualification.id)
-            }));
-            setQualifications(updatedQualifications);
-          } catch (error) {
-            console.error("Error fetching qualification data:", error);
-          }
+            try {
+                // Fetch qualification data
+                const qualificationData = await getQualification();
+                const updatedQualifications = qualificationData.map(qualification => ({
+                    ...qualification,
+                    checked: fetchedInstructorDetails.qualifications.includes(qualification.id)
+                }));
+                setQualifications(updatedQualifications);
+            } catch (error) {
+                console.error("Error fetching qualification data:", error);
+            }
         };
-    
         fetchData();
-
-       
-      }, []);
-
-     
-
+        // Fetch qualifications when component mounts or fetchedInstructorDetails changes
+    }, [fetchedInstructorDetails]);
+    
+ // Handle qualification checkbox change
     const handleQualificationChange = (event) => {
         const { name, checked } = event.target;
-    
-        console.log(name);
-        // Find the qualification by id
-        const qualification = qualifications.find((qualification) => qualification.id === parseInt(name));
-    
-        if (!qualification) {
-            return; // Qualification not found
-        }
-    
-        // Update the checked state of the qualification
+        const qualification = qualifications.find(q => q.id === parseInt(name));
+        if (!qualification) return;
+
         qualification.checked = checked;
-    
-        // Update the state with the updated qualifications
         setQualifications([...qualifications]);
-    
-        // Filter the selected qualifications
-        const selectedIds = qualifications.filter((qualification) => qualification.checked).map((qualification) => qualification.id);
-    
-        // Pass the selected qualifications to the parent component
+
+        const selectedIds = qualifications.filter(q => q.checked).map(q => q.id);
         saveQualificationDetails({ qualifications: selectedIds });
     };
-    
-
-    
-
-    
 
     return (
         <Container maxWidth="md">
@@ -86,12 +59,11 @@ export default function AddQualifications({fetchedInstructorDetails,saveQualific
                 </Typography>
                 <Box component="form" noValidate>
                     <Grid container spacing={3}>
-                    {qualifications.map((qualification) => (
+                        {qualifications.map(qualification => (
                             <Grid item xs={12} key={qualification.id}>
                                 <FormControlLabel
                                     control={
                                         <Checkbox
-                                        
                                             checked={qualification.checked || false}
                                             onChange={handleQualificationChange}
                                             name={`${qualification.id}`}
@@ -102,12 +74,9 @@ export default function AddQualifications({fetchedInstructorDetails,saveQualific
                                 />
                             </Grid>
                         ))}
-                       
-                       
                     </Grid>
                 </Box>
             </Paper>
         </Container>
     );
 }
-

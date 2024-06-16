@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     Container,
@@ -14,23 +14,19 @@ import "../css/AddInstructorAvailability.css";
 
 const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-
-export default function AddInstructorAvailability({fetchedInstructorDetails,saveAvailabilityDetails}) {
+export default function AddInstructorAvailability({
+    fetchedInstructorDetails = { availability: [], startDate: '', endDate: '' },
+    saveAvailabilityDetails
+}) {
+    // State for start and end dates
     const [startEndDates, setStartEndDates] = useState({
-        startDate: '',
-        endDate: ''
+        startDate: fetchedInstructorDetails.startDate || '',
+        endDate: fetchedInstructorDetails.endDate || ''
     });
+    // State for availability
     const [availability, setAvailability] = useState({});
-    const [error, setError] = useState('');
     
     useEffect(() => {
-        console.log(fetchedInstructorDetails)
-     
-        setStartEndDates({
-            startDate:fetchedInstructorDetails.startDate,
-            endDate:fetchedInstructorDetails.endDate
-        });
-
         if (fetchedInstructorDetails && fetchedInstructorDetails.availability) {
             const initialAvailability = {};
             fetchedInstructorDetails.availability.forEach(day => {
@@ -38,18 +34,10 @@ export default function AddInstructorAvailability({fetchedInstructorDetails,save
             });
             setAvailability(initialAvailability);
         }
-       
-
-       }, [fetchedInstructorDetails]);
-     
-      
+    }, [fetchedInstructorDetails]);
 
     const navigate = useNavigate();
-
-    const handleBack = () => {
-        navigate('/qualifications');
-    };
-
+ // Handle availability change
     const handleAvailabilityChange = (event) => {
         const { name, checked } = event.target;
         setAvailability(prevAvailability => ({
@@ -58,7 +46,7 @@ export default function AddInstructorAvailability({fetchedInstructorDetails,save
         }));
         saveAvailabilityDetails({ availability: { ...availability, [name]: checked } }, startEndDates);
     };
-
+// Handle input change for start and end dates
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setStartEndDates(prevDates => ({

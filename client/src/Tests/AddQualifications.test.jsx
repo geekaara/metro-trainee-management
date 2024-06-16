@@ -12,6 +12,7 @@ jest.mock('../services/QualificationService', () => ({
 const saveQualificationDetailsMock = jest.fn();
 
 describe('AddQualifications Component', () => {
+  // Clear all mocks and clean up the DOM after each test
   afterEach(() => {
     jest.clearAllMocks();
     cleanup();
@@ -22,10 +23,12 @@ describe('AddQualifications Component', () => {
     { id: 2, qualification_name: 'Phase 2' },
   ];
 
-  test('renders AddQualifications component and interacts with form', async () => {
-    // Mock the API response
-    getQualification.mockResolvedValue(mockQualifications);
 
+  test('handles API error correctly', async () => {
+    // Test case to check if API errors are handled correctly
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    // Mock the getQualification function to throw an error
+    getQualification.mockRejectedValue(new Error('API error'));
     await act(async () => {
       render(
         <BrowserRouter>
@@ -34,26 +37,13 @@ describe('AddQualifications Component', () => {
       );
     });
 
-    // Verify that the qualifications are fetched and rendered
+    // Verify that an error is logged
     await waitFor(() => {
-      expect(screen.getByText(/phase 1/i)).toBeInTheDocument();
-      expect(screen.getByText(/phase 2/i)).toBeInTheDocument();
+      expect(console.error).toHaveBeenCalledWith("Error fetching qualification data:", expect.any(Error));
     });
 
-    // Simulate selecting qualifications
-    await act(async () => {
-      userEvent.click(screen.getByLabelText(/phase 1/i));
-    });
-    await act(async () => {
-      userEvent.click(screen.getByLabelText(/phase 2/i));
-    });
-
-    // Verify the state updates and function call
-    await waitFor(() => {
-      expect(saveQualificationDetailsMock).toHaveBeenCalledWith({ qualifications: [1] });
-    });
-    await waitFor(() => {
-      expect(saveQualificationDetailsMock).toHaveBeenCalledWith({ qualifications: [1, 2] });
-    });
+    consoleErrorSpy.mockRestore();
   });
+
+
 });

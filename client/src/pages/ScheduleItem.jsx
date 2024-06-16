@@ -20,20 +20,20 @@ const ScheduleItem = ({ item, modules, instructors, onModuleChange, onInstructor
     setSelectedModule("");
     setSelectedInstructor("");
   }, [item]);
-
+// Handle module change
   const handleModuleChange = async (e) => {
     const moduleId = e.target.value;
     setSelectedModule(moduleId);
     onModuleChange(moduleId, item.date, index);
     await fetchInstructors(moduleId, item.date);
   };
-
+  // Handle instructor change
   const handleInstructorChange = (e) => {
     const instructorId = e.target.value;
     setSelectedInstructor(instructorId);
     onInstructorChange(instructorId, item.date, index);
   };
-
+ // Fetch instructors based on module and date
   const fetchInstructors = async (moduleId, date) => {
     try {
       const formattedDate = date.split("/").reverse().join("-");

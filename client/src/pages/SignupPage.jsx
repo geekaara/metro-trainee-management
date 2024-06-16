@@ -12,13 +12,14 @@ import {
     TextField
 } from '@mui/material';
 import "../css/SignupPage.css";
-import { toast } from 'react-toastify'; // Import toast from react-toastify
+import { toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function SignupPage() {
+    // Initialize useNavigate hook for navigation
     const navigate = useNavigate();
     const [errors, setErrors] = useState({});
-
+// Function to validate form input
     const validate = (data) => {
         let errors = {};
         const emailRegex = /^[a-zA-Z0-9._%+-]+@metrotrains\.com\.au$/;
@@ -50,7 +51,7 @@ export default function SignupPage() {
 
         return errors;
     };
-
+// Function to handle form submission
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -66,6 +67,7 @@ export default function SignupPage() {
             try {
                 const response = await axios.post('http://localhost:3001/users/register', userDetails);
                 console.log('Signup successful:', response.data);
+                // Navigate to home page on success
                 navigate('/');
                 toast.success("Successfully Registered!!", {
                     position: "top-center",

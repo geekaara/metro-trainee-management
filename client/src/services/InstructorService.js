@@ -1,10 +1,11 @@
 // instructorService.js
 import axios from "axios";
-
-const API_URL = "http://localhost:3001/instructor"; // Your API URL
-
+//the base API URL
+const API_URL = "http://localhost:3001/instructor"; 
+// Function to add a new instructor
 export const addInstructor = async (instructorData) => {
   try {
+    // Send a POST request to the create endpoint with instructor data
     const response = await axios.post(`${API_URL}/create`, 
     {
         empId: instructorData.employeeID,
@@ -22,6 +23,7 @@ export const addInstructor = async (instructorData) => {
     });
     return response.data;
   } catch (error) {
+    // Handle errors and throw them with a message
     if (error.response && error.response.data && error.response.data.error) {
       throw new Error(error.response.data.error);
     } else {
@@ -31,7 +33,7 @@ export const addInstructor = async (instructorData) => {
   }
 };
 
-
+// Function to update an existing instructor
 export const updateInstructor = async (instructorData) => {
   try {
     const response = await axios.put(`${API_URL}/update`, 
@@ -56,7 +58,7 @@ export const updateInstructor = async (instructorData) => {
     throw error;
   }
 };
-
+// Function to delete an instructor by ID
 export const deleteInstructor = async (instructorId) => {
   try {
     const response = await axios.delete(`${API_URL}/delete}`,{id:instructorId});
@@ -66,7 +68,7 @@ export const deleteInstructor = async (instructorId) => {
     throw error;
   }
 };
-
+// Function to fetch all instructors
 export const getInstructors = async () => {
   try {
     const response = await axios.get(`${API_URL}/fetch`);
@@ -76,7 +78,7 @@ export const getInstructors = async () => {
     throw error;
   }
 };
-
+// Function to fetch an instructor by ID
 export const getInstructorById = async (id) => {
     try {
       const response = await axios.post(`${API_URL}/fetchbyid`,{id:id});
@@ -87,9 +89,10 @@ export const getInstructorById = async (id) => {
       throw error;
     }
 };
-
+// Function to check if an employee ID already exists
 export const checkEmpIdExists = async (empId) => {
   try {
+    // Send a GET request to the check-empId endpoint with the employee ID as a parameter
     const response = await axios.get(`${API_URL}/check-empId`, { params: { empId } });
     return response.data.exists;
   } catch (error) {
@@ -97,9 +100,10 @@ export const checkEmpIdExists = async (empId) => {
     throw error;
   }
 };
-
+// Function to check if an email address already exists
 export const checkEmailExists = async (email) => {
   try {
+    // Send a GET request to the check-email endpoint with the email as a parameter
     const response = await axios.get(`${API_URL}/check-email`, { params: { email } });
     return response.data.exists;
   } catch (error) {

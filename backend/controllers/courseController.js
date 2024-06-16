@@ -4,7 +4,7 @@ const db = require("../test-db-connection");
 // Fetch course details by name
 exports.getCourseDetailsByName = asyncHandler(async (req, res, next) => {
     const courseName = req.params.name.trim();
-    console.log("Searching for course:", courseName); // Debugging statement
+    console.log("Searching for course:", courseName); 
 
     try {
         // Fetch the course details by course name
@@ -12,15 +12,15 @@ exports.getCourseDetailsByName = asyncHandler(async (req, res, next) => {
             "SELECT * FROM courses WHERE course_name = ?",
             [courseName]
         );
-        console.log("Course details result:", courseDetails); // Debugging statement
+        console.log("Course details result:", courseDetails); 
 
         if (courseDetails.length === 0) {
-            console.log("Course not found:", courseName); // Debugging statement
+            console.log("Course not found:", courseName); 
             return res.status(404).json({ message: "Course not found" });
         }
 
         const courseId = courseDetails[0].id;
-        console.log("Course ID:", courseId); // Debugging statement
+        console.log("Course ID:", courseId); 
 
         // Fetch the schedule details using the course ID and join with instructor and module tables
         const [scheduleDetails] = await db.query(
@@ -33,7 +33,7 @@ exports.getCourseDetailsByName = asyncHandler(async (req, res, next) => {
             [courseId]
         );
 
-        console.log("Schedule details result:", scheduleDetails); // Debugging statement
+        console.log("Schedule details result:", scheduleDetails); 
 
         res.status(200).json({ course: courseDetails[0], schedule: scheduleDetails });
     } catch (error) {
@@ -214,7 +214,7 @@ exports.instructor_get = asyncHandler(async (req, res, next) => {
         }, {});
         console.log("Instructor qualification map:", instructorQualMap);
 
-        // Filter instructors based on qualification match
+        
        // Filter instructors based on qualification match
         const qualifiedInstructors = Object.keys(instructorQualMap).filter(instructorId => {
           const instructorQuals = instructorQualMap[instructorId];

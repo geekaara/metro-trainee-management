@@ -22,11 +22,11 @@ function NewQualification() {
   const [qualifications, setQualifications] = useState([]);
 
 
-  
+  // Fetch qualifications when component mounts
   useEffect(() => {
     fetchQualifications();
   }, []);
-
+// Function to fetch qualifications from the server
   const fetchQualifications = async () => {
     try {
       const qualificationData = await getQualification();
@@ -36,7 +36,7 @@ function NewQualification() {
       console.error("Error fetching qualifications:", error);
     }
   };
-
+// Function to handle saving a new qualification
   const handleSave = async () => {
     try {
       const response =  await addQualification(qualificationName)

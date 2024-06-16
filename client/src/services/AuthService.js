@@ -4,10 +4,18 @@ import axios from "axios";
 const API_URL = "http://localhost:3001/users";
 
 const useAuth = () => {
-  const [currentUser, setCurrentUser] = useState(
-    JSON.parse(localStorage.getItem("currentUser")) || null
-  );
-
+  // Initialize the currentUser state with the value from localStorage
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const user = localStorage.getItem("currentUser");
+      return user ? JSON.parse(user) : null;
+    } catch (error) {
+      console.error("Error parsing currentUser from localStorage:", error);
+      localStorage.removeItem("currentUser"); // Ensure invalid JSON is removed
+      return null;
+    }
+  });
+  // Function to handle login
   const login = async (credentials) => {
     try {
       const response = await axios.post(`${API_URL}/login`, credentials);
@@ -19,7 +27,7 @@ const useAuth = () => {
       throw error;
     }
   };
-
+// Function to handle logout
   const logout = async () => {
     try {
       setCurrentUser(null);
@@ -29,26 +37,8 @@ const useAuth = () => {
       throw error;
     }
   };
-
+ // Return the currentUser state and authentication functions
   return { currentUser, login, logout };
 };
 
 export default useAuth;
-
-
-// {
-//     "success": true,
-//     "user": {
-//       "id": 123,
-//       "username": "example_user",
-//       "email": "user@example.com",
-//       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-//     }
-//   }
-  
-
-// {
-//     "success": false,
-//     "message": "Invalid credentials"
-//   }
-  

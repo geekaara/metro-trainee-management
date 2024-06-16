@@ -17,8 +17,10 @@ router.put("/update", instructorController.instructor_update);
 // Delete instructor
 router.delete("/remove", instructorController.instructor_delete);
 
+// to check instructor ID exists
 router.get("/check-empId", instructorController.check_empId_exists);
 
+// to check instructor email exists
 router.get("/check-email", instructorController.check_email_exists);
 
 module.exports = router;

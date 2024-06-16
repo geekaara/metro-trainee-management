@@ -13,7 +13,7 @@ import AddQualifications from './AddQualifications';
 import AddInstructorAvailability from './AddInstructorAvailability';
 import BasicDetails from './BasicDetails';
 import { addInstructor } from '../services/InstructorService';
-
+// Define the steps for the stepper
 const steps = [
     'Basic Details',
     'Qualifications',
@@ -22,6 +22,7 @@ const steps = [
 
 function AddInstructor() {
     const navigate = useNavigate();
+    // State for instructor details
     const [instructorDetails, setInstructorDetails] = useState({
         title: '',
         firstName: '',
@@ -39,33 +40,33 @@ function AddInstructor() {
 
     const [activeStep, setActiveStep] = useState(0);
     const [error, setError] = useState("");
-
+// Function to handle next step
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
-
+ // Function to handle previous step
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
-
+// Function to reset the stepper
     const handleReset = () => {
         setActiveStep(0);
     };
-
+// Function to save basic details
     const saveBasicDetails = (basicDetails) => {
         setInstructorDetails({
             ...instructorDetails,
             ...basicDetails
         });
     };
-
+// Function to save qualification details
     const saveQualificationDetails = (qualificationDetails) => {
         setInstructorDetails({
             ...instructorDetails,
             ...qualificationDetails
         });
     };
-
+// Function to save availability details
     const saveAvailabilityDetails = (availability, startEndDates) => {
         if (availability.availability) {
             const selectedDays = Object.keys(availability.availability).filter(day => availability.availability[day]);
@@ -81,7 +82,7 @@ function AddInstructor() {
             });
         }
     };
-
+ // Function to handle finish step
     const handleFinish = async () => {
         try {
             await addInstructor(instructorDetails);

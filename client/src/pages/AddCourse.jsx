@@ -16,8 +16,11 @@ import {
 } from "@mui/material";
 import "../css/AddCourse.css";
 import ScheduleItem from "./ScheduleItem";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function AddCourse() {
+  // State variables for course details
   const [courseName, setCourseName] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -31,12 +34,12 @@ function AddCourse() {
 
 
 
-
+// useEffect to fetch public holidays and modules on component mount
   useEffect(() => {
     fetchPublicHolidays();
     fetchModules();
   }, []);
-
+// Function to fetch modules from the server
   const fetchModules = async () => {
     try {
       const response = await axios.get("http://localhost:3001/modules/fetch");
@@ -45,19 +48,19 @@ function AddCourse() {
       console.error("Error fetching modules:", error);
     }
   };
-
+// Function to handle module change in schedule
   const handleModuleChange = (moduleId, date, index) => {
     const updatedSchedule = [...generatedSchedule];
     updatedSchedule[index].moduleId = moduleId;
     setGeneratedSchedule(updatedSchedule);
   };
-
+// Function to handle instructor change in schedule
   const handleInstructorChange = (instructorId, date, index) => {
     const updatedSchedule = [...generatedSchedule];
     updatedSchedule[index].instructorId = instructorId;
     setGeneratedSchedule(updatedSchedule);
   };
-
+// Function to handle description change in schedule
   const handleDescriptionChange = (description, index) => {
     const updatedSchedule = [...generatedSchedule];
     updatedSchedule[index].description = description;
@@ -65,7 +68,7 @@ function AddCourse() {
   };
   
 
-
+// Function to fetch public holidays from API
   const fetchPublicHolidays = async (fromDate, toDate) => {
     try {
       const response = await axios.get(
@@ -85,7 +88,7 @@ function AddCourse() {
       return [];
     }
   };
-
+// Function to generate course schedule
   const handleGenerateSchedule = async () => {
     setGeneratedSchedule([]);
     const startDateObj = new Date(startDate);
@@ -134,7 +137,7 @@ function AddCourse() {
       console.error("Error generating schedule:", error);
     }
   };
-
+// Function to check if a date is a public holiday
   const isPublicHoliday = (date, publicHolidays) => {
     if (date.getDay() === 0 || date.getDay() === 6) {
       return "Day off";
@@ -150,7 +153,7 @@ function AddCourse() {
     }
     return false;
   };
-
+// Function to save the course details
   const handleSave = async () => {
     try {
       const payload = {
@@ -170,6 +173,7 @@ function AddCourse() {
   
       const response = await axios.post("http://localhost:3001/courses/add", payload);
       alert("Course saved successfully!");
+
     } catch (error) {
       console.error("Error saving the course:", error);
       alert("Error saving the course!");

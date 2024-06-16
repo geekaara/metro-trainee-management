@@ -73,7 +73,7 @@ exports.schedule_get = asyncHandler(async (req, res, next) => {
 
     // Process modules
     modulesResults.forEach(module => {
-      const moduleDate = new Date(module.date); // Parse module date string to Date object
+      const moduleDate = new Date(module.date); 
       if (!instructorsData[module.instructorId]) {
         instructorsData[module.instructorId] = {
           instructorId: module.instructorId,
